@@ -46,7 +46,7 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-2.jpg"
+                <img class="rounded-circle header-profile-user" src="assets/images/users/profile.png"
                 alt="Header Avatar">
             </button>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -62,7 +62,7 @@
                 </div>
                 <div data-simplebar style="max-height: 230px;">
                     <!-- item-->
-                    <a href="" class="text-reset notification-item">
+                    <a href="profile.php" class="text-reset notification-item">
                         <div class="d-flex align-items-center">
                             <div class="avatar-xs me-3 mt-1">
                                 <span class="avatar-title bg-soft-primary rounded-circle font-size-16">
@@ -78,7 +78,7 @@
                     <!-- item-->
                     <div class="pt-2 border-top">
                         <div class="d-grid">
-                            <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                            <a class="btn btn-sm btn-link font-size-14 text-center" href="logout.php">
                                 <i class="ri-shut-down-line align-middle me-1"></i> Logout
                             </a>
                         </div>

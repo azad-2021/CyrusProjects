@@ -27,6 +27,18 @@ include"query.php";
         <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
         <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+        <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+        <style type="text/css">
+
+
+
+        </style>
+
     </head>
 
     <body data-sidebar="dark" data-topbar="dark">
@@ -67,6 +79,142 @@ include"query.php";
                         </div>
                         <!-- end page title -->
 
+                        <form class="form-control rounded-corner">
+                            <h4 align="center">Select Details</h4>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Select Organization</label>
+
+                                    <select class="form-control rounded-corner" id="OrgCodeRequirement">
+                                        <option value="">Select</option>
+                                        <?php
+
+                                        $result=mysqli_query($con,$QueryOrg);
+                                        if (mysqli_num_rows($result)>0)
+                                        {
+                                          while ($arr=mysqli_fetch_assoc($result))
+                                          {
+                                            ?>
+                                            <option value="<?php echo $arr['OrganizationCode']; ?>"><?php echo $arr['Organization']; ?></option>
+                                            <?php
+                                        }}?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Select Division</label>
+                                    <select class="form-select form-control rounded-corner" id="DivisionCodeRequirement">
+                                        <option value="">Select</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Select Order ID</label>
+                                    <select class="form-select form-control rounded-corner" id="OrderIDRequirement">
+                                        <option value="">Select</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Type</label>
+                                    <select class="form-select form-control rounded-corner" id="Type">
+                                        <option value="">Select</option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Variation">Variation</option>
+                                    </select>
+                                </div>
+
+                                <center>
+                                    <div class="col-lg-4 d-none" id="TypeDiv">
+                                        <label for="recipient-name" class="col-form-label">Upload Variation Document </label>
+                                        <i class="ri-file-upload-fill"></i>
+                                        <input type="file" class="form-control rounded-corner" name="VrDocument" id="VrDocument">
+                                    </div>
+                                </center>
+
+
+                                <div class="col-lg-12" style="margin-top:20px;">
+                                    <textarea class="form-control rounded-corner" id="OrderDesc" disabled placeholder="Order Discription"></textarea>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+
+                        <form class="form-control rounded-corner" style="margin-top: 20px;">
+                            <h4 align="center">Enter Material Details</h4>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Sr No (Schedule for Railways)</label>
+                                    <input type="text" class="form-control rounded-corner" name="ScheduleName" id="Schedule">
+                                </div>
+                                <div class="col-lg-7">
+                                    <label for="recipient-name" class="col-form-label">Material Name</label>
+                                    <input type="text" class="form-control rounded-corner" name="MaterialName" id="MaterialName">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label for="recipient-name" class="col-form-label">Quantity</label>
+                                    <input type="number" class="form-control rounded-corner" name="Qty" id="Qty">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="recipient-name" class="col-form-label">Unit</label>
+                                    <select class="form-control rounded-corner" id="Unit">
+                                        <option value="">Select</option>
+                                        <?php
+
+                                        $result=mysqli_query($con,$QueryUnit);
+                                        if (mysqli_num_rows($result)>0)
+                                        {
+                                          while ($arr=mysqli_fetch_assoc($result))
+                                          {
+                                            ?>
+                                            <option value="<?php echo $arr['Unit']; ?>"><?php echo $arr['Unit']; ?></option>
+                                            <?php
+                                        }}?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="recipient-name" class="col-form-label">Rate</label>
+                                    <input type="number" class="form-control rounded-corner" name="Rate" id="Rate">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="recipient-name" class="col-form-label">Inspection Authority</label>
+                                    <input type="text" class="form-control rounded-corner" name="IAuth" id="IAuth">
+                                </div>
+                            </div>
+                            
+                            <center>
+                                <input class="form-check-input" type="checkbox" id="Labour" style="margin-top: 25px;">
+                                <label class="form-check-label" for="formCheck1" style="margin-top: 20px;">
+                                    Labour Work
+                                </label>
+                            </center>
+                            
+                            <center>
+                                <button type="button" class="btn btn-primary AddMaterial" style="margin-top: 10px;">Add</button>
+                            </center>
+
+                            <div class=" ">
+                                <table class="table table-centered table-hover table-bordered border-primary  display" style="margin-top: 10px;">
+                                    <thead>
+                                        <th style="min-width: 100px">Sr. No</th>
+                                        <th style="min-width: 400px;">Material Name</th>
+                                        <th style="min-width: 100px">Quantity</th>
+                                        <th style="min-width: 100px">Rate</th>
+                                        <th style="min-width: 150px">Amount</th>
+                                        <th style="min-width: 150px">Inspecting Authority</th>
+                                        <th style="min-width: 150px">Labour Work</th>
+                                        <th style="min-width: 100px">Action</th>
+                                    </thead>
+                                    <tbody id="MaterialData">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </form>
+
                     </div><!-- end col -->
 
                 </div><!-- end col -->
@@ -102,8 +250,15 @@ include"query.php";
     <script src="assets/libs/node-waves/waves.min.js"></script>
 
 
-    <!-- apexcharts -->
-    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/libs/select2/js/select2.min.js"></script>
+    <script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="assets/libs/admin-resources/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
+    <script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+
+    <script src="assets/js/pages/form-advanced.init.js"></script>
+
 
     <!-- jquery.vectormap map -->
     <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
@@ -114,7 +269,25 @@ include"query.php";
     <!-- App js -->
     <script src="assets/js/app.js"></script>
 
+
+    <!-- Required datatable js -->
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('table.display').DataTable({
+
+                scrollY: '200px',
+                scrollCollapse: true,
+                paging: false,
+                scrollX: true,
+            });
+
+        });
+
+
 
         function err(msg){
             Swal.fire({
@@ -125,160 +298,170 @@ include"query.php";
             })
         }
 
-        $(document).on('click', '.SaveOrg', function(){
 
-          var Org=document.getElementById("neworg").value;
-          if (Org) {
-              $.ajax({
-                url:"insert.php",
-                method:"POST",
-                data:{'NewOrg':Org},
-                success:function(result){
-                    if(result==1){
-                        Swal.fire({
-                            title: 'success',
-                            text: 'Organization Created',
-                            icon: 'success',
-                        });
-                        $('#NewOrg').modal("hide");
-                        $('#FAddOrg').trigger("reset");
-                    }else{
-                        err(result);
-                    }
+
+
+        $(document).on('change', '#OrgCodeRequirement', function(){
+
+            var OrgCode=$(this).val();
+            if(OrgCode){
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'OrgCode':OrgCode},
+                  success:function(result){
+                    $('#DivisionCodeRequirement').html(result);
+
                 }
-            });
-          }
-      });
+            }); 
+            }else{
+                $('#DivisionCodeRequirement').html('<option value="">Division</option>');
+            }
+        });
 
 
-        $(document).on('click', '.SaveDiv', function(){
+        $(document).on('change', '#DivisionCodeRequirement', function(){
 
-          var OrgCode=document.getElementById("OrgCodeNDiv").value;
-          var Division=document.getElementById("newdiv").value;
-          if (OrgCode && Division) {
-              $.ajax({
-                url:"insert.php",
-                method:"POST",
-                data:{'NewDiv':Division, 'OrgCodeNDiv':OrgCode},
-                success:function(result){
-                    if(result==1){
-                        Swal.fire({
-                            title: 'success',
-                            text: 'Organization Created',
-                            icon: 'success',
-                        });
-                        $('#NewDivision').modal("hide");
-                        $('#FAddDiv').trigger("reset");
-                    }else{
-                        err(result);
-                    }
+            var DivisionCode=$(this).val();
+            if(DivisionCode){
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'DivisionCodeRequirement':DivisionCode},
+                  success:function(result){
+                    //alert(result);
+                    $('#OrderIDRequirement').html(result);
+
                 }
-            });
-          }else{
-            err("Please enter all fields");
+            }); 
+            }else{
+                $('#OrderIDRequirement').html('<option value="">Order ID</option>');
+            }
+        });
+
+
+        $(document).on('change', '#OrderIDRequirement', function(){
+
+            var OrderID=$(this).val();
+            if(OrderID){
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'OrderIDRequirement':OrderID},
+                  success:function(result){
+                    //alert(result);
+                    document.getElementById("OrderDesc").value=result;
+                    //$('#OrderIDRequirement').html(result);
+
+                }
+            }); 
+            }
+        });
+
+        $(document).on('click', '.AddMaterial', function(){
+
+            var VarErr=0;
+            var Type=document.getElementById("Type").value;
+
+            if (Type=='Variation') {
+               var file_data = $('#VrDocument').prop('files')[0];   
+               var form_data = new FormData();                  
+               form_data.append('file', file_data);
+
+               if(file_data){
+
+                var filename = file_data.name;
+                var extension = filename.split('.').pop().toLowerCase();
+                if (jQuery.inArray(extension,['pdf','']) == -1) {
+
+                    err("Invalid file format");
+                    VarErr=1;
+                }
+
+            }else{
+                err("Please select document file");
+                VarErr=1;
+            }
         }
-    });
-
-        $(document).on('change', '#OrgCode', function(){
-
-            var OrgCode=$(this).val();
-            if(OrgCode){
-                $.ajax({
-                  type:'POST',
-                  url:'select.php',
-                  data:{'OrgCode':OrgCode},
-                  success:function(result){
-                    $('#DivisionCode').html(result);
-
-                }
-            }); 
-            }else{
-                $('#DivisionCode').html('<option value="">Division</option>');
-            }
-        });
-
-        $(document).on('change', '#OrgCodeSite', function(){
-
-            var OrgCode=$(this).val();
-            if(OrgCode){
-                $.ajax({
-                  type:'POST',
-                  url:'select.php',
-                  data:{'OrgCode':OrgCode},
-                  success:function(result){
-                    $('#DivisionCodeSite').html(result);
-
-                }
-            }); 
-            }else{
-                $('#DivisionCodeSite').html('<option value="">Division</option>');
-            }
-        });
-
-        $(document).on('click', '.SaveOrder', function(){
-
-            var file_data = $('#LOAFile').prop('files')[0];   
-            var form_data = new FormData();                  
-            form_data.append('file', file_data);
-
-            var filename = file_data.name;
-            var extension = filename.split('.').pop().toLowerCase();
-
-            if(jQuery.inArray(extension,['pdf','']) == -1){
-              alert("Invalid LOA file");
-          }else{
 
 
-              var DivisionCode=document.getElementById("DivisionCode").value;
-              var LOADate=document.getElementById("LOADate").value;
-              var Completion=document.getElementById("Completion").value;
-              var BGAmount=document.getElementById("BGAmount").value;
-              var BGDate=document.getElementById("BGDate").value;
-              var Warranty=document.getElementById("Warranty").value;
-              var OderingAuth=document.getElementById("OderingAuth").value;
-              var BillingAuth=document.getElementById("BillingAuth").value;
-              var LOANumber=document.getElementById("LOANumber").value;
-              var Description=document.getElementById("Description").value;
 
-              if (DivisionCode && LOADate && Completion && BGAmount && BGDate && Warranty && OderingAuth && BillingAuth && Description && file_data) {
-                  $.ajax({
-                    url:"insert.php",
-                    method:"POST",
-                    data:{'DivisionCodeO':DivisionCode, 'LOADate':LOADate, 'Completion':Completion, 'BGAmount':BGAmount, 'BGDate':BGDate, 'Warranty':Warranty, 'OderingAuth':OderingAuth, 'BillingAuth':BillingAuth, 'LOANumber':LOANumber, 'Description':Description},
-                    success:function(result){
-                        if(result==1){
+        var OrderID=document.getElementById("OrderIDRequirement").value;
+        var Schedule=document.getElementById("Schedule").value;
+        var MaterialName=document.getElementById("MaterialName").value;
+        var Qty=document.getElementById("Qty").value;
+        var Unit=document.getElementById("Unit").value;
+        var IAuth=document.getElementById("IAuth").value;
+        var Rate=document.getElementById("Rate").value;
+        
 
-                            $.ajax({
-                                url: 'upload.php',
-                                dataType: 'text',
-                                cache: false,
-                                contentType: false,
-                                processData: false,
-                                data: form_data,                         
-                                type: 'post',
-                                success: function(result){
-                        //alert(result); 
+        if ($('#Labour').is(':checked')) {
+            Labour=1;
+        }else{
+            Labour=0;
+        }
+
+
+        if(OrderID && Schedule && MaterialName && Qty && Unit && IAuth && Rate && Labour && VarErr==0){
+
+            $.ajax({
+              type:'POST',
+              url:'insert.php',
+              data:{'OrderIDRequirement':OrderID, 'Schedule':Schedule, 'MaterialName':MaterialName, 'RequirementQty':Qty, 'UnitRequirement':Unit, 'IAuth':IAuth, 'RequirementRate':Rate, 'Labour':Labour},
+              success:function(result){
+
+
+                if (result==1) {
+                    $('.display').DataTable().clear();
+                    $('.display').DataTable().destroy();
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'RTemp':OrderID},
+                      success:function(result){
+
+                        $('#MaterialData').html(result);
+
+                        $('table.display').DataTable( {
+
+                           scrollY: '200px',
+                           scrollCollapse: true,
+                           paging: false,
+                           scrollX: true,
+
+                       } );
+
+
                     }
                 });
 
 
-                            Swal.fire({
-                                title: 'success',
-                                text: 'Order Registered',
-                                icon: 'success',
-                            });
-                //$('#NewOrder').modal("hide");
-                //$('#FAddOrder').trigger("reset");
-            }else{
-                err(result);
+
+                }else{
+                    err(result);
+                }
+
             }
+        }); 
+        }else if (VarErr==0) {
+            err("Please enter all fields");
+        }
+
+    });
+
+        $(document).on('change', '#Type', function(){
+
+            var DcType=$(this).val();
+            if(DcType=='Variation'){
+             $("#TypeDiv").removeClass("d-none");
+         }else{
+            $('#TypeDiv').addClass("d-none");
         }
     });
-              }
-          }
-      });
 
-  </script>
+
+</script>
 </body>
 
 </html>

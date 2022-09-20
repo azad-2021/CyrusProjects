@@ -18,5 +18,8 @@ $org="organization";
 $div="division";
 $site="site";
 $orders="orders";
+$demands="demands";
+$units="units";
+$temprequirement='temprequirement';
 
 ?>  

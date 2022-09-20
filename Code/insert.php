@@ -30,30 +30,6 @@ if (!empty($NewDiv))
 		echo "Error: " . $sql . "<br>" . $con->error;
 	}
 }
-/*
-$_FILES=!empty($_POST['LoaFile'])?$_POST['LoaFile']:'';
-if (!empty($_FILES))
-{
-
-
-	$file_name = $_FILES['LoaFile']['name'];
-
-	$file_size =$_FILES['LoaFile']['size'];
-	$file_tmp =$_FILES['LoaFile']['tmp_name'];
-	$file_type=$_FILES['LoaFile']['type'];
-	$tmp = explode('.', $_FILES['LoaFile']['name']);
-	$file_ext = strtolower(end($tmp));    
-	$newfilename="ABC.".$file_ext;         
-	$extensions= array("jpeg","jpg","pdf");
-
-	$Upload=move_uploaded_file($file_tmp,"LOA/".$newfilename);
-
-	echo 1;
-}
-*/
-
-
-
 
 
 $DivisionCodeO=!empty($_POST['DivisionCodeO'])?$_POST['DivisionCodeO']:'';
@@ -80,6 +56,46 @@ if (!empty($DivisionCodeO) and !empty($LOADate))
 	} else {
 		echo "Error: " . $sql . "<br>" . $con->error;
 	}
+}
+
+
+$OrderIDRequirement=!empty($_POST['OrderIDRequirement'])?$_POST['OrderIDRequirement']:'';
+$Schedule=!empty($_POST['Schedule'])?$_POST['Schedule']:'';
+if (!empty($OrderIDRequirement) and !empty($Schedule))
+{
+
+	$MaterialName=!empty($_POST['MaterialName'])?$_POST['MaterialName']:'';
+	$RequirementQty=!empty($_POST['RequirementQty'])?$_POST['RequirementQty']:'';
+	$UnitRequirement=!empty($_POST['UnitRequirement'])?$_POST['UnitRequirement']:'';
+	$IAuth=!empty($_POST['IAuth'])?$_POST['IAuth']:'';
+	$RequirementRate=!empty($_POST['RequirementRate'])?$_POST['RequirementRate']:'';
+	$Labour=!empty($_POST['Labour'])?$_POST['Labour']:'';
+	
+	$Query="SELECT MaterialName FROM $temprequirement WHERE MaterialName='$MaterialName'";
+	$result=mysqli_query($con,$Query);
+
+	//$Query="SELECT MaterialName FROM $temprequirement WHERE MaterialName='$MaterialName'";
+	//$result=mysqli_query($con,$Query);
+
+
+	if (mysqli_num_rows($result)>0)
+	{
+		echo 'Material already exist';
+
+	}else{
+
+
+		$sql = "INSERT INTO $temprequirement (OrderID, SrNo, MaterialName, Qty, Rate, InspectingAuth	, LabourWork)
+		VALUES ($OrderIDRequirement, '$Schedule', '$MaterialName', $RequirementQty, $RequirementRate, '$IAuth', $Labour)";
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	}
+
 }
 
 ?>
