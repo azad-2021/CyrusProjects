@@ -21,5 +21,5 @@ $orders="orders";
 $demands="demands";
 $units="units";
 $temprequirement='temprequirement';
-
+$DemandDetails='demand_details';
 ?>  

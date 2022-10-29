@@ -107,7 +107,7 @@
             </li>
 
             <li>
-                <a href="calendar.html" class=" waves-effect">
+                <a href="" data-bs-toggle="modal" data-bs-target="#SiteSurvey" class=" waves-effect">
                     <i class="ri-map-fill"></i>
                     <span>Site Survey</span>
                 </a>
@@ -116,27 +116,27 @@
             <li class="menu-title">Purchase & Movement Control</li>
 
             <li>
-                <a href="calendar.html" class=" waves-effect">
+                <a href="" data-bs-toggle="modal" data-bs-target="#Accessing">
                     <i class="ri-user-2-fill"></i>
                     <span>Accessing Vendor</span>
                 </a>
             </li>
 
             <li>
-                <a href="calendar.html" class=" waves-effect">
+                <a href="Offer.php" class=" waves-effect">
                     <i class="ri-mail-add-line"></i>
                     <span>New Offer</span>
                 </a>
             </li>
 
             <li>
-                <a href="apps-chat.html" class=" waves-effect">
+                <a href="fvendor.php" class=" waves-effect">
                     <i class="ri-user-follow-fill"></i>
                     <span>Finalizing Vendors</span>
                 </a>
             </li>
             <li>
-                <a href="apps-chat.html" class=" waves-effect">
+                <a href="placepo.php" class=" waves-effect">
                     <i class="ri-bill-fill"></i>
                     <span>Place PO</span>
                 </a>

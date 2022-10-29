@@ -200,4 +200,12 @@ body:not(.vertical-collpsed) .app-search{
   border-radius: 25px;
   text-align: center;
 }
+
+.rounded-corner2{
+  border: 2px solid #517FF0;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+
 /*# sourceMappingURL=app.min.css.map */
