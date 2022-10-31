@@ -75,7 +75,8 @@
                     <li><a href="" data-bs-toggle="modal" data-bs-target="#NewOrg">New Organization</a></li>
                     <li><a href="" data-bs-toggle="modal" data-bs-target="#NewDivision">New Division</a></li>
                     <li><a href="" data-bs-toggle="modal" data-bs-target="#NewSite">New Site</a></li>
-                    <li><a href="layouts-compact-sidebar.html">New Employee</a></li>
+                    <li><a href="" data-bs-toggle="modal" data-bs-target="#NewDesignation">New Designation</a></li>
+                    <li><a href="" data-bs-toggle="modal" data-bs-target="#NewEmployee">New Employee</a></li>
                     <li><a href="" data-bs-toggle="modal" data-bs-target="#NewOrder">New Order</a></li>
                     <li><a href="layouts-compact-sidebar.html">New Complaints</a></li>
 
@@ -149,6 +150,12 @@
             </li>
             <li class="menu-title">Work Reporting & Verification</li>
 
+            <li>
+                <a href="workassign.php" class=" waves-effect">
+                    <i class="ri-file-list-fill"></i>
+                    <span>Work Assigning</span>
+                </a>
+            </li>
 
             <li>
                 <a href="apps-chat.html" class=" waves-effect">

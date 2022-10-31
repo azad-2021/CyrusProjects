@@ -288,6 +288,7 @@ if (isset($_POST['submit'])) {
 
     var OrderID=<?php echo $OrderID ?>;
     var OfferID=<?php print_r(json_encode($OfferID)) ?>;
+    var POQty=<?php print_r(json_encode($Qty)) ?>;
     $(document).on('click', '.GeneratePO', function(){
 
         var Shipping=document.getElementById("Shipping").value;
@@ -301,7 +302,7 @@ if (isset($_POST['submit'])) {
             $.ajax({
               type:'POST',
               url:'insert.php',
-              data:{'Shipping':Shipping, 'Payment':Payment, 'Warranty':Warranty, 'Delivery':Delivery, 'Other':Other, 'GeneratePO':'GeneratePO', 'OrderIDGenPO':OrderID, 'OfferIDGenPO':OfferID},
+              data:{'Shipping':Shipping, 'Payment':Payment, 'Warranty':Warranty, 'Delivery':Delivery, 'Other':Other, 'POQty':POQty, 'OrderIDGenPO':OrderID, 'OfferIDGenPO':OfferID},
               success:function(result){
 
                 if (result==1) {

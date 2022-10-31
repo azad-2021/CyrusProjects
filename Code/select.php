@@ -2,7 +2,7 @@
 include"connection.php";
 include"session.php";
 
-
+//Common Codes
 $OrgCode=!empty($_POST['OrgCode'])?$_POST['OrgCode']:'';
 if (!empty($OrgCode))
 {
@@ -19,6 +19,113 @@ if (!empty($OrgCode))
 	}
 
 }
+
+$DivisionCode=!empty($_POST['DivisionCode'])?$_POST['DivisionCode']:'';
+if (!empty($DivisionCode))
+{
+	$Query="SELECT SiteName, SiteCode FROM $site WHERE DivisionCode=$DivisionCode order by SiteName";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		echo "<option value=''>Select Division</option>";
+		while ($arr=mysqli_fetch_assoc($result))
+		{
+			echo '<option value="'.$arr['SiteCode'].'">'.$arr['SiteName']."</option>";
+
+		}
+	}
+
+}
+
+
+$DivisionCodeOrder=!empty($_POST['DivisionCodeOrder'])?$_POST['DivisionCodeOrder']:'';
+if (!empty($DivisionCodeOrder))
+{
+	$Query="SELECT OrderID FROM orders WHERE DivisionCode=$DivisionCodeOrder order by OrderID";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		echo "<option value=''>Select OrderID</option>";
+		while ($arr=mysqli_fetch_assoc($result))
+		{
+			echo '<option value="'.$arr['OrderID'].'">'.$arr['OrderID']."</option>";
+
+		}
+	}
+
+}
+
+$OrderIDSurvey=!empty($_POST['OrderIDSurvey'])?$_POST['OrderIDSurvey']:'';
+if (!empty($OrderIDSurvey))
+{
+	$Query="SELECT MaterialName, MaterialID FROM cyrusproject.demand_details WHERE OrderID=$OrderIDSurvey order by MaterialName";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		echo "<option value=''>Select Material</option>";
+		while ($arr=mysqli_fetch_assoc($result))
+		{
+			echo '<option value="'.$arr['MaterialID'].'">'.$arr['MaterialName']."</option>";
+
+		}
+	}
+
+}
+
+$GetQtyOF=!empty($_POST['GetQtyOF'])?$_POST['GetQtyOF']:'';
+if (!empty($GetQtyOF))
+{
+	$Query="SELECT Qty FROM demand_details WHERE MaterialID=$GetQtyOF";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		$arr=mysqli_fetch_assoc($result);
+		echo $arr['Qty'];
+
+	}
+
+}
+
+
+$GetUnit=!empty($_POST['GetUnit'])?$_POST['GetUnit']:'';
+if (!empty($GetUnit))
+{
+	$Query="SELECT Unit FROM demand_details WHERE MaterialID=$GetUnit";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		$arr=mysqli_fetch_assoc($result);
+		echo $arr['Unit'];
+
+	}
+
+}
+//End Common code
+
+
+//Site Survey
+
+$GetQtySurvey=!empty($_POST['GetQtySurvey'])?$_POST['GetQtySurvey']:'';
+if (!empty($GetQtySurvey))
+{	
+	$Query="SELECT (demand_details.Qty-(sum(sitesurvey.Qty))) as leftQty FROM cyrusproject.demand_details
+	join sitesurvey on demand_details.MaterialID=sitesurvey.MaterialID WHERE sitesurvey.MaterialID=$GetQtySurvey";
+	$result=mysqli_query($con,$Query);
+	$arr=mysqli_fetch_assoc($result);
+
+	$Query2="SELECT Qty FROM demand_details WHERE MaterialID=$GetQtySurvey";
+	$result2=mysqli_query($con,$Query2);
+	$arr2=mysqli_fetch_assoc($result2);
+	if (!empty($arr['leftQty'])) {
+		echo $arr['leftQty'];
+	}else{
+		echo $arr2['Qty'];
+	}
+
+
+}
+
+//End Site Survey
 
 
 $DivisionCodeRequirement=!empty($_POST['DivisionCodeRequirement'])?$_POST['DivisionCodeRequirement']:'';
@@ -275,19 +382,7 @@ if (!empty($VendorNameAVE))
 	}
 
 
-	$GetQtyOF=!empty($_POST['GetQtyOF'])?$_POST['GetQtyOF']:'';
-	if (!empty($GetQtyOF))
-	{
-		$Query="SELECT Qty FROM demand_details WHERE MaterialID=$GetQtyOF";
-		$result=mysqli_query($con,$Query);
-		if (mysqli_num_rows($result)>0)
-		{
-			$arr=mysqli_fetch_assoc($result);
-			echo $arr['Qty'];
 
-		}
-
-	}
 
 	$GetUnitOF=!empty($_POST['GetUnitOF'])?$_POST['GetUnitOF']:'';
 	if (!empty($GetUnitOF))
@@ -495,5 +590,31 @@ if (!empty($VendorNameAVE))
 
 		}
 	}
+
+
+	$SurveydataE=!empty($_POST['SurveydataE'])?$_POST['SurveydataE']:'';
+
+	if (!empty($SurveydataE))
+	{   
+
+		$query="SELECT MaterialName, SurveyID, sitesurvey.Qty, Unit FROM cyrusproject.sitesurvey
+		join demand_details on sitesurvey.MaterialID=demand_details.MaterialID WHERE SiteCode=$SurveydataE and sitesurvey.Status=0";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+
+				print "<tr>";
+				print '<td style="word-wrap: break-word;">'.$row["MaterialName"]."</td>";
+				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
+				print '<td><button type="button" class="btn btn-danger DeleteSurvey" id="'.$row["SurveyID"].'">Delete</button></td>';
+				print '</tr>';
+			}
+
+		}
+	}
+
 	?>
 

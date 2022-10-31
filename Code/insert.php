@@ -48,6 +48,50 @@ if (!empty($NewDiv))
 }
 
 
+$DesignationName=!empty($_POST['DesignationName'])?$_POST['DesignationName']:'';
+if (!empty($DesignationName))
+{
+
+	$sql = "INSERT INTO designation (Designation)
+	VALUES ('$DesignationName')";
+
+	if ($con->query($sql) === TRUE) {
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+}
+
+$EmployeeName=!empty($_POST['EmployeeName'])?$_POST['EmployeeName']:'';
+if (!empty($EmployeeName))
+{
+	$DesignationCode=!empty($_POST['DesignationCode'])?$_POST['DesignationCode']:'';
+	$EmployeeContact=!empty($_POST['EmployeeContact'])?$_POST['EmployeeContact']:'';
+	$EmployeeContact='+91'.$EmployeeContact;
+	$EmployeeEmail=!empty($_POST['EmployeeEmail'])?$_POST['EmployeeEmail']:'';
+	
+	$EmployeeAddress=!empty($_POST['EmployeeAddress'])?$_POST['EmployeeAddress']:'';
+
+	$Query="SELECT EmployeeName FROM cyrusproject.employees WHERE EmployeeName='$EmployeeName'";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+
+		echo "Employee already exist";
+
+	}else{
+
+		$sql = "INSERT INTO cyrusproject.employees (EmployeeName, DesignationID, Contact, Email, Address)
+		VALUES ('$EmployeeName', $DesignationCode, '$EmployeeContact', '$EmployeeEmail', '$EmployeeAddress')";
+
+		if ($con->query($sql) === TRUE) {
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	}
+}
+
 $DivisionCodeO=!empty($_POST['DivisionCodeO'])?$_POST['DivisionCodeO']:'';
 $LOADate=!empty($_POST['LOADate'])?$_POST['LOADate']:'';
 if (!empty($DivisionCodeO) and !empty($LOADate))
@@ -356,60 +400,162 @@ $OfferIDGenPO=!empty($_POST['OfferIDGenPO'])?$_POST['OfferIDGenPO']:'';
 if (!empty($OfferIDGenPO))
 {
 	//echo $OfferIDGenPO[0];
+	$err=0;
 	$Shipping=!empty($_POST['Shipping'])?$_POST['Shipping']:'';
 	$Payment=!empty($_POST['Payment'])?$_POST['Payment']:'';
 	$Warranty=!empty($_POST['Warranty'])?$_POST['Warranty']:'';
 	$Delivery=!empty($_POST['Delivery'])?$_POST['Delivery']:'';
 	$Other=!empty($_POST['Other'])?$_POST['Other']:'';
 	$OrderIDGenPO=!empty($_POST['OrderIDGenPO'])?$_POST['OrderIDGenPO']:'';
+	$POQty=!empty($_POST['POQty'])?$_POST['POQty']:'';
 
 
-	$Query="SELECT POID FROM cyrusproject.po order by POID desc LIMIT 1";
+	$Query="SELECT PONo FROM cyrusproject.po order by POID desc LIMIT 1";
 	$result=mysqli_query($con,$Query);
 
 	if (mysqli_num_rows($result)>0)
 	{
 
 		$arr=mysqli_fetch_assoc($result);
-		$POID=$arr['POID']+1;
-		$PONo=$FY.'CE'.$POID;
-
+		$PONo=$arr['PONo'];
+		$NewPONo=(int)substr($PONo, 6)+1;
+		$NewPONo=$FY.'CE'.$NewPONo;
 	}else{
-		$PONo=$FY.'CE1';
+		$NewPONo=$FY.'CE1';
 	}
 
-	echo $PONo;
 
-	/*for ($i=0; $i < count($FinalizedID); $i++) { 
+	$Query="SELECT TermID FROM cyrusproject.offers WHERE OfferID=$OfferIDGenPO[0]";
+	$result=mysqli_query($con,$Query);
 
+	if (mysqli_num_rows($result)>0)
+	{
 
-		$Query="SELECT MaterialID FROM cyrusproject.offers WHERE OfferID=$FinalizedID[$i]";
-		$result=mysqli_query($con,$Query);
-		if (mysqli_num_rows($result)>0)
-		{
+		$arr=mysqli_fetch_assoc($result);
+		$TermID=$arr['TermID'];
 
-			$arr=mysqli_fetch_assoc($result);
-			$MaterialID=$arr['MaterialID'];
-
+		if (!empty($Other)) {
+			$sql = "UPDATE `offer terms` SET PaymentTerms='$Payment', WarrantyTerms='$Warranty', DeliveryTerms='$Delivery', OtherTerms='$Other' WHERE TermID=$TermID";
+		}else{
+			$sql = "UPDATE `offer terms` SET PaymentTerms='$Payment', WarrantyTerms='$Warranty', DeliveryTerms='$Delivery' WHERE TermID=$TermID";
 		}
 
-		$sql = "UPDATE offers SET Finalized=1, FinalizedDate='$Date' WHERE OfferID=$FinalizedID[$i]";
 
 		if ($con->query($sql) === TRUE) {
 
-			$sql2 = "UPDATE cyrusproject.demand_details SET Status=3 WHERE MaterialID=$MaterialID";
 
+		} else {
+
+			$err=1;
+
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+
+	}
+
+
+	$sql = "INSERT INTO po (OrderID, ShippingAddress, PONo)
+	VALUES ($OrderIDGenPO, '$Shipping', '$NewPONo')";
+
+	if ($con->query($sql) === TRUE) {
+
+		$POID=$con->insert_id;
+		$_SESSION['PONo']=$NewPONo;
+
+
+
+		for ($i=0; $i < count($OfferIDGenPO); $i++) { 
+
+			$sql2 = "INSERT INTO po_details (POID, OfferID, POQty)
+			VALUES ($POID, $OfferIDGenPO[$i], $POQty[$i])";
 			if ($con->query($sql2) === TRUE) {
-				echo 1;
+				
 			} else {
+				$err=1;
 				echo "Error: " . $sql2 . "<br>" . $con->error;
+				break;
 			}
+
+		}
+
+
+
+	} else {
+		$err=1;
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+
+	if ($err==0) {
+		echo 1;
+	}
+}
+
+$MaterialSurvey=!empty($_POST['MaterialSurvey'])?$_POST['MaterialSurvey']:'';
+if (!empty($MaterialSurvey))
+{
+	$OrderIDSurvey=!empty($_POST['OrderIDSurvey'])?$_POST['OrderIDSurvey']:'';
+	$Qty=!empty($_POST['QtySurvey'])?$_POST['QtySurvey']:'';
+	$SiteCodeSurvey=!empty($_POST['SiteCodeSurvey'])?$_POST['SiteCodeSurvey']:'';
+	
+
+
+
+	$Query="SELECT MaterialID FROM cyrusproject.sitesurvey WHERE MaterialID=$MaterialSurvey and SiteCode=$SiteCodeSurvey";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+
+		echo "Material already exist";
+
+	}else{
+
+		$sql = "INSERT INTO sitesurvey (OrderID, SiteCode, MaterialID, Qty)
+		VALUES ($OrderIDSurvey, $SiteCodeSurvey, $MaterialSurvey, $Qty)";
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
 
 
 		} else {
 			echo "Error: " . $sql . "<br>" . $con->error;
 		}
-	}*/
+
+	}
+}
+
+
+$DelSurvey=!empty($_POST['DelSurvey'])?$_POST['DelSurvey']:'';
+if (!empty($DelSurvey))
+{
+
+	$sql = "DELETE FROM sitesurvey WHERE SurveyID=$DelSurvey";
+
+	if ($con->query($sql) === TRUE) {
+
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
+}
+
+
+$SaveSurveyData=!empty($_POST['SaveSurveyData'])?$_POST['SaveSurveyData']:'';
+if (!empty($SaveSurveyData))
+{
+
+	$sql = "UPDATE sitesurvey SET Status=1 WHERE SiteCode=$SaveSurveyData";
+
+	if ($con->query($sql) === TRUE) {
+
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
 }
 
 ?>

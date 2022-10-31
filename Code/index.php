@@ -859,10 +859,313 @@ $(document).on('click', '.DeleteVendor', function(){
     }
 });
 
+//Site Survey
+
+$(document).on('change', '#OrgCodeSurvey', function(){
+
+    var OrgCode=$(this).val();
+    if(OrgCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrgCode':OrgCode},
+          success:function(result){
+            $('#DivisionCodeSurvey').html(result);
+
+        }
+    }); 
+    }else{
+        $('#DivisionCodeSurvey').html('<option value="">Division</option>');
+    }
+});
+
+$(document).on('change', '#DivisionCodeSurvey', function(){
+
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCode':DivisionCode},
+          success:function(result){
+            $('#SiteCodeSurvey').html(result);
+
+        }
+    }); 
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCodeOrder':DivisionCode},
+          success:function(result){
+            $('#OrderIDSurvey').html(result);
+
+        }
+    }); 
+
+    }else{
+        $('#SiteCodeSurvey').html('<option value="">Site</option>');
+        $('#OrderIDSurvey').html('<option value="">Order ID</option>');
+    }
+});
+
+
+$(document).on('change', '#OrderIDSurvey', function(){
+
+    var OrderID=$(this).val();
+    if(OrderID){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrderIDSurvey':OrderID},
+          success:function(result){
+            $('#MaterialSurvey').html(result);
+
+        }
+    }); 
+
+    }else{
+        $('#MaterialSurvey').html('<option value="">Material</option>');
+    }
+});
+
+
+$(document).on('change', '#MaterialSurvey', function(){
+
+    var MaterialID=$(this).val();
+    if(MaterialID){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetQtySurvey':MaterialID},
+          success:function(result){
+            //alert(result);
+            document.getElementById("LeftQtySurve").value=result;
+            document.getElementById("QtySurvey").max = result;
+
+        }
+    }); 
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetUnit':MaterialID},
+          success:function(result){
+
+            document.getElementById("UnitSiteSurvey").value=result;
+
+        }
+    }); 
 
 
 
+    }else{
+        document.getElementById("LeftQtySurve").value=0;
+        document.getElementById("UnitSiteSurvey").value=" ";
+    }
+});
 
+function limit(element)
+{
+
+    var Qty=document.getElementById("QtySurvey").value;
+    var MaxQty= document.getElementById("LeftQtySurve").value;
+
+    if (Qty>parseInt(MaxQty)) {
+      document.getElementById("QtySurvey").value=parseInt(MaxQty);
+  }
+
+}
+
+$(document).on('click', '.AddSiteSurvey', function(){
+
+
+    var MaterialID=document.getElementById("MaterialSurvey").value;
+    var OrderID=document.getElementById("OrderIDSurvey").value;
+    var Qty=document.getElementById("QtySurvey").value;
+    var SiteCode=document.getElementById("SiteCodeSurvey").value;
+    if(MaterialID && OrderID && Qty && SiteCode){
+        $.ajax({
+          type:'POST',
+          url:'insert.php',
+          data:{'MaterialSurvey':MaterialID, 'OrderIDSurvey':OrderID, 'QtySurvey':Qty, 'SiteCodeSurvey':SiteCode },
+          success:function(result){
+
+            if (result==1) {
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SurveydataE':SiteCode},
+                  success:function(result){
+
+                    $('.Surveydisplay').DataTable().clear();
+                    $('.Surveydisplay').DataTable().destroy();
+                    $('#Surveydata').html(result);
+                    $('table.Surveydisplay').DataTable();
+
+                }
+            });
+            }else{
+                err(result);
+            }
+
+        }
+    });
+
+    }
+});
+
+
+$(document).on('change', '#SiteCodeSurvey', function(){
+
+    var SiteCode=$(this).val();
+    if(SiteCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'SurveydataE':SiteCode},
+          success:function(result){
+
+            $('.Surveydisplay').DataTable().clear();
+            $('.Surveydisplay').DataTable().destroy();
+            $('#Surveydata').html(result);
+            $('table.Surveydisplay').DataTable();
+
+        }
+    });
+
+    }else{
+     $('.Surveydisplay').DataTable().clear();
+     $('.Surveydisplay').DataTable().destroy();
+ }
+});
+
+
+$(document).on('click', '.DeleteSurvey', function(){
+
+    var ID=$(this).attr("id");
+    
+    var SiteCode=document.getElementById("SiteCodeSurvey").value;
+    if(ID && SiteCode){
+        $.ajax({
+          type:'POST',
+          url:'insert.php',
+          data:{'DelSurvey':ID},
+          success:function(result){
+
+            if (result==1) {
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SurveydataE':SiteCode},
+                  success:function(result){
+
+                    $('.Surveydisplay').DataTable().clear();
+                    $('.Surveydisplay').DataTable().destroy();
+                    $('#Surveydata').html(result);
+                    $('table.Surveydisplay').DataTable();
+
+                }
+            });
+            }else{
+                err(result);
+            }
+
+        }
+    });
+
+    }
+});
+
+
+$(document).on('click', '.SaveSurveyData', function(){
+
+    var SiteCode=document.getElementById("SiteCodeSurvey").value;
+    if(SiteCode){
+        $.ajax({
+          type:'POST',
+          url:'insert.php',
+          data:{'SaveSurveyData':SiteCode},
+          success:function(result){
+
+            if (result==1) {
+                Swal.fire({
+                    title: 'success',
+                    text: 'Saved',
+                    icon: 'success',
+                });
+                $('#SurveyF').trigger("reset");
+                $('.Surveydisplay').DataTable().clear();
+                $('.Surveydisplay').DataTable().destroy();
+                
+
+            }else{
+                err(result);
+            }
+
+        }
+    });
+
+    }
+});
+
+//New Designation
+
+$(document).on('click', '.NewDesignation', function(){
+
+  var DesignationName=document.getElementById("DesignationName").value;
+  if (DesignationName) {
+      $.ajax({
+        url:"insert.php",
+        method:"POST",
+        data:{'DesignationName':DesignationName},
+        success:function(result){
+            if(result==1){
+                Swal.fire({
+                    title: 'success',
+                    text: 'Added',
+                    icon: 'success',
+                });
+                $('#NewDesignation').modal("hide");
+                $('#FNewDesignation').trigger("reset");
+            }else{
+                err(result);
+            }
+        }
+    });
+  }
+});
+
+
+$(document).on('click', '.SaveEmployee', function(){
+
+  var EmployeeName=document.getElementById("EmployeeName").value;
+  var DesignationCode=document.getElementById("DesignationCode").value;
+  var EmployeeContact=document.getElementById("EmployeeContact").value;
+  var EmployeeEmail=document.getElementById("EmployeeEmail").value;
+  var EmployeeAddress=document.getElementById("EmployeeAddress").value;
+
+  if (EmployeeName && DesignationCode && EmployeeContact && EmployeeEmail && EmployeeAddress) {
+      $.ajax({
+        url:"insert.php",
+        method:"POST",
+        data:{'EmployeeName':EmployeeName, 'DesignationCode':DesignationCode, 'EmployeeContact':EmployeeContact, 'EmployeeEmail':EmployeeEmail, 'EmployeeAddress':EmployeeAddress},
+        success:function(result){
+            if(result==1){
+                Swal.fire({
+                    title: 'success',
+                    text: 'Added',
+                    icon: 'success',
+                });
+                $('#NewEmployee').modal("hide");
+                $('#EmployeeF').trigger("reset");
+            }else{
+                err(result);
+            }
+        }
+    });
+  }
+});
 </script>
 </body>
 

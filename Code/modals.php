@@ -233,6 +233,89 @@
 </div>
 
 
+<div class="modal fade" data-bs-backdrop="static" id="NewDesignation" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Designation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control rounded-corner" id="FNewDesignation">
+                    <div class="lg-3">
+                        <label for="recipient-name" class="col-form-label">Enter Designation Name</label>
+                        <input type="text" class="form-control rounded-corner" id="DesignationName">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary NewDesignation">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="NewEmployee" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" align="center">New Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;" id="EmployeeF">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Employee Name</label>
+                            <input type="text" class="form-control rounded-corner" id="EmployeeName">
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Designation</label>
+                            
+                            <select class="form-control rounded-corner" id="DesignationCode">
+                                <option value="">Select</option>
+                                <?php
+                                $query="SELECT * FROM cyrusproject.designation";
+                                $result=mysqli_query($con,$query);
+                                if (mysqli_num_rows($result)>0)
+                                {
+                                  while ($arr=mysqli_fetch_assoc($result))
+                                  {
+                                    ?>
+                                    <option value="<?php echo $arr['DesignationID']; ?>"><?php echo $arr['Designation']; ?></option>
+                                    <?php
+                                }}?>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Contact Number</label>
+                            <input type="number" max=9999999999 class="form-control rounded-corner" id="EmployeeContact">
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Email</label>
+                            <input type="email" class="form-control rounded-corner" id="EmployeeEmail">
+                        </div>
+                        <center>
+                        <div class="col-lg-4">
+                            <label for="recipient-name" class="col-form-label">Address</label>
+                            <textarea type="text" class="form-control rounded-corner" id="EmployeeAddress"></textarea>
+                        </div>
+                    </center>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary SaveEmployee" data-bs-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="SiteSurvey" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content rounded-corner">
@@ -241,12 +324,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="form-control rounded-corner" style="margin-bottom: 50px;">
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;" id="SurveyF">
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Organization</label>
-                            
-                            <select class="form-control rounded-corner select2" id="OrgCodeSite">
+
+                            <select class="form-control rounded-corner" id="OrgCodeSurvey">
                                 <option value="">Select</option>
                                 <?php
 
@@ -263,14 +346,14 @@
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Division</label>
-                            <select class="form-select form-control rounded-corner" id="DivisionCodeSite">
+                            <select class="form-select form-control rounded-corner" id="DivisionCodeSurvey">
                                 <option value="">Select</option>
 
                             </select>
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Site</label>
-                            <select class="form-select form-control rounded-corner" id="DivisionCodeSite">
+                            <select class="form-select form-control rounded-corner" id="SiteCodeSurvey">
                                 <option value="">Select</option>
 
                             </select>
@@ -278,7 +361,7 @@
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Order ID</label>
-                            <select class="form-select form-control rounded-corner" id="DivisionCodeSite">
+                            <select class="form-select form-control rounded-corner" id="OrderIDSurvey">
                                 <option value="">Select</option>
 
                             </select>
@@ -286,14 +369,14 @@
 
                         <div class="col-lg-4">
                             <label for="recipient-name" class="col-form-label">Select Material</label>
-                            <select class="form-select form-control rounded-corner2" id="DivisionCodeSite">
+                            <select class="form-select form-control rounded-corner2" id="MaterialSurvey">
                                 <option value="">Select</option>
 
                             </select>
                         </div>
                         <div class="col-lg-2">
                             <label for="recipient-name" class="col-form-label">Quantity</label>
-                            <input type="number" class="form-control rounded-corner" name="Qty" id="Qty">
+                            <input type="number" class="form-control rounded-corner" name="Qty" id="QtySurvey" min=1 onkeydown="limit(this);" onkeyup="limit(this);">
                         </div>
                         <div class="col-lg-2">
                             <label for="recipient-name" class="col-form-label">Left Quantity</label>
@@ -305,27 +388,28 @@
                         </div>
 
                         <div class="col-lg-2" style="margin-top: 35px;">
-                            <button type="button" class="bt btn-lg btn-primary AddSite">Add</button>
+                            <button type="button" class="bt btn-lg btn-primary AddSiteSurvey">Add</button>
                         </div>
 
                     </div>
                 </form>
 
-                <table class="table table-responsive table-centered table-hover table-bordered border-primary sitedisplay" style="margin-top:45px" width="100%">
+                <table class="table table-responsive table-centered table-hover table-bordered border-primary Surveydisplay" style="margin-top:45px" width="100%">
                     <thead>
-                        <th width="25%">Material Name</th>
-                        <th width="25%">Quantity</th>
-                        <th width="25%">Action</th>
+                        <th width="65%">Material Name</th>
+                        <th width="5%">Quantity</th>
+                        <th width="5%">Action</th>
                     </thead>
-                    <tbody id="SiteSurveyata">
+                    <tbody id="Surveydata">
 
                     </tbody>
                 </table>
 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary SaveSurveyData" data-bs-dismiss="modal">Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                
+
             </div>
         </div>
     </div>
@@ -343,7 +427,7 @@
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Organization</label>
-                            
+
                             <select class="form-control rounded-corner select2" id="OrgCodeAV">
                                 <option value="">Select</option>
                                 <?php
