@@ -43,7 +43,7 @@ $Date = date('Y-m-d',strtotime($timestamp));
         <style type="text/css">
 
 
-           table.dataTable tbody td {
+         table.dataTable tbody td {
             word-break: break-word;
             vertical-align: top;
         }
@@ -132,8 +132,16 @@ $Date = date('Y-m-d',strtotime($timestamp));
                                     <option value="">Select</option>
                                 </select>
                             </div>
-
-
+                            <center>
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Shipping Charges</label>
+                                    <input type="number" name="Shipping" class="form-control rounded-corner" required>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="recipient-name" class="col-form-label">Other Charges</label>
+                                    <input type="number" name="Other" class="form-control rounded-corner" required>
+                                </div>
+                            </center>
                         </div>
 
 
@@ -141,9 +149,11 @@ $Date = date('Y-m-d',strtotime($timestamp));
                             <table class="table table-centered table-hover table-bordered border-primary  displayPO" style="margin-top: 30px;" width="100%">
                                 <thead>
 
-                                    <th style="min-width: 200px">Modal Name</th>
+                                    <th style="min-width: 200px">Item Name</th>
+                                    <th style="min-width: 150px">Modal No</th>
                                     <th style="min-width: 100px">Offer Quantity</th>
                                     <th style="min-width: 70px">Offer Rate</th>
+                                    <th style="min-width: 70px">GST %</th>
                                     <th style="min-width: 200px">Payment Terms</th>
                                     <th style="min-width: 200px">Warranty Terms</th>
                                     <th style="min-width: 200px">Delivery Terms</th>
@@ -338,8 +348,8 @@ $Date = date('Y-m-d',strtotime($timestamp));
       var OfferID=$(this).val();
       if ($(this).is(":checked")) {
         //alert(OfferID);
-          document.getElementById(OfferID).required=true;
-      }else{
+        document.getElementById(OfferID).required=true;
+    }else{
         document.getElementById(OfferID).required=false;
     }
 });

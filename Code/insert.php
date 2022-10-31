@@ -327,10 +327,11 @@ if (!empty($MaterialIDOF))
 	$RateOF=!empty($_POST['RateOF'])?$_POST['RateOF']:'';
 	$inspection=!empty($_POST['inspection'])?$_POST['inspection']:'';
 	$VendorOF=!empty($_POST['VendorOF'])?$_POST['VendorOF']:'';
+	$GSTOF=!empty($_POST['GSTOF'])?$_POST['GSTOF']:'';
+	$ModalNoOF=!empty($_POST['ModalNoOF'])?$_POST['ModalNoOF']:'';
 
-
-	$sql = "INSERT INTO tempoffer (MaterialID, ItemName, Rate, Qty, Inspection, VendorID)
-	VALUES ($MaterialIDOF, '$Modal', $RateOF, $QtyOF,  '$inspection', $VendorOF)";
+	$sql = "INSERT INTO tempoffer (MaterialID, ItemName, Rate, Qty, Inspection, VendorID, GST, ModalNo)
+	VALUES ($MaterialIDOF, '$Modal', $RateOF, $QtyOF,  '$inspection', $VendorOF, $GSTOF, '$ModalNoOF')";
 
 	if ($con->query($sql) === TRUE) {
 
@@ -409,6 +410,8 @@ if (!empty($OfferIDGenPO))
 	$OrderIDGenPO=!empty($_POST['OrderIDGenPO'])?$_POST['OrderIDGenPO']:'';
 	$POQty=!empty($_POST['POQty'])?$_POST['POQty']:'';
 
+	$ShippingCharges=!empty($_POST['ShippingCharges'])?$_POST['ShippingCharges']:0;
+	$OtherCharges=!empty($_POST['OtherCharges'])?$_POST['OtherCharges']:0;
 
 	$Query="SELECT PONo FROM cyrusproject.po order by POID desc LIMIT 1";
 	$result=mysqli_query($con,$Query);
@@ -435,7 +438,7 @@ if (!empty($OfferIDGenPO))
 		$TermID=$arr['TermID'];
 
 		if (!empty($Other)) {
-			$sql = "UPDATE `offer terms` SET PaymentTerms='$Payment', WarrantyTerms='$Warranty', DeliveryTerms='$Delivery', OtherTerms='$Other' WHERE TermID=$TermID";
+			$sql = "UPDATE `offer terms` SET PaymentTerms='$Payment', WarrantyTerms='$Warranty', DeliveryTerms='$Delivery', OtherTerms='$Other', ShippingCharges=$ShippingCharges, OtherCharges=$OtherCharges WHERE TermID=$TermID";
 		}else{
 			$sql = "UPDATE `offer terms` SET PaymentTerms='$Payment', WarrantyTerms='$Warranty', DeliveryTerms='$Delivery' WHERE TermID=$TermID";
 		}

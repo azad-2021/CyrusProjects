@@ -14,7 +14,8 @@ $OfferID=$_GET['offerid'];
 $Qty=$_GET['Qty'];
 $Rate=$_GET['Offerrate'];
 $VendorID=$_GET['VendorPO'];
-
+$Shipping=$_GET['Shipping'];
+$Other=$_GET['Other'];
 
 $query="SELECT * FROM cyrusproject.offers
 join `offer terms` on offers.TermID=`offer terms`.TermID
@@ -170,21 +171,26 @@ if (isset($_POST['submit'])) {
                             <table class="table table-centered table-hover table-bordered border-primary  displayPO" style="margin-top: 30px;" width="100%">
                                 <thead>
 
-                                    <th style="min-width: 200px">Modal Name</th>
+                                    <th style="min-width: 200px">Item Name</th>
+                                    <th style="min-width: 200px">Modal No</th>
                                     <th style="min-width: 70px">Offer Rate</th>
+                                    <th style="min-width: 70px">GST %</th>
                                     <th style="min-width: 100px">Placed Quantity</th>
                                 </thead>
                                 <tbody>
                                     <?php 
                                     
                                     for ($i=0; $i < count($OfferID); $i++) { 
-                                        $query="SELECT * FROM cyrusproject.offers WHERE OfferID=$OfferID[$i]";
+                                        $query="SELECT ItemName, ModalNo, OfferRate, GST, Unit FROM cyrusproject.offers
+                                        join demand_details on offers.MaterialID=demand_details.MaterialID WHERE OfferID=$OfferID[$i]";
                                         $result=mysqli_query($con,$query);
                                         $row=mysqli_fetch_assoc($result);
 
                                         print "<tr>";
                                         print '<td>'.$row["ItemName"]."</td>";
+                                        print '<td>'.$row["ModalNo"]."</td>";
                                         print '<td>'.$row["OfferRate"]."</td>";
+                                        print '<td>'.$row["GST"]."</td>";
                                         print '<td>'.$Qty[$i].' '.$row["Unit"]."</td>";
                                         print '</tr>';
                                     }
@@ -287,6 +293,9 @@ if (isset($_POST['submit'])) {
 
 
     var OrderID=<?php echo $OrderID ?>;
+    var ShippingCharges=<?php echo $Shipping ?>;
+    var OtherCharges=<?php echo $Other ?>;
+
     var OfferID=<?php print_r(json_encode($OfferID)) ?>;
     var POQty=<?php print_r(json_encode($Qty)) ?>;
     $(document).on('click', '.GeneratePO', function(){
@@ -297,12 +306,12 @@ if (isset($_POST['submit'])) {
         var Delivery=document.getElementById("Delivery").value;
         var Other=document.getElementById("Other").value;
         
-        alert(Warranty+' '+Delivery);
+        //alert(Warranty+' '+Delivery);
         if(Shipping && Payment && Warranty && Delivery){
             $.ajax({
               type:'POST',
               url:'insert.php',
-              data:{'Shipping':Shipping, 'Payment':Payment, 'Warranty':Warranty, 'Delivery':Delivery, 'Other':Other, 'POQty':POQty, 'OrderIDGenPO':OrderID, 'OfferIDGenPO':OfferID},
+              data:{'Shipping':Shipping, 'Payment':Payment, 'Warranty':Warranty, 'Delivery':Delivery, 'Other':Other, 'POQty':POQty, 'OrderIDGenPO':OrderID, 'OfferIDGenPO':OfferID, 'ShippingCharges':ShippingCharges, 'OtherCharges':OtherCharges},
               success:function(result){
 
                 if (result==1) {

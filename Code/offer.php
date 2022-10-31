@@ -74,9 +74,11 @@ if (isset($_POST['submit'])) {
                     $Rate=$row["Rate"];
                     $Qty=$row["Qty"];
                     $Inspection=$row["Inspection"];
-                    
-                    $sql = "INSERT INTO offers (TermID, OrderID, MaterialID, VendorID,  ItemName, OfferRate, Qty, InspectionAt, OfferDate)
-                    VALUES ($TermID, $OrderID, $MaterialID, $VendorID, '$ItemName', $Rate, $Qty, '$Inspection', '$OFD')";
+                    $ModalNo=$row["ModalNo"];
+                    $GST=$row["GST"];
+
+                    $sql = "INSERT INTO offers (TermID, OrderID, MaterialID, VendorID,  ItemName, OfferRate, Qty, InspectionAt, OfferDate, ModalNo, GST)
+                    VALUES ($TermID, $OrderID, $MaterialID, $VendorID, '$ItemName', $Rate, $Qty, '$Inspection', '$OFD', '$ModalNo', $GST)";
 
                     if ($con->query($sql) === TRUE) {
 
@@ -161,7 +163,7 @@ if (isset($_POST['submit'])) {
         <style type="text/css">
 
 
-           table.dataTable tbody td {
+         table.dataTable tbody td {
             word-break: break-word;
             vertical-align: top;
         }
@@ -272,12 +274,20 @@ if (isset($_POST['submit'])) {
                                 <input type="text" class="form-control rounded-corner" name="Qty" id="TotalQtyOF" disabled>
                             </div>
                             <div class="col-lg-5">
-                                <label for="recipient-name" class="col-form-label">Modal Name</label>
+                                <label for="recipient-name" class="col-form-label">Item Name</label>
                                 <input type="text" class="form-control rounded-corner" name="ModalNameOF" id="ModalNameOF">
                             </div>
+                            <div class="col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Modal No.</label>
+                                <input type="text" class="form-control rounded-corner" name="ModalNoOF" id="ModalNoOF">
+                            </div>
                             <div class="col-lg-2">
-                                <label for="recipient-name" class="col-form-label">Offer Rate</label>
+                                <label for="recipient-name" class="col-form-label">Offer Rate without GST</label>
                                 <input type="number" class="form-control rounded-corner" name="RateOF" id="RateOF">
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="recipient-name" class="col-form-label">GST %</label>
+                                <input type="number" class="form-control rounded-corner" name="GSTOF" id="GSTOF">
                             </div>
                             <div class="col-lg-2">
                                 <label for="recipient-name" class="col-form-label">Offer Quantity</label>
@@ -289,19 +299,19 @@ if (isset($_POST['submit'])) {
                                 <input type="text" class="form-control rounded-corner" name="unit" id="UnitOF" disabled>
                             </div>
 
-                            <div class="col-lg-2">
+                            <div class="col-lg-4">
                                 <div class="form-check form-check-inline" style="margin-top:46px;">
                                   <input class="form-check-input" type="radio" name="inspection" value="Inspection at OEM" required>
                                   <label class="form-check-label" for="inlineRadio1">Inspection at OEM</label>
                               </div>
                           </div>
-                          <div class="col-lg-2">
+                          <div class="col-lg-4">
                             <div class="form-check form-check-inline" style="margin-top:46px;">
                               <input class="form-check-input" type="radio" name="inspection" value="Inspection at other place">
                               <label class="form-check-label" for="inlineRadio2">Inspection at other place</label>
                           </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-4">
                           <div class="form-check form-check-inline" style="margin-top:46px;">
                               <input class="form-check-input" type="radio" name="inspection" value="No inspection">
                               <label class="form-check-label" for="inlineRadio3">No inspection</label>
@@ -316,10 +326,11 @@ if (isset($_POST['submit'])) {
             <br>
             <table class="table table-centered table-hover table-bordered border-primary  displayOF" style="margin-top: 10px;" width="100%">
                 <thead>
-                    <th style="min-width: 400px; max-width: 500px;">Material Name</th>
-                    <th style="min-width: 150px">Modal Name</th>
+                    <th style="min-width: 200px">Item Name</th>
+                    <th style="min-width: 150px">Modal</th>
                     <th style="min-width: 40px">Quantity</th>
                     <th style="min-width: 40px">Rate</th>
+                    <th style="min-width: 40px">GST %</th>
                     <th style="min-width: 120px">Inspection Place</th>
                     <th style="min-width: 80px">Action</th>
                 </thead>
@@ -556,22 +567,22 @@ if (isset($_POST['submit'])) {
               url:'select.php',
               data:{'MaterialdataOF':VendorID},
               success:function(result){
-               $('.displayOF').DataTable().clear();
-               $('.displayOF').DataTable().destroy();
-               $('#MaterialdataOF').html(result);
+                 $('.displayOF').DataTable().clear();
+                 $('.displayOF').DataTable().destroy();
+                 $('#MaterialdataOF').html(result);
 
-               $('table.displayOF').DataTable( {
+                 $('table.displayOF').DataTable( {
 
-                   scrollY: '200px',
-                   scrollCollapse: true,
-                   paging: false,
-                   scrollX: true,
+                     scrollY: '200px',
+                     scrollCollapse: true,
+                     paging: false,
+                     scrollX: true,
 
-               } );
+                 } );
 
 
-           }
-       });
+             }
+         });
 
 
         }else{
@@ -588,18 +599,18 @@ if (isset($_POST['submit'])) {
               url:'select.php',
               data:{'GetQtyOF':MaterialID},
               success:function(result){
-               document.getElementById("TotalQtyOF").value=result;
-           }
-       }); 
+                 document.getElementById("TotalQtyOF").value=result;
+             }
+         }); 
 
             $.ajax({
               type:'POST',
               url:'select.php',
               data:{'GetUnitOF':MaterialID},
               success:function(result){
-               document.getElementById("UnitOF").value=result;
-           }
-       }); 
+                 document.getElementById("UnitOF").value=result;
+             }
+         }); 
 
         }else{
             document.getElementById("TotalQtyOF").value=0;
@@ -615,8 +626,12 @@ if (isset($_POST['submit'])) {
         var Modal=document.getElementById("ModalNameOF").value;
         Modal = Modal.replace(/\\/g, "/");
 
+        var ModalNo=document.getElementById("ModalNoOF").value;
+        ModalNo = ModalNo.replace(/\\/g, "/");
+
         var Qty=document.getElementById("QtyOF").value;
         var Rate=document.getElementById("RateOF").value;
+        var GST=document.getElementById("GSTOF").value;
         var VendorID =document.getElementById("VendorOF").value;
         var inspection=$('input[name="inspection"]:checked').val();
 
@@ -624,8 +639,12 @@ if (isset($_POST['submit'])) {
             $("#MaterialOF").addClass('errorClass');
         }else if (!Modal) {
             $("#ModalNameOF").addClass('errorClass');
+        }else if (!ModalNo) {
+            $("#ModalNoOF").addClass('errorClass');
         }else if (!Rate) {
             $("#RateOF").addClass('errorClass');
+        }else if (!GST) {
+            $("#GSTOF").addClass('errorClass');
         }else if (!Qty) {
             $("#QtyOF").addClass('errorClass');
         }
@@ -642,6 +661,10 @@ if (isset($_POST['submit'])) {
         }
         if (Rate) {
             $("#RateOF").removeClass('errorClass');
+        }if (ModalNo) {
+            $("#ModalNoOF").removeClass('errorClass');
+        }if (GST) {
+            $("#GSTOF").removeClass('errorClass');
         }
 
 
@@ -649,7 +672,9 @@ if (isset($_POST['submit'])) {
         if(MaterialID && Modal && Qty && Rate){
 
             if((Modal.indexOf("/") > -1)){
-                err("Do not use forwardslash or backslash in material name");
+                err("Do not use forwardslash or backslash in Item name");
+            }else if((ModalNo.indexOf("/") > -1)){
+                err("Do not use forwardslash or backslash in ModalNo name");
             }else if(!inspection){
                 err("Please select inspection option");
             } else{
@@ -657,7 +682,7 @@ if (isset($_POST['submit'])) {
               $.ajax({
                   type:'POST',
                   url:'insert.php',
-                  data:{'MaterialIDOF':MaterialID, 'Modal':Modal, 'QtyOF':Qty, 'RateOF':Rate, 'inspection':inspection, 'VendorOF':VendorID},
+                  data:{'MaterialIDOF':MaterialID, 'Modal':Modal, 'QtyOF':Qty, 'RateOF':Rate, 'inspection':inspection, 'VendorOF':VendorID, 'GSTOF':GST, 'ModalNoOF':ModalNo},
                   success:function(result){
 
 
@@ -671,22 +696,22 @@ if (isset($_POST['submit'])) {
                           url:'select.php',
                           data:{'MaterialdataOF':VendorID},
                           success:function(result){
-                           $('.displayOF').DataTable().clear();
-                           $('.displayOF').DataTable().destroy();
-                           $('#MaterialdataOF').html(result);
+                             $('.displayOF').DataTable().clear();
+                             $('.displayOF').DataTable().destroy();
+                             $('#MaterialdataOF').html(result);
 
-                           $('table.displayOF').DataTable( {
+                             $('table.displayOF').DataTable( {
 
-                               scrollY: '200px',
-                               scrollCollapse: true,
-                               paging: false,
-                               scrollX: true,
+                                 scrollY: '200px',
+                                 scrollCollapse: true,
+                                 paging: false,
+                                 scrollX: true,
 
-                           } );
+                             } );
 
 
-                       }
-                   });
+                         }
+                     });
                     //    
                     $.ajax({
                         type:'POST',
@@ -732,22 +757,22 @@ $(document).on('click', '.DeleteMaterialOF', function(){
                   url:'select.php',
                   data:{'MaterialdataOF':VendorID},
                   success:function(result){
-                   $('.displayOF').DataTable().clear();
-                   $('.displayOF').DataTable().destroy();
-                   $('#MaterialdataOF').html(result);
+                     $('.displayOF').DataTable().clear();
+                     $('.displayOF').DataTable().destroy();
+                     $('#MaterialdataOF').html(result);
 
-                   $('table.displayOF').DataTable( {
+                     $('table.displayOF').DataTable( {
 
-                       scrollY: '200px',
-                       scrollCollapse: true,
-                       paging: false,
-                       scrollX: true,
+                         scrollY: '200px',
+                         scrollCollapse: true,
+                         paging: false,
+                         scrollX: true,
 
-                   } );
+                     } );
 
 
-               }
-           });
+                 }
+             });
 
             }else{
                 err(result);

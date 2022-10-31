@@ -136,9 +136,11 @@ $Date = date('Y-m-d',strtotime($timestamp));
                                     <thead>
 
                                         <th style="min-width: 200px">Vendor Name</th>
-                                        <th style="min-width: 200px">Modal Name</th>
+                                        <th style="min-width: 200px">Item Name</th>
+                                        <th style="min-width: 150px">Modal No</th>
                                         <th style="min-width: 100px">Offer Quantity</th>
                                         <th style="min-width: 80px">Offer Rate</th>
+                                        <th style="min-width: 80px">GST %</th>
                                         <th style="min-width: 200px">Payment Terms</th>
                                         <th style="min-width: 200px">Warranty Terms</th>
                                         <th style="min-width: 200px">Delivery Terms</th>

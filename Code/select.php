@@ -404,7 +404,7 @@ if (!empty($VendorNameAVE))
 	if (!empty($MaterialdataOF))
 	{   
 
-		$query="SELECT ID, MaterialName, ItemName, tempoffer.Rate, tempoffer.Qty, Inspection  FROM cyrusproject.tempoffer
+		$query="SELECT ID, MaterialName, ItemName, tempoffer.Rate, tempoffer.Qty, Inspection, ModalNo, GST  FROM cyrusproject.tempoffer
 		join demand_details on tempoffer.MaterialID=demand_details.MaterialID WHERE VendorID=$MaterialdataOF";
 		$result=mysqli_query($con,$query);
 		if (mysqli_num_rows($result)>0)
@@ -415,10 +415,11 @@ if (!empty($VendorNameAVE))
 
 				print "<tr>";
 
-				print '<td>'.$row["MaterialName"]."</td>";
-				print '<td>'.$row["ItemName"].' '.$row["Unit"]."</td>";
-				print '<td>'.$row["Qty"]."</td>";
+				print '<td>'.$row["ItemName"]."</td>";
+				print '<td>'.$row["ModalNo"]."</td>";
+				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
 				print '<td>'.$row["Rate"]."</td>";
+				print '<td>'.$row["GST"]."</td>";
 				print '<td>'.$row["Inspection"]."</td>";
 				print '<td><button type="button" class="btn btn-danger DeleteMaterialOF" id="'.$row["ID"].'">Delete</button></td>';
 				print '</tr>';
@@ -477,11 +478,11 @@ if (!empty($VendorNameAVE))
 	if (!empty($MaterialIDFV))
 	{   
 
-		$query="SELECT OfferID, vendors.VendorID, VendorName, demand_details.MaterialID, MaterialName, demand_details.OrderID, ItemName, OfferRate, OfferDate, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
+		$query="SELECT OfferID, vendors.VendorID, VendorName, demand_details.MaterialID, MaterialName, ModalNo, demand_details.OrderID, ItemName, OfferRate, OfferDate, GST, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
 		inner join vendor_details on demand_details.MaterialID=vendor_details.MaterialID
 		inner join vendors on vendor_details.VendorID=vendors.VendorID
 		inner join offers on demand_details.MaterialID=offers.MaterialID
-		join `offer terms` on offers.TermID=`offer terms`.TermID WHERE offers.MaterialID=5 and offers.Finalized=0 and demand_details.Status=2";
+		join `offer terms` on offers.TermID=`offer terms`.TermID WHERE offers.MaterialID=$MaterialIDFV and offers.Finalized=0 and demand_details.Status=2";
 		$result=mysqli_query($con,$query);
 		if (mysqli_num_rows($result)>0)
 		{
@@ -493,8 +494,10 @@ if (!empty($VendorNameAVE))
 				print "<tr>";
 				print '<td>'.$row["VendorName"]."</td>";
 				print '<td>'.$row["ItemName"]."</td>";
+				print '<td>'.$row["ModalNo"]."</td>";
 				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
 				print '<td>'.$row["OfferRate"]."</td>";
+				print '<td>'.$row["GST"]."</td>";
 				print '<td>'.$row["PaymentTerms"]."</td>";
 				print '<td>'.$row["WarrantyTerms"]."</td>";
 				print '<td>'.$row["DeliveryTerms"]."</td>";
@@ -557,7 +560,7 @@ if (!empty($VendorNameAVE))
 	if (!empty($VendorIDPO))
 	{   
 
-		$query="SELECT OfferID, vendors.VendorID, VendorName, demand_details.MaterialID, MaterialName, demand_details.OrderID, ItemName, OfferRate, OfferDate, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
+		$query="SELECT OfferID, vendors.VendorID, VendorName, ModalNo, GST, demand_details.MaterialID, MaterialName, demand_details.OrderID, ItemName, OfferRate, OfferDate, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
 		inner join vendor_details on demand_details.MaterialID=vendor_details.MaterialID
 		inner join vendors on vendor_details.VendorID=vendors.VendorID
 		inner join offers on demand_details.MaterialID=offers.MaterialID
@@ -575,8 +578,10 @@ if (!empty($VendorNameAVE))
 				print "<tr>";
 				print '<td class="d-none"><input  name="Offerrate[]" type="number" value="'.$row["OfferRate"].'"></td>';
 				print '<td>'.$row["ItemName"]."</td>";
+				print '<td>'.$row["ModalNo"]."</td>";
 				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
 				print '<td>'.$row["OfferRate"]."</td>";
+				print '<td>'.$row["GST"]."</td>";
 				print '<td>'.$row["PaymentTerms"]."</td>";
 				print '<td>'.$row["WarrantyTerms"]."</td>";
 				print '<td>'.$row["DeliveryTerms"]."</td>";

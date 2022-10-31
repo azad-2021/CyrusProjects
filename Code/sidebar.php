@@ -143,7 +143,7 @@
                 </a>
             </li>
             <li>
-                <a href="apps-chat.html" class=" waves-effect">
+                <a href="movement.php" class=" waves-effect">
                     <i class="ri-luggage-cart-fill"></i>
                     <span>Movement Control</span>
                 </a>
