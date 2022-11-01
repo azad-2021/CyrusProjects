@@ -4,6 +4,12 @@ include ('session.php');
 
 //$_SESSION['BillNO']='2223CEUP26264';
 
+if (isset($_GET['PONo'])) {
+	$PONo=base64_decode($_GET['PONo']);
+}elseif(isset($_SESSION['PONo'])){
+	$PONo=$_SESSION['PONo'];
+}
+
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
@@ -14,10 +20,10 @@ $Address1='Registered Off: Cyrus House, B44/69 Sector Q, Aliganj, Lucknow-24';
 $Contact='Ph.(0522)-4026916, 2746916, Fax 4075916 mail- admin@cyruselectronics.co.in';
 require('fpdf/fpdf.php');
 require('fpdf/html_table.php');
-if (!empty($_SESSION['PONo']))
+if (!empty($PONo))
 {	
 
-	$PONo=$_SESSION['PONo'];
+	
 
 
 	$Query="SELECT po.POID, VendorName, Address, Contact, Email, GSTNo, ShippingAddress, PODate, PaymentTerms, WarrantyTerms, DeliveryTerms, OtherTerms, ShippingCharges, OtherCharges  FROM cyrusproject.po_details

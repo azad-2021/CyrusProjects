@@ -143,6 +143,12 @@
                 </a>
             </li>
             <li>
+                <a href="pendingpo.php" class=" waves-effect">
+                    <i class="ri-bill-fill"></i>
+                    <span>Pending PO</span>
+                </a>
+            </li>
+            <li>
                 <a href="movement.php" class=" waves-effect">
                     <i class="ri-luggage-cart-fill"></i>
                     <span>Movement Control</span>

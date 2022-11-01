@@ -469,6 +469,25 @@ if (!empty($OfferIDGenPO))
 
 		for ($i=0; $i < count($OfferIDGenPO); $i++) { 
 
+			$query = "SELECT MaterialID FROM cyrusproject.offers WHERE OfferID=$OfferIDGenPO[$i];";
+			$result=mysqli_query($con,$query);
+			if (mysqli_num_rows($result)>0)
+			{
+				$row=mysqli_fetch_assoc($result);
+				$MaterialID=$row["MaterialID"];
+
+				$sqlm = "UPDATE cyrusproject.demand_details SET Status=4 WHERE MaterialID=$MaterialID";
+
+				if ($con->query($sqlm) === TRUE) {
+
+					echo 1;
+				} else {
+					echo "Error: " . $sqlm . "<br>" . $con->error;
+				}
+
+			}
+
+
 			$sql2 = "INSERT INTO po_details (POID, OfferID, POQty)
 			VALUES ($POID, $OfferIDGenPO[$i], $POQty[$i])";
 			if ($con->query($sql2) === TRUE) {
@@ -561,4 +580,38 @@ if (!empty($SaveSurveyData))
 
 }
 
+//UPDATE Ready Qty
+$ReadyQtyE=!empty($_POST['ReadyQtyE'])?$_POST['ReadyQtyE']:'';
+if (!empty($ReadyQtyE))
+{
+
+	$ID=!empty($_POST['ID'])?$_POST['ID']:'';
+
+	$query = "SELECT MaterialID FROM cyrusproject.po_details
+	join offers on po_details.OfferID=offers.OfferID WHERE po_details.ID=$ID";
+	$result=mysqli_query($con,$query);
+	if (mysqli_num_rows($result)>0)
+	{
+		$row=mysqli_fetch_assoc($result);
+		$MaterialID=$row["MaterialID"];
+	}
+
+	$sql = "UPDATE cyrusproject.po_details SET ReadyQty=$ReadyQtyE WHERE ID=$ID";
+
+	if ($con->query($sql) === TRUE) {
+
+		$sql = "UPDATE cyrusproject.demand_details SET Status=5 WHERE MaterialID=$MaterialID";
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
+}
 ?>

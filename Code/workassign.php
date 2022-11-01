@@ -266,3 +266,5 @@ include"query.php";
 $(document).ready(function () {
     $('table.displayUWork').DataTable();
 });
+
+</script>

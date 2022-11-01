@@ -145,24 +145,42 @@ $_SESSION["NewOrderID"]=0;
                                                     <th>Order ID</th>
                                                     <th>LOA Date</th>
                                                     <th>Completion Date</th>
+                                                    <th>Left Days</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                <tr class="badge-soft-danger">
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
 
-                                                            <div class="flex-grow-1 ms-3">
-                                                                <div>Org 1</div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>Division 1</td>
-                                                    <td>1234</td>
-                                                    <td>17 Sep 2022</td>
-                                                    <td>17 Sep 2023</td>
-                                                </tr>
+                                                <?php 
+                                                $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, datediff(CompletionDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode
+                                                join organization on division.OrganizationCode=organization.OrganizationCode
+                                                WHERE datediff(CompletionDate, current_date())<30;";
+                                                $result=mysqli_query($con,$query);
+                                                if (mysqli_num_rows($result)>0)
+                                                {
+
+                                                    while ($row=mysqli_fetch_assoc($result))
+                                                    {
+                                                        if($row["LeftDays"]<0){
+
+                                                            $tr='<tr class="badge-soft-danger">';
+                                                        }else{
+                                                            $tr='<tr class="badge-soft-warning">';
+                                                        }
+                                                        print($tr);
+                                                        
+                                                        
+                                                        print '<td>'.$row["Organization"]."</td>";
+                                                        print '<td>'.$row["DivisionName"]."</td>";
+                                                        print '<td>'.$row["OrderID"]."</td>";
+                                                        print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
+                                                        print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
+                                                        print '<td>'.$row["LeftDays"]."</td>";
+                                                        print '</tr>';
+                                                    }
+
+                                                }
+                                                ?>
                                             </tbody>
                                         </table>
                                     </div>                        
@@ -186,26 +204,41 @@ $_SESSION["NewOrderID"]=0;
                                                     <th>Completion Date</th>
                                                     <th>BG Amount</th>
                                                     <th>BG Date</th>
+                                                    <th>Left Days</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                <tr class="badge-soft-danger">
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
+                                                <?php 
+                                                $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, BGAmount, BGDate, datediff(BGDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode join organization on division.OrganizationCode=organization.OrganizationCode WHERE datediff(BGDate, current_date())<30;";
+                                                $result=mysqli_query($con,$query);
+                                                if (mysqli_num_rows($result)>0)
+                                                {
 
-                                                            <div class="flex-grow-1 ms-3">
-                                                                <div>Org 1</div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>Division 1</td>
-                                                    <td>1234</td>
-                                                    <td>17 Sep 2022</td>
-                                                    <td>17 Sep 2023</td>
-                                                    <th>200000</th>
-                                                    <td>17 Mar 2023</td>
-                                                </tr>
+                                                    while ($row=mysqli_fetch_assoc($result))
+                                                    {
+                                                        if($row["LeftDays"]<0){
+
+                                                            $tr='<tr class="badge-soft-danger">';
+                                                        }else{
+                                                            $tr='<tr class="badge-soft-warning">';
+                                                        }
+                                                        print($tr);
+                                                        
+                                                        
+                                                        print '<td>'.$row["Organization"]."</td>";
+                                                        print '<td>'.$row["DivisionName"]."</td>";
+                                                        print '<td>'.$row["OrderID"]."</td>";
+                                                        print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
+                                                        print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
+                                                        print '<td>'.$row["BGAmount"]."</td>";
+                                                        print '<td><span class="d-none">'.$row["BGDate"].'</span>'.date('d-M-Y',strtotime($row["BGDate"]))."</td>";
+                                                        print '<td>'.$row["LeftDays"]."</td>";
+                                                        print '</tr>';
+                                                    }
+
+                                                }
+                                                ?>
 
                                             </tbody>
                                         </table>
@@ -213,7 +246,7 @@ $_SESSION["NewOrderID"]=0;
                                 </div><!-- end card-body -->
                             </div><!-- end card -->
 
-                            <div class="col-xl-12">
+                            <!--<div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title mb-4">Pending Orders for material requirement</h4>
@@ -253,9 +286,9 @@ $_SESSION["NewOrderID"]=0;
                                                 </tbody>
                                             </table>
                                         </div>                        
-                                    </div><!-- end card-body -->
-                                </div><!-- end card -->
-                            </div><!-- end col -->
+                                    </div> 
+                                </div>
+                            </div> end col -->
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div>
@@ -313,6 +346,9 @@ $(document).ready(function () {
     $('table.sitedisplay').DataTable();
 });
 
+$(document).ready(function () {
+    $('table.display').DataTable();
+});
 
 function err(msg){
     Swal.fire({
@@ -1035,9 +1071,9 @@ $(document).on('change', '#SiteCodeSurvey', function(){
     });
 
     }else{
-     $('.Surveydisplay').DataTable().clear();
-     $('.Surveydisplay').DataTable().destroy();
- }
+       $('.Surveydisplay').DataTable().clear();
+       $('.Surveydisplay').DataTable().destroy();
+   }
 });
 
 

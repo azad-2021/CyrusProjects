@@ -76,7 +76,7 @@ include"query.php";
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Organization</label>
 
-                            <select class="form-control rounded-corner" id="OrgCodeSurvey">
+                            <select class="form-control rounded-corner" id="OrgCodeM">
                                 <option value="">Select</option>
                                 <?php
 
@@ -93,7 +93,7 @@ include"query.php";
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Division</label>
-                            <select class="form-select form-control rounded-corner" id="DivisionCodeSurvey">
+                            <select class="form-select form-control rounded-corner" id="DivisionCodeM">
                                 <option value="">Select</option>
 
                             </select>
@@ -102,7 +102,7 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Order ID</label>
-                            <select class="form-select form-control rounded-corner" id="OrderIDSurvey">
+                            <select class="form-select form-control rounded-corner" id="OrderIDM">
                                 <option value="">Select</option>
 
                             </select>
@@ -110,7 +110,7 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Vendor</label>
-                            <select class="form-select form-control rounded-corner" id="MaterialSurvey">
+                            <select class="form-select form-control rounded-corner" id="VendorM">
                                 <option value="">Select</option>
 
                             </select>
@@ -119,7 +119,7 @@ include"query.php";
                         <div class="col-lg-4">
                             <label for="recipient-name" class="col-form-label">Select Movement</label>
 
-                            <select class="form-control rounded-corner" id="WorkType">
+                            <select class="form-control rounded-corner" id="Movement">
                                 <option value="">Select</option>
                                 <?php
 
@@ -138,7 +138,7 @@ include"query.php";
                         </div>
                         <div class="col-lg-4">
                             <label for="recipient-name" class="col-form-label">Select Site</label>
-                            <select class="form-select form-control rounded-corner" id="SiteCodeSurvey">
+                            <select class="form-select form-control rounded-corner" id="SiteCodeM">
                                 <option value="">Select</option>
 
                             </select>
@@ -158,28 +158,30 @@ include"query.php";
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-4">Unassigned Work</h4>
 
                                 <div class="table-responsive">
-                                    <table class="table table-centered table-nowrap mb-0 table-bordered displayUWork">
+                                    <table class="table table-centered table-nowrap mb-0 table-bordered displayC" style="text-align:center;">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>Work</th>
-                                                <th>Work ID</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Assign To</th>
+                                                <th width="20%">Item Name</th>
+                                                <th width="20%">Modal No</th>
+                                                <th width="15%">PO Quantity</th>
+                                                <th width="15%">Ready Qty</th>
+                                                <th width="15%">Rate</th>
+                                                <th width="15%">Select</th>
                                             </tr>
                                         </thead>
 
-                                        <tbody>
+                                        <tbody id="CTable">
 
                                         </tbody>
                                     </table>
-                                </div>                        
+                                </div>  
+                                <h4 align="right" style="margin: 30px;">Amount : <span id="Amount"></span></h4>                      
                             </div><!-- end card-body -->
+
                             <center>
-                                <div class="col-lg-2" style="margin-top: 35px;">
+                                <div class="col-lg-2" style="margin-top: 35px; margin-bottom: 20px;">
                                     <button type="button" class="bt btn-lg btn-primary AddWorkSite">Generate Challan</button>
                                 </div>
                             </center>
@@ -248,5 +250,113 @@ include"query.php";
 <script type="text/javascript">
 //
 $(document).ready(function () {
-    $('table.displayUWork').DataTable();
+    $('table.displayC').DataTable();
 });
+
+
+$(document).on('change', '#OrgCodeM', function(){
+
+    var OrgCode=$(this).val();
+    if(OrgCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrgCode':OrgCode},
+          success:function(result){
+            $('#DivisionCodeM').html(result);
+
+        }
+    }); 
+    }else{
+        $('#DivisionCodeM').html('<option value="">Division</option>');
+    }
+});
+
+$(document).on('change', '#DivisionCodeM', function(){
+
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCodeM':DivisionCode},
+          success:function(result){
+            $('#OrderIDM').html(result);
+
+        }
+    });  
+
+    }else{
+        $('#OrderIDM').html('<option value="">Select</option>');
+        $('#VendorM').html('<option value="">Select</option>');
+    }
+});
+
+
+
+$(document).on('change', '#OrderIDM', function(){
+
+    var OrderIDM=$(this).val();
+    if(OrderIDM){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrderIDM':OrderIDM},
+          success:function(result){
+            $('#VendorM').html(result);
+
+        }
+    });  
+
+    }else{
+        $('#VendorM').html('<option value="">Select</option>');
+    }
+});
+
+
+$(document).on('change', '#VendorM', function(){
+
+    var VendorID=$(this).val();
+    if(VendorID){
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'VendorM':VendorID},
+          success:function(result){
+             $('.displayC').DataTable().clear();
+             $('.displayC').DataTable().destroy();
+             $('#CTable').html(result);
+             $('table.displayC').DataTable();
+
+         }
+     });
+    }else{
+        $('.displayC').DataTable().clear();
+        $('.displayC').DataTable().destroy();
+    }
+});
+
+
+$(document).on('change', '#Movement', function(){
+
+    var ID=$(this).val();
+    var DivisionCodeM = document.getElementById("DivisionCodeM").value;
+    if(ID==3 && DivisionCodeM){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GestSiteM':DivisionCodeM},
+          success:function(result){
+            $('#SiteCodeM').html(result);
+            document.getElementById("SiteCodeM").disabled=false;
+        }
+    }); 
+    }else{
+        document.getElementById("SiteCodeM").disabled=true;
+        $('#SiteCodeM').html('<option value="">Site</option>');
+    }
+});
+
+
+</script>

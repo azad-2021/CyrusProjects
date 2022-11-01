@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2022 at 01:49 PM
+-- Generation Time: Nov 01, 2022 at 01:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -128,7 +128,6 @@ CREATE TABLE `demands` (
 --
 
 INSERT INTO `demands` (`ID`, `OrderID`, `OrderDate`, `DemandDate`, `DemandBy`, `ConfirmedBy`, `ConfirmationDate`, `StatusID`) VALUES
-(2, 9, '2022-10-19', '2022-10-24', 1, NULL, NULL, 2),
 (3, 10, '2022-10-28', '2022-10-28', 1, NULL, NULL, 2);
 
 -- --------------------------------------------------------
@@ -157,7 +156,7 @@ CREATE TABLE `demand_details` (
 
 INSERT INTO `demand_details` (`MaterialID`, `OrderID`, `MaterialName`, `SrNo`, `Qty`, `Unit`, `Rate`, `InspectingAuth`, `LabourWork`, `DemandDate`, `Status`) VALUES
 (4, 10, 'Supply of UTP indoor cable CAT 6 ,UTP cable CAT-6 to support 10-100-1000 Mbps .The category 6 cable should consists of 4 pair of solid insulated copper 23 AWG (0.57mm) pairs separated with a central slit film filler, insulation -polyethylene Make D-link, Molex, Dax, Schncider or similar. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-1', 10000, 'm', '21.67', 'Inspection by Consignee.', 0, '2022-10-28', 3),
-(5, 10, 'Supply of optical fiber cable as per RDSO specification IRS:TC 55-2006 Rev.1 Amnd.1.1 with latest amnd. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-2', 2000, 'm', '59.25', 'Inspection by Consignee.', 0, '2022-10-28', 3),
+(5, 10, 'Supply of optical fiber cable as per RDSO specification IRS:TC 55-2006 Rev.1 Amnd.1.1 with latest amnd. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-2', 2000, 'm', '59.25', 'Inspection by Consignee.', 0, '2022-10-28', 5),
 (6, 10, 'Laying of signalling-Power-Telecom cable of various cores-sizes in trenches.', 'Schedule 02-Schedule B Execution Portion-Sr. No-11', 5, 'm', '6820.57', 'Inspection by Authority', 1, '2022-10-28', 1),
 (7, 10, 'Cutting of cable trench in mechanadised -concrete and stone paved road-track crossing-culvert-metal-road crossing to a depth of 1.0 mtr and width .30 mtr for laying of cable and restoring the surface with plaster-tiles etc', 'Schedule 02-Schedule B Execution Portion Sr. No-12', 1000, 'm', '275.60', 'Inspection by Consinee', 1, '2022-10-28', 1);
 
@@ -420,7 +419,7 @@ CREATE TABLE `offers` (
 --
 
 INSERT INTO `offers` (`OfferID`, `TermID`, `OrderID`, `MaterialID`, `VendorID`, `ItemName`, `ModalNo`, `OfferRate`, `GST`, `Qty`, `InspectionAt`, `OfferDate`, `Finalized`, `FinalizedDate`) VALUES
-(2, 5, 10, 5, 20, 'Modal 1', NULL, '2000.00', '0.00', 2000, 'Inspection at OEM', '2022-10-29', 1, '2022-10-29'),
+(2, 5, 10, 5, 20, 'ABC', 'Modal 1', '2000.00', '0.00', 2000, 'Inspection at OEM', '2022-10-29', 1, '2022-10-29'),
 (3, 6, 10, 4, 21, 'Cat-6', 'NA', '100.00', '18.00', 100, 'Inspection at OEM', '2022-10-31', 1, '2022-10-31');
 
 -- --------------------------------------------------------
@@ -498,6 +497,34 @@ INSERT INTO `organization` (`OrganizationCode`, `Organization`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `organization_details`
+-- (See below for the actual view)
+--
+CREATE TABLE `organization_details` (
+`Organization` varchar(200)
+,`OrganizationCode` int(11)
+,`DivisionName` varchar(200)
+,`DivisionCode` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `pending_po`
+-- (See below for the actual view)
+--
+CREATE TABLE `pending_po` (
+`Organization` varchar(200)
+,`DivisionName` varchar(200)
+,`OrderID` int(11)
+,`PODate` date
+,`PONo` varchar(100)
+,`POID` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `po`
 --
 
@@ -534,22 +561,17 @@ CREATE TABLE `po_details` (
   `ID` int(11) NOT NULL,
   `POID` int(11) NOT NULL,
   `OfferID` int(11) NOT NULL,
-  `POQty` int(11) NOT NULL
+  `POQty` int(11) NOT NULL,
+  `ReadyQty` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `po_details`
 --
 
-INSERT INTO `po_details` (`ID`, `POID`, `OfferID`, `POQty`) VALUES
-(1, 1, 2, 100),
-(2, 2, 2, 100),
-(3, 3, 2, 100),
-(4, 4, 2, 100),
-(5, 5, 2, 100),
-(6, 6, 2, 100),
-(7, 7, 2, 100),
-(8, 8, 3, 100);
+INSERT INTO `po_details` (`ID`, `POID`, `OfferID`, `POQty`, `ReadyQty`) VALUES
+(7, 7, 2, 100, 30),
+(8, 8, 3, 100, 0);
 
 -- --------------------------------------------------------
 
@@ -803,6 +825,24 @@ CREATE TABLE `work verification` (
   `VerificationDate` date DEFAULT NULL,
   `Accepted` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `organization_details`
+--
+DROP TABLE IF EXISTS `organization_details`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `organization_details`  AS SELECT `organization`.`Organization` AS `Organization`, `organization`.`OrganizationCode` AS `OrganizationCode`, `division`.`DivisionName` AS `DivisionName`, `division`.`DivisionCode` AS `DivisionCode` FROM (`organization` join `division` on(`organization`.`OrganizationCode` = `division`.`OrganizationCode`))  ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `pending_po`
+--
+DROP TABLE IF EXISTS `pending_po`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `pending_po`  AS SELECT `organization_details`.`Organization` AS `Organization`, `organization_details`.`DivisionName` AS `DivisionName`, `orders`.`OrderID` AS `OrderID`, `po`.`PODate` AS `PODate`, `po`.`PONo` AS `PONo`, `po`.`POID` AS `POID` FROM (((`po` join `orders` on(`po`.`OrderID` = `orders`.`OrderID`)) join `organization_details` on(`orders`.`DivisionCode` = `organization_details`.`DivisionCode`)) join `po_details` on(`po`.`POID` = `po_details`.`POID`)) WHERE `po_details`.`POQty` - `po_details`.`ReadyQty` > 00  ;
 
 --
 -- Indexes for dumped tables

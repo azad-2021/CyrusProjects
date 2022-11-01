@@ -536,3 +536,35 @@
 </div>
 
 
+<!-- Pending PO Details -->
+
+<div class="modal fade" id="pendingpo" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pending Purchase Order Details</h5>
+                
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover table-bordered border-primary pendingpod" style="margin-top:45px" width="100%">
+                    <thead>
+                        <th width="40%">Item Name</th>
+                        <th width="20%">Modal No.</th>
+                        <th width="20%">Offer Rate</th>
+                        <th width="10%">PO Quantity</th>
+                        <th width="10%">Ready Quantity</th>
+                    </thead>
+                    <tbody id="podata">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary refresh" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -621,5 +621,116 @@ if (!empty($VendorNameAVE))
 		}
 	}
 
+
+//Pending PO Details
+
+	$PONoPending=!empty($_POST['PONoPending'])?$_POST['PONoPending']:'';
+
+	if (!empty($PONoPending))
+	{   
+
+		$query="SELECT ItemName, ModalNo, OfferRate, POQty, ReadyQty, po_details.ID FROM cyrusproject.po_details
+		join offers on po_details.OfferID=offers.OfferID
+		WHERE (POQty-ReadyQty)>0 and po_details.POID=$PONoPending";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+
+				print "<tr>";
+				print '<td>'.$row["ItemName"]."</td>";
+				print '<td>'.$row["ModalNo"]."</td>";
+				print '<td>'.$row["OfferRate"]."</td>";
+				print '<td>'.$row["POQty"]."</td>";
+				print '<td><input type="number" name="" class="form-control rounded-corner ReadyQtyE" id="'.$row["ID"].'" value="'.$row["ReadyQty"].'" disabled></td>';
+				print '</tr>';
+			}
+
+		}
+	}	
+
+//Movement Control	
+
+	$DivisionCodeM=!empty($_POST['DivisionCodeM'])?$_POST['DivisionCodeM']:'';
+	if (!empty($DivisionCodeM))
+	{
+		$Query="SELECT OrderID FROM orders WHERE DivisionCode=$DivisionCodeM and CompletionDate>current_date() order by OrderID";
+		$result=mysqli_query($con,$Query);
+		if (mysqli_num_rows($result)>0)
+		{
+			echo "<option value=''>OrderID</option>";
+			while ($arr=mysqli_fetch_assoc($result))
+			{
+				echo '<option value="'.$arr['OrderID'].'">'.$arr['OrderID']."</option>";
+
+			}
+		}
+
+	}
+
+	$OrderIDM=!empty($_POST['OrderIDM'])?$_POST['OrderIDM']:'';
+	if (!empty($OrderIDM))
+	{
+		$Query="SELECT VendorName, VendorID FROM vendors WHERE OrderID=$OrderIDM order by VendorName";
+		$result=mysqli_query($con,$Query);
+		if (mysqli_num_rows($result)>0)
+		{
+			echo "<option value=''>Vendor</option>";
+			while ($arr=mysqli_fetch_assoc($result))
+			{
+				echo '<option value="'.$arr['VendorID'].'">'.$arr['VendorName']."</option>";
+
+			}
+		}
+
+	}
+	$VendorM=!empty($_POST['VendorM'])?$_POST['VendorM']:'';
+
+	if (!empty($VendorM))
+	{   
+
+		$query="SELECT ItemName, ModalNo, POQty, ReadyQty, demand_details.MaterialID FROM cyrusproject.offers
+		join demand_details on offers.MaterialID=demand_details.MaterialID
+		join po_details on offers.OfferID=po_details.OfferID
+		Where (demand_details.Status=5) or ((POQty-ReadyQty)>0 and Status=6) and VendorID=$VendorM";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+
+				print "<tr>";
+				print '<td>'.$row["ItemName"]."</td>";
+				print '<td>'.$row["ModalNo"]."</td>";
+				print '<td>'.$row["POQty"]."</td>";
+				print '<td>'.$row["ReadyQty"]."</td>";
+				print '<td><input class="form-control rounded-corner" name="CRate" type="number" min=0 onkeydown="limit2(this);" onkeyup="limit2(this);"></td>';
+				print '<td><input class="form-check-input checkb" name="select" type="checkbox" value="'.$row["MaterialID"].'"></td>';
+				print '</tr>';
+			}
+
+		}
+	}
+
+
+	$GestSiteM=!empty($_POST['GestSiteM'])?$_POST['GestSiteM']:'';
+	if (!empty($GestSiteM))
+	{
+		$Query="SELECT SiteName, SiteCode FROM site WHERE DivisionCode=$GestSiteM order by SiteName";
+		$result=mysqli_query($con,$Query);
+		if (mysqli_num_rows($result)>0)
+		{
+			echo "<option value=''>Select Site</option>";
+			while ($arr=mysqli_fetch_assoc($result))
+			{
+				echo '<option value="'.$arr['SiteCode'].'">'.$arr['SiteName']."</option>";
+
+			}
+		}
+
+	}
 	?>
 
