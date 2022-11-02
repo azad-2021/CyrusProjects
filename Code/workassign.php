@@ -17,23 +17,23 @@ include"query.php";
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/cyrus logo.png">
 
-        <!-- jquery.vectormap css -->
-        <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    <!-- jquery.vectormap css -->
+    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
 
-        <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-        <!-- App Css-->
-        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap Css -->
+    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- App Css-->
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
-        <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-        <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-        <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+    <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+    <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
+    <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
 </head>
 <body data-sidebar="dark" data-topbar="dark">
 
@@ -76,7 +76,7 @@ include"query.php";
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Organization</label>
 
-                            <select class="form-control rounded-corner" id="OrgCodeSurvey">
+                            <select class="form-control rounded-corner" id="OrgCodeW">
                                 <option value="">Select</option>
                                 <?php
 
@@ -93,14 +93,14 @@ include"query.php";
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Division</label>
-                            <select class="form-select form-control rounded-corner" id="DivisionCodeSurvey">
+                            <select class="form-select form-control rounded-corner" id="DivisionCodeW">
                                 <option value="">Select</option>
 
                             </select>
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Site</label>
-                            <select class="form-select form-control rounded-corner" id="SiteCodeSurvey">
+                            <select class="form-select form-control rounded-corner" id="SiteCodeW">
                                 <option value="">Select</option>
 
                             </select>
@@ -108,7 +108,7 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Order ID</label>
-                            <select class="form-select form-control rounded-corner" id="OrderIDSurvey">
+                            <select class="form-select form-control rounded-corner" id="OrderIDW">
                                 <option value="">Select</option>
 
                             </select>
@@ -116,7 +116,7 @@ include"query.php";
 
                         <div class="col-lg-6">
                             <label for="recipient-name" class="col-form-label">Select Material</label>
-                            <select class="form-select form-control rounded-corner2" id="MaterialSurvey">
+                            <select class="form-select form-control rounded-corner2" id="MaterialW">
                                 <option value="">Select</option>
 
                             </select>
@@ -145,30 +145,30 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Quantity</label>
-                            <input type="number" class="form-control rounded-corner" name="Qty" id="QtySurvey" min=1 onkeydown="limit(this);" onkeyup="limit(this);">
+                            <input type="number" class="form-control rounded-corner" name="Qty" id="QtyW" min=1 onkeydown="limit(this);" onkeyup="limit(this);">
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Left Quantity</label>
-                            <input type="text" class="form-control rounded-corner" name="Unit" id="LeftQtySurve" disabled>
+                            <input type="text" class="form-control rounded-corner" name="Unit" id="LeftQtyW" disabled>
                         </div>          
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Unit</label>
-                            <input type="text" class="form-control rounded-corner" name="Unit" id="UnitSiteSurvey" disabled>
+                            <input type="text" class="form-control rounded-corner" name="Unit" id="UnitW" disabled>
                         </div>
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Start Date</label>
-                            <input type="date" class="form-control rounded-corner" name="Unit" id="UnitSiteSurvey" disabled>
+                            <input type="date" class="form-control rounded-corner" name="Unit" id="SDateW" disabled>
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">End Date</label>
-                            <input type="date" class="form-control rounded-corner" name="Unit" id="UnitSiteSurvey" disabled>
+                            <input type="date" class="form-control rounded-corner" name="Unit" id="EDateW" disabled>
                         </div>
                         <center>
-                        <div class="col-lg-2" style="margin-top: 35px;">
-                            <button type="button" class="bt btn-lg btn-primary AddWorkSite">Add Work</button>
-                        </div>
-                    </center>
+                            <div class="col-lg-2" style="margin-top: 35px;">
+                                <button type="button" class="bt btn-lg btn-primary AddWorkSite">Add Work</button>
+                            </div>
+                        </center>
 
                     </div>
                 </form>
@@ -267,4 +267,130 @@ $(document).ready(function () {
     $('table.displayUWork').DataTable();
 });
 
+
+
+function err(msg){
+    Swal.fire({
+        title: 'error!',
+        text: msg,
+        icon: 'error',
+
+    })
+}
+
+
+$(document).on('change', '#OrgCodeW', function(){
+
+    var OrgCode=$(this).val();
+    if(OrgCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrgCode':OrgCode},
+          success:function(result){
+            $('#DivisionCodeW').html(result);
+
+        }
+    }); 
+    }else{
+        $('#DivisionCodeW').html('<option value="">Division</option>');
+    }
+});
+
+$(document).on('change', '#DivisionCodeW', function(){
+
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCodeOrder':DivisionCode},
+          success:function(result){
+            $('#OrderIDW').html(result);
+
+        }
+    });
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCode':DivisionCode},
+          success:function(result){
+            $('#SiteCodeW').html(result);
+
+        }
+    }); 
+    }else{
+        $('#OrderIDW').html('<option value="">Select</option>');
+        $('#SiteCodeW').html('<option value="">Select</option>');
+    }
+});
+
+
+
+$(document).on('change', '#OrderIDW', function(){
+
+    var OrderIDM=$(this).val();
+    if(OrderIDM){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrderIDW':OrderIDM},
+          success:function(result){
+            $('#MaterialW').html(result);
+
+        }
+    });  
+
+    }else{
+        $('#MaterialW').html('<option value="">Select</option>');
+    }
+});
+
+
+$(document).on('change', '#VendorM', function(){
+
+    var VendorID=$(this).val();
+    if(VendorID){
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'VendorM':VendorID},
+          success:function(result){
+             $('.displayC').DataTable().clear();
+             $('.displayC').DataTable().destroy();
+             $('#CTable').html(result);
+             $('table.displayC').DataTable();
+
+         }
+     });
+    }else{
+        $('.displayC').DataTable().clear();
+        $('.displayC').DataTable().destroy();
+    }
+});
+
+
+
+
+$(document).on('change', '#SiteCodeM', function(){
+
+    var SiteCodeM=$(this).val();
+
+    if(SiteCodeM){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'SiteCodeM':SiteCodeM},
+          success:function(result){
+            document.getElementById("InspectionOther").value=result;
+            document.getElementById("InspectionOther").disabled=true;
+        }
+    }); 
+    }else{
+        document.getElementById("InspectionOther").value='';
+        document.getElementById("InspectionOther").disabled=false;
+    }
+});
 </script>

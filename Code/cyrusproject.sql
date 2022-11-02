@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2022 at 01:58 PM
+-- Generation Time: Nov 02, 2022 at 01:51 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -85,8 +85,16 @@ CREATE TABLE `challan detail` (
   `ID` int(11) NOT NULL,
   `MaterialID` int(11) NOT NULL,
   `ChallanNo` varchar(50) DEFAULT NULL,
-  `ReadyQty` int(11) NOT NULL
+  `ReadyQty` int(11) NOT NULL,
+  `Rate` decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `challan detail`
+--
+
+INSERT INTO `challan detail` (`ID`, `MaterialID`, `ChallanNo`, `ReadyQty`, `Rate`) VALUES
+(6, 5, '2223CEUP2', 30, '1200.00');
 
 -- --------------------------------------------------------
 
@@ -98,13 +106,24 @@ CREATE TABLE `deliverychallan` (
   `ChallanID` int(11) NOT NULL,
   `OrderID` int(11) NOT NULL,
   `PONo` varchar(500) DEFAULT NULL,
-  `MovementID` int(11) NOT NULL,
+  `MovementID` int(11) DEFAULT NULL,
   `ShippingAddress` varchar(500) DEFAULT NULL,
+  `StateCode` int(11) NOT NULL,
+  `SiteCode` int(11) DEFAULT NULL,
+  `EmployeeCode` int(11) DEFAULT NULL,
   `ChallanDate` date DEFAULT NULL,
   `Delivered` tinyint(4) NOT NULL DEFAULT 0,
   `DeliveryDate` date DEFAULT NULL,
-  `ChallanNo` varchar(50) DEFAULT NULL
+  `ChallanNo` varchar(50) DEFAULT NULL,
+  `Cancelled` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `deliverychallan`
+--
+
+INSERT INTO `deliverychallan` (`ChallanID`, `OrderID`, `PONo`, `MovementID`, `ShippingAddress`, `StateCode`, `SiteCode`, `EmployeeCode`, `ChallanDate`, `Delivered`, `DeliveryDate`, `ChallanNo`, `Cancelled`) VALUES
+(6, 10, '2223CE5', 3, '  ABC\n', 9, 1, NULL, '2022-11-02', 0, NULL, '2223CEUP2', 0);
 
 -- --------------------------------------------------------
 
@@ -147,18 +166,20 @@ CREATE TABLE `demand_details` (
   `InspectingAuth` varchar(100) NOT NULL,
   `LabourWork` tinyint(4) NOT NULL DEFAULT 0,
   `DemandDate` date NOT NULL,
-  `Status` int(11) NOT NULL DEFAULT 1
+  `Status` int(11) NOT NULL DEFAULT 1,
+  `OnSite` tinyint(4) NOT NULL DEFAULT 0,
+  `Issued` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `demand_details`
 --
 
-INSERT INTO `demand_details` (`MaterialID`, `OrderID`, `MaterialName`, `SrNo`, `Qty`, `Unit`, `Rate`, `InspectingAuth`, `LabourWork`, `DemandDate`, `Status`) VALUES
-(4, 10, 'Supply of UTP indoor cable CAT 6 ,UTP cable CAT-6 to support 10-100-1000 Mbps .The category 6 cable should consists of 4 pair of solid insulated copper 23 AWG (0.57mm) pairs separated with a central slit film filler, insulation -polyethylene Make D-link, Molex, Dax, Schncider or similar. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-1', 10000, 'm', '21.67', 'Inspection by Consignee.', 0, '2022-10-28', 3),
-(5, 10, 'Supply of optical fiber cable as per RDSO specification IRS:TC 55-2006 Rev.1 Amnd.1.1 with latest amnd. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-2', 2000, 'm', '59.25', 'Inspection by Consignee.', 0, '2022-10-28', 5),
-(6, 10, 'Laying of signalling-Power-Telecom cable of various cores-sizes in trenches.', 'Schedule 02-Schedule B Execution Portion-Sr. No-11', 5, 'm', '6820.57', 'Inspection by Authority', 1, '2022-10-28', 1),
-(7, 10, 'Cutting of cable trench in mechanadised -concrete and stone paved road-track crossing-culvert-metal-road crossing to a depth of 1.0 mtr and width .30 mtr for laying of cable and restoring the surface with plaster-tiles etc', 'Schedule 02-Schedule B Execution Portion Sr. No-12', 1000, 'm', '275.60', 'Inspection by Consinee', 1, '2022-10-28', 1);
+INSERT INTO `demand_details` (`MaterialID`, `OrderID`, `MaterialName`, `SrNo`, `Qty`, `Unit`, `Rate`, `InspectingAuth`, `LabourWork`, `DemandDate`, `Status`, `OnSite`, `Issued`) VALUES
+(4, 10, 'Supply of UTP indoor cable CAT 6 ,UTP cable CAT-6 to support 10-100-1000 Mbps .The category 6 cable should consists of 4 pair of solid insulated copper 23 AWG (0.57mm) pairs separated with a central slit film filler, insulation -polyethylene Make D-link, Molex, Dax, Schncider or similar. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-1', 10000, 'm', '21.67', 'Inspection by Consignee.', 0, '2022-10-28', 3, 0, 0),
+(5, 10, 'Supply of optical fiber cable as per RDSO specification IRS:TC 55-2006 Rev.1 Amnd.1.1 with latest amnd. Inspection by Consignee.', 'Schedule 01-Schedule A Supply Portion Sr. No-2', 2000, 'm', '59.25', 'Inspection by Consignee.', 0, '2022-10-28', 5, 1, 0),
+(6, 10, 'Laying of signalling-Power-Telecom cable of various cores-sizes in trenches.', 'Schedule 02-Schedule B Execution Portion-Sr. No-11', 5, 'm', '6820.57', 'Inspection by Authority', 1, '2022-10-28', 1, 0, 0),
+(7, 10, 'Cutting of cable trench in mechanadised -concrete and stone paved road-track crossing-culvert-metal-road crossing to a depth of 1.0 mtr and width .30 mtr for laying of cable and restoring the surface with plaster-tiles etc', 'Schedule 02-Schedule B Execution Portion Sr. No-12', 1000, 'm', '275.60', 'Inspection by Consinee', 1, '2022-10-28', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -188,15 +209,16 @@ INSERT INTO `designation` (`DesignationID`, `Designation`) VALUES
 CREATE TABLE `division` (
   `DivisionCode` int(11) NOT NULL,
   `OrganizationCode` int(11) NOT NULL,
-  `DivisionName` varchar(200) NOT NULL
+  `DivisionName` varchar(200) NOT NULL,
+  `GSTIN` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `division`
 --
 
-INSERT INTO `division` (`DivisionCode`, `OrganizationCode`, `DivisionName`) VALUES
-(1, 2, 'Div 1');
+INSERT INTO `division` (`DivisionCode`, `OrganizationCode`, `DivisionName`, `GSTIN`) VALUES
+(1, 2, 'Div 1', '09ABCESFG7');
 
 -- --------------------------------------------------------
 
@@ -419,7 +441,7 @@ CREATE TABLE `offers` (
 --
 
 INSERT INTO `offers` (`OfferID`, `TermID`, `OrderID`, `MaterialID`, `VendorID`, `ItemName`, `ModalNo`, `OfferRate`, `GST`, `Qty`, `InspectionAt`, `OfferDate`, `Finalized`, `FinalizedDate`) VALUES
-(2, 5, 10, 5, 20, 'ABC', 'Modal 1', '2000.00', '0.00', 2000, 'Inspection at OEM', '2022-10-29', 1, '2022-10-29'),
+(2, 5, 10, 5, 20, 'ABC', 'Modal 1', '2000.00', '0.00', 2000, 'Inspection at other place', '2022-10-29', 1, '2022-10-29'),
 (3, 6, 10, 4, 21, 'Cat-6', 'NA', '100.00', '18.00', 100, 'Inspection at OEM', '2022-10-31', 1, '2022-10-31');
 
 -- --------------------------------------------------------
@@ -505,6 +527,7 @@ CREATE TABLE `organization_details` (
 ,`OrganizationCode` int(11)
 ,`DivisionName` varchar(200)
 ,`DivisionCode` int(11)
+,`GSTIN` varchar(20)
 );
 
 -- --------------------------------------------------------
@@ -619,7 +642,7 @@ CREATE TABLE `sitesurvey` (
 INSERT INTO `sitesurvey` (`SurveyID`, `OrderID`, `SiteCode`, `MaterialID`, `Qty`, `SurveyDate`, `Status`) VALUES
 (1, 10, 1, 7, 100, '2022-10-31', 1),
 (3, 10, 1, 6, 1, '2022-10-31', 1),
-(5, 10, 1, 5, 200, '2022-10-31', 1),
+(5, 10, 1, 5, 200, '2022-10-31', 2),
 (6, 10, 1, 4, 2000, '2022-10-31', 1);
 
 -- --------------------------------------------------------
@@ -649,9 +672,53 @@ CREATE TABLE `sitework` (
 --
 
 CREATE TABLE `states` (
-  `StateCode` int(11) NOT NULL,
-  `StateName` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `StateName` varchar(255) DEFAULT NULL,
+  `ShortCode` varchar(5) DEFAULT NULL,
+  `StateCode` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `states`
+--
+
+INSERT INTO `states` (`StateName`, `ShortCode`, `StateCode`) VALUES
+('Jammu and Kashmir', 'JK', 1),
+('Himachal Pradesh', 'HP', 2),
+('Punjab', 'PB', 3),
+('Chandigarh', 'CH', 4),
+('Uttarakhand', 'UT', 5),
+('Haryana', 'HR', 6),
+('Delhi', 'DL', 7),
+('Rajasthan', 'RJ', 8),
+('Uttar Pradesh', 'UP', 9),
+('Bihar', 'BH', 10),
+('Sikkim', 'SK', 11),
+('Arunachal Pradesh', 'AR', 12),
+('Nagaland', 'NL', 13),
+('Manipur', 'MN', 14),
+('Mizoram', 'MI', 15),
+('Tripura', 'TR', 16),
+('Meghalaya', 'ME', 17),
+('Assam', 'AS', 18),
+('West Bengal', 'WB', 19),
+('Jharkhand', 'JH', 20),
+('Odisha', 'OR', 21),
+('Chattisgarh', 'CT', 22),
+('Madhya Pradesh', 'MP', 23),
+('Gujarat', 'GJ', 24),
+('Daman and Diu', 'DD', 25),
+('Dadra and Nagar Haveli', 'DN', 26),
+('Maharashtra', 'MH', 27),
+('Andhra Pradesh', 'AP', 28),
+('Karnataka', 'KA', 29),
+('Goa', 'GA', 30),
+('Lakshadweep Islands', 'LD', 31),
+('Kerala', 'KL', 32),
+('Tamil Nadu', 'TN', 33),
+('Pondicherry', 'PY', 34),
+('Andaman and Nicobar Islands', 'AN', 35),
+('Telangana', 'TS', 36),
+('Andhra Pradesh (New)', 'AD', 37);
 
 -- --------------------------------------------------------
 
@@ -833,7 +900,7 @@ CREATE TABLE `work verification` (
 --
 DROP TABLE IF EXISTS `organization_details`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `organization_details`  AS SELECT `organization`.`Organization` AS `Organization`, `organization`.`OrganizationCode` AS `OrganizationCode`, `division`.`DivisionName` AS `DivisionName`, `division`.`DivisionCode` AS `DivisionCode` FROM (`organization` join `division` on(`organization`.`OrganizationCode` = `division`.`OrganizationCode`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `organization_details`  AS SELECT `organization`.`Organization` AS `Organization`, `organization`.`OrganizationCode` AS `OrganizationCode`, `division`.`DivisionName` AS `DivisionName`, `division`.`DivisionCode` AS `DivisionCode`, `division`.`GSTIN` AS `GSTIN` FROM (`organization` join `division` on(`organization`.`OrganizationCode` = `division`.`OrganizationCode`))  ;
 
 -- --------------------------------------------------------
 
@@ -995,6 +1062,14 @@ ALTER TABLE `sitework`
   ADD PRIMARY KEY (`WorkID`);
 
 --
+-- Indexes for table `states`
+--
+ALTER TABLE `states`
+  ADD PRIMARY KEY (`StateCode`),
+  ADD KEY `ShortCode` (`ShortCode`),
+  ADD KEY `StateCode` (`StateCode`);
+
+--
 -- Indexes for table `tempoffer`
 --
 ALTER TABLE `tempoffer`
@@ -1056,13 +1131,13 @@ ALTER TABLE `billdetail`
 -- AUTO_INCREMENT for table `challan detail`
 --
 ALTER TABLE `challan detail`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `deliverychallan`
 --
 ALTER TABLE `deliverychallan`
-  MODIFY `ChallanID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ChallanID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `demands`

@@ -691,7 +691,7 @@ if (!empty($VendorNameAVE))
 	if (!empty($VendorM))
 	{   
 
-		$query="SELECT ItemName, ModalNo, POQty, ReadyQty, demand_details.MaterialID FROM cyrusproject.offers
+		$query="SELECT ItemName, ModalNo, POQty, ReadyQty, demand_details.MaterialID, InspectionAt, po_details.POID FROM cyrusproject.offers
 		join demand_details on offers.MaterialID=demand_details.MaterialID
 		join po_details on offers.OfferID=po_details.OfferID
 		Where (demand_details.Status=5) or ((POQty-ReadyQty)>0 and Status=6) and VendorID=$VendorM";
@@ -707,8 +707,8 @@ if (!empty($VendorNameAVE))
 				print '<td>'.$row["ModalNo"]."</td>";
 				print '<td>'.$row["POQty"]."</td>";
 				print '<td>'.$row["ReadyQty"]."</td>";
-				print '<td><input class="form-control rounded-corner" name="CRate" type="number" min=0 onkeydown="limit2(this);" onkeyup="limit2(this);"></td>';
-				print '<td><input class="form-check-input checkb" name="select" type="checkbox" value="'.$row["MaterialID"].'"></td>';
+				print '<td><input class="form-control rounded-corner CRate" name="CRate[]" type="number" min=0 id="'.$row["POID"].'"></td>';
+				print '<td><input class="form-check-input checkb" id="'.$row["InspectionAt"].'" name="select" type="checkbox" value="'.$row["POID"].'"></td>';
 				print '</tr>';
 			}
 
@@ -730,6 +730,64 @@ if (!empty($VendorNameAVE))
 
 			}
 		}
+
+	}
+
+	$SiteCodeM=!empty($_POST['SiteCodeM'])?$_POST['SiteCodeM']:'';
+	if (!empty($SiteCodeM))
+	{
+		$Query="SELECT * FROM cyrusproject.site WHERE SiteCode=$SiteCodeM";
+		$result=mysqli_query($con,$Query);
+		if (mysqli_num_rows($result)>0)
+		{
+			$arr=mysqli_fetch_assoc($result);
+			echo $arr['Address'];
+
+		}
+
+	}
+
+
+	//work assigning
+
+
+	$OrderIDW=!empty($_POST['OrderIDW'])?$_POST['OrderIDW']:'';
+	if (!empty($OrderIDW))
+	{
+		$Query="SELECT MaterialName, sitesurvey.MaterialID FROM cyrusproject.demand_details
+		join sitesurvey on demand_details.MaterialID=sitesurvey.MaterialID
+		WHERE sitesurvey.OrderID=$OrderIDW and (LabourWork=1 or sitesurvey.Status=2) order by MaterialName";
+		$result=mysqli_query($con,$Query);
+		if (mysqli_num_rows($result)>0)
+		{
+			echo "<option value=''>Select Material</option>";
+			while ($arr=mysqli_fetch_assoc($result))
+			{
+				echo '<option value="'.$arr['MaterialID'].'">'.$arr['MaterialName']."</option>";
+
+			}
+		}
+
+	}
+
+
+	$GetQtyW=!empty($_POST['GetQtyW'])?$_POST['GetQtyW']:'';
+	if (!empty($GetQtyW))
+	{	
+		$Query="SELECT (demand_details.Qty-(sum(sitesurvey.Qty))) as leftQty FROM cyrusproject.demand_details
+		join sitesurvey on demand_details.MaterialID=sitesurvey.MaterialID WHERE sitesurvey.MaterialID=$GetQtySurvey";
+		$result=mysqli_query($con,$Query);
+		$arr=mysqli_fetch_assoc($result);
+
+		$Query2="SELECT Qty FROM demand_details WHERE MaterialID=$GetQtySurvey";
+		$result2=mysqli_query($con,$Query2);
+		$arr2=mysqli_fetch_assoc($result2);
+		if (!empty($arr['leftQty'])) {
+			echo $arr['leftQty'];
+		}else{
+			echo $arr2['Qty'];
+		}
+
 
 	}
 	?>

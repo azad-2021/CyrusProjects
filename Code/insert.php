@@ -614,4 +614,115 @@ if (!empty($ReadyQtyE))
 	
 
 }
+
+//UPDATE Ready Qty
+$POIDCH=!empty($_POST['POIDCH'])?$_POST['POIDCH']:'';
+if (!empty($POIDCH))
+{
+	$RateCH=!empty($_POST['RateCH'])?$_POST['RateCH']:'';
+	$OrderIDCH=!empty($_POST['OrderIDCH'])?$_POST['OrderIDCH']:'';
+	$MovementIDCH=!empty($_POST['MovementIDCH'])?$_POST['MovementIDCH']:'';
+	$ShippingAddressCH=!empty($_POST['ShippingAddressCH'])?$_POST['ShippingAddressCH']:'';
+	$StateCodeCH=!empty($_POST['StateCodeCH'])?$_POST['StateCodeCH']:'';
+
+	$SiteCodeCH=!empty($_POST['SiteCodeCH'])?$_POST['SiteCodeCH']:'';
+
+	$Query="SELECT ChallanNo FROM cyrusproject.deliverychallan order by ChallanID desc LIMIT 1";
+	$result=mysqli_query($con,$Query);
+
+	if (mysqli_num_rows($result)>0)
+	{
+
+		$arr=mysqli_fetch_assoc($result);
+		$ChallanNo=$arr['ChallanNo'];
+		$ChallanNo=(int)substr($ChallanNo, 8)+1;
+		$ChallanNo=$FY.'CEUP'.$ChallanNo;
+	}else{
+		$ChallanNo=$FY.'CEUP1';
+	}
+	
+
+	$Query="SELECT PONo FROM cyrusproject.po WHERE POID=$POIDCH[0]";
+	$result=mysqli_query($con,$Query);
+
+	if (mysqli_num_rows($result)>0)
+	{
+
+		$arr=mysqli_fetch_assoc($result);
+		$PONo=$arr['PONo'];
+
+	}
+
+	$err=0;
+	for ($i=0; $i < count($POIDCH); $i++) { 
+
+
+		$Query="SELECT MaterialID, ReadyQty FROM cyrusproject.po_details
+		join offers on po_details.OfferID=offers.OfferID
+		where POID=$POIDCH[$i]";
+		$result=mysqli_query($con,$Query);
+
+		if (mysqli_num_rows($result)>0)
+		{
+
+			$arr=mysqli_fetch_assoc($result);
+			$MaterialID=$arr['MaterialID'];
+			$ReadyQty=$arr['ReadyQty'];
+
+			$sql = "INSERT INTO `challan detail` (MaterialID, ReadyQty, ChallanNo, Rate)
+			VALUES ($MaterialID, $ReadyQty, '$ChallanNo', $RateCH[$i])";
+
+			if ($con->query($sql) === TRUE) {
+
+
+
+				if (!empty($StateCodeCH)) {
+
+					$sql2 = "UPDATE cyrusproject.sitesurvey SET Satus=2 WHERE MaterialID=$MaterialID";
+
+					if ($con->query($sql2) === TRUE) {
+
+					} else {
+						$err=1;
+						echo "Error: " . $sql2 . "<br>" . $con->error;
+					}
+				}
+
+
+
+			} else {
+				echo "Error: " . $sql . "<br>" . $con->error;
+				$err=1;
+				break;
+			}
+		}
+
+	}
+
+	if ($err==0) {
+
+
+		if (!empty($StateCodeCH)) {
+			$sql = "INSERT INTO deliverychallan (OrderID, PONo, MovementID, ShippingAddress, StateCode, SiteCode, ChallanDate, ChallanNo)
+			VALUES ($OrderIDCH, '$PONo', $MovementIDCH, '$ShippingAddressCH', $StateCodeCH, $SiteCodeCH, '$Date', '$ChallanNo')";
+
+		}else{
+
+			$sql = "INSERT INTO deliverychallan (OrderID, PONo, MovementID, ShippingAddress, StateCode, ChallanDate, ChallanNo)
+			VALUES ($OrderIDCH, '$PONo', $MovementIDCH, '$ShippingAddressCH', $StateCodeCH, '$Date', '$ChallanNo')";
+
+		}
+
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
+			$_SESSION['ChallanNo']=$ChallanNo;
+
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	}
+
+}
 ?>

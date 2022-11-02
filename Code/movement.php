@@ -116,7 +116,28 @@ include"query.php";
                             </select>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Select State</label>
+
+                            <select class="form-control rounded-corner" id="State">
+                                <option value="">Select State</option>
+                                <?php
+
+                                $query="SELECT * FROM cyrusproject.states order by StateName";
+
+                                $result=mysqli_query($con,$query);
+                                if (mysqli_num_rows($result)>0)
+                                {
+                                  while ($arr=mysqli_fetch_assoc($result))
+                                  {
+                                    ?>
+                                    <option value="<?php echo $arr['StateCode']; ?>"><?php echo $arr['StateName']; ?></option>
+                                    <?php
+                                }}?>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Movement</label>
 
                             <select class="form-control rounded-corner" id="Movement">
@@ -136,16 +157,16 @@ include"query.php";
                                 }}?>
                             </select>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Site</label>
                             <select class="form-select form-control rounded-corner" id="SiteCodeM">
                                 <option value="">Select</option>
 
                             </select>
                         </div>
-                        <div class="col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Inspection Address</label>
-                            <textarea class="form-control rounded-corner" id="InspectionOther" disabled></textarea>
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Shipping Address</label>
+                            <textarea class="form-control rounded-corner" id="InspectionOther"></textarea>
                         </div>
 
 
@@ -177,12 +198,12 @@ include"query.php";
                                         </tbody>
                                     </table>
                                 </div>  
-                                <h4 align="right" style="margin: 30px;">Amount : <span id="Amount"></span></h4>                      
+                                <h4 align="right" style="margin: 30px;">Amount : <span id="AmountC">0</span></h4>                      
                             </div><!-- end card-body -->
 
                             <center>
                                 <div class="col-lg-2" style="margin-top: 35px; margin-bottom: 20px;">
-                                    <button type="button" class="bt btn-lg btn-primary AddWorkSite">Generate Challan</button>
+                                    <button type="button" class="bt btn-lg btn-primary GenerateChallan">Generate Challan</button>
                                 </div>
                             </center>
                         </div><!-- end card -->
@@ -252,6 +273,15 @@ include"query.php";
 $(document).ready(function () {
     $('table.displayC').DataTable();
 });
+
+function err(msg){
+    Swal.fire({
+        title: 'error!',
+        text: msg,
+        icon: 'error',
+
+    })
+}
 
 
 $(document).on('change', '#OrgCodeM', function(){
@@ -341,8 +371,9 @@ $(document).on('change', '#VendorM', function(){
 $(document).on('change', '#Movement', function(){
 
     var ID=$(this).val();
+    document.getElementById("InspectionOther").value='';
     var DivisionCodeM = document.getElementById("DivisionCodeM").value;
-    if(ID==3 && DivisionCodeM){
+    if(DivisionCodeM){
         $.ajax({
           type:'POST',
           url:'select.php',
@@ -355,7 +386,134 @@ $(document).on('change', '#Movement', function(){
     }else{
         document.getElementById("SiteCodeM").disabled=true;
         $('#SiteCodeM').html('<option value="">Site</option>');
+
     }
+});
+
+$(document).on('change', '#SiteCodeM', function(){
+
+    var SiteCodeM=$(this).val();
+
+    if(SiteCodeM){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'SiteCodeM':SiteCodeM},
+          success:function(result){
+            document.getElementById("InspectionOther").value=result;
+            document.getElementById("InspectionOther").disabled=true;
+        }
+    }); 
+    }else{
+        document.getElementById("InspectionOther").value='';
+        document.getElementById("InspectionOther").disabled=false;
+    }
+});
+
+
+$(document).on('change', '.CRate', function(){
+
+    var arr = $('input[name="CRate[]"]').map(function () {
+
+        if (this.value) {
+
+            return this.value;
+        }else{
+            return 0;
+        }
+
+        
+    }).get();
+
+    const sum = arr.reduce(add, 0);
+
+    function add(accumulator, a) {
+      return accumulator + parseFloat(a);
+  }
+  //alert(sum);
+  document.getElementById("AmountC").innerHTML=sum.toFixed(2);
+});
+
+
+var Ins=0;
+$(document).on('change', '.checkb', function(){
+
+    var MaterialID=$(this).val();
+    Ins=0;
+    var Rate=document.getElementById(MaterialID).value;
+    //alert(Rate);
+    if (!Rate) {
+
+        err("Please enter rate");
+        $(this).prop('checked', false);
+    }
+
+    $("input:checkbox[name=select]:checked").each(function() {
+        InspectionAt=$(this).attr("id");
+        //alert(InspectionAt);
+        if (InspectionAt=='Inspection at other place') {
+
+            Ins=1;
+        }
+
+    });
+
+    if (Ins==1) {
+        document.getElementById("InspectionOther").disabled=false;
+    }else{
+        document.getElementById("InspectionOther").disabled=true;
+    }
+
+
+});
+
+
+
+$(document).on('click', '.GenerateChallan', function(){
+
+    var POID = [];
+    var Rate=[];
+    var OrderID=document.getElementById("OrderIDM").value;
+    var MovementID=document.getElementById("Movement").value;
+    var ShippingAddress=document.getElementById("InspectionOther").value;
+    var StateCode=document.getElementById("State").value;
+    var SiteCode=document.getElementById("SiteCodeM").value;
+
+    $("input:checkbox[name=select]:checked").each(function() {
+        POID.push($(this).val());
+        Rate.push(document.getElementById($(this).val()).value);
+    });
+    
+    if (POID.length==0) {
+        err("Please select Material");
+    }else if(!StateCode){
+        err("Please select state");
+    }else if(!ShippingAddress){
+        err("Please enter Shipping Address");
+    }else if(!MovementID){
+        err("Please enter Movement");
+    }else{
+
+        $.ajax({
+          type:'POST',
+          url:'insert.php',
+          data:{'POIDCH':POID, 'RateCH':Rate, 'OrderIDCH':OrderID, 'MovementIDCH':MovementID, 'ShippingAddressCH':ShippingAddress, 'StateCodeCH':StateCode, 'SiteCodeCH':SiteCode },
+          success:function(result){
+
+            if (result==1) {
+                window.open('printchallan.php', '_blank').focus();
+                window.location.reload();
+
+            }else{
+                err(result);
+            }
+
+        }
+    }); 
+
+    }
+
+
 });
 
 
