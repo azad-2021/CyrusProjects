@@ -751,16 +751,17 @@ if (!empty($VendorNameAVE))
 	//work assigning
 
 
-	$OrderIDW=!empty($_POST['OrderIDW'])?$_POST['OrderIDW']:'';
-	if (!empty($OrderIDW))
+	$SiteCodeWM=!empty($_POST['SiteCodeWM'])?$_POST['SiteCodeWM']:'';
+	if (!empty($SiteCodeWM))
 	{
 		$Query="SELECT MaterialName, sitesurvey.MaterialID FROM cyrusproject.demand_details
 		join sitesurvey on demand_details.MaterialID=sitesurvey.MaterialID
-		WHERE sitesurvey.OrderID=$OrderIDW and (LabourWork=1 or sitesurvey.Status=2) order by MaterialName";
+		WHERE sitesurvey.SiteCode=$SiteCodeWM order by MaterialName";
 		$result=mysqli_query($con,$Query);
+		echo "<option value=''>Select Material</option>";
 		if (mysqli_num_rows($result)>0)
 		{
-			echo "<option value=''>Select Material</option>";
+			
 			while ($arr=mysqli_fetch_assoc($result))
 			{
 				echo '<option value="'.$arr['MaterialID'].'">'.$arr['MaterialName']."</option>";
@@ -774,21 +775,71 @@ if (!empty($VendorNameAVE))
 	$GetQtyW=!empty($_POST['GetQtyW'])?$_POST['GetQtyW']:'';
 	if (!empty($GetQtyW))
 	{	
-		$Query="SELECT (demand_details.Qty-(sum(sitesurvey.Qty))) as leftQty FROM cyrusproject.demand_details
-		join sitesurvey on demand_details.MaterialID=sitesurvey.MaterialID WHERE sitesurvey.MaterialID=$GetQtySurvey";
+		$SiteCodeW=!empty($_POST['SiteCodeW'])?$_POST['SiteCodeW']:'';
+
+		$Query="SELECT (sitesurvey.Qty-sitework.Qty) as leftQty FROM cyrusproject.sitework
+		join sitesurvey on sitework.MaterialID=sitesurvey.MaterialID WHERE sitework.MaterialID=$GetQtyW and sitesurvey.SiteCode=$SiteCodeW";
 		$result=mysqli_query($con,$Query);
 		$arr=mysqli_fetch_assoc($result);
 
-		$Query2="SELECT Qty FROM demand_details WHERE MaterialID=$GetQtySurvey";
+		$Query2="SELECT Qty FROM cyrusproject.sitesurvey WHERE MaterialID=$GetQtyW and SiteCode=$SiteCodeW";
 		$result2=mysqli_query($con,$Query2);
 		$arr2=mysqli_fetch_assoc($result2);
-		if (!empty($arr['leftQty'])) {
-			echo $arr['leftQty'];
-		}else{
+
+
+		if (empty($arr)==true) {
 			echo $arr2['Qty'];
+
+		}else{
+			echo $arr['leftQty'];
 		}
 
 
+
+	}
+
+//Site work
+
+	$SiteWork=!empty($_POST['SiteWork'])?$_POST['SiteWork']:'';
+
+	if (!empty($SiteWork))
+	{   
+
+		$query="SELECT Work, WorkID, sitework.Qty, Unit, StartDate, EndDate, MaterialName FROM cyrusproject.sitework
+		join worktype on sitework.WorkTypeID=worktype.WorkTypeID
+		join demand_details on sitework.MaterialID=demand_details.MaterialID WHERE SiteCode=$SiteWork and AssignDate is null and EmployeeCode is null Order by WorkID";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+
+				print "<tr>";
+				print '<td>'.$row["Work"]."</td>";
+				print '<td style="word-wrap: break-word;">'.$row["MaterialName"]."</td>";
+				print '<td>'.$row["WorkID"]."</td>";
+				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
+				print '<td>'.date('d-M-Y',strtotime($row["StartDate"]))."</td>";
+				print '<td>'.date('d-M-Y',strtotime($row["EndDate"]))."</td>";
+				print '<td><select class="form-control rounded-corner" id="AssignTo" id2="'.$row["WorkID"].'">';
+				$Query="SELECT EmployeeCode, EmployeeName FROM employees WHERE DesignationID=2 and Active=1 order by EmployeeName";
+				$result2=mysqli_query($con,$Query);
+				print "<option value=''>Select Employee</option>";
+				if (mysqli_num_rows($result2)>0)
+				{
+					
+					while ($arr=mysqli_fetch_assoc($result2))
+					{
+						print '<option value="'.$arr['EmployeeCode'].'">'.$arr['EmployeeName']."</option>";
+
+					}
+				}
+				print'</select></td>';
+				print '</tr>';
+			}
+
+		}
 	}
 	?>
 

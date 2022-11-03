@@ -725,4 +725,59 @@ if (!empty($POIDCH))
 	}
 
 }
+
+
+$OrderIDAW=!empty($_POST['OrderIDAW'])?$_POST['OrderIDAW']:'';
+if (!empty($OrderIDAW))
+{
+	$SiteCodeAW=!empty($_POST['SiteCodeAW'])?$_POST['SiteCodeAW']:'';
+	$MaterialIDAW=!empty($_POST['MaterialIDAW'])?$_POST['MaterialIDAW']:'';
+	$QtyAW=!empty($_POST['QtyAW'])?$_POST['QtyAW']:'';
+	$WorkTypeAW=!empty($_POST['WorkTypeAW'])?$_POST['WorkTypeAW']:'';
+	$SDateAW=!empty($_POST['SDateAW'])?$_POST['SDateAW']:'';
+	$EDateAW=!empty($_POST['EDateAW'])?$_POST['EDateAW']:'';
+	
+
+
+
+	$Query="SELECT * FROM cyrusproject.sitework WHERE MaterialID=$MaterialIDAW and SiteCode=$SiteCodeAW";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+
+		echo "Material already exist";
+
+	}else{
+
+		$sql = "INSERT INTO sitework (OrderID, SiteCode, MaterialID, WorkTypeID, Qty, StartDate, EndDate)
+		VALUES ($OrderIDAW, $SiteCodeAW, $MaterialIDAW, $WorkTypeAW, $QtyAW, '$SDateAW', '$EDateAW')";
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
+
+
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+
+	}
+}
+
+
+$EmployeeAssign=!empty($_POST['EmployeeAssign'])?$_POST['EmployeeAssign']:'';
+if (!empty($EmployeeAssign))
+{
+	$WorkIDAssign=!empty($_POST['WorkIDAssign'])?$_POST['WorkIDAssign']:'';
+	$sql = "UPDATE sitework SET EmployeeCode=$EmployeeAssign, AssignDate='$Date' WHERE WorkID=$WorkIDAssign";
+
+	if ($con->query($sql) === TRUE) {
+
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
+}
 ?>

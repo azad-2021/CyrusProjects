@@ -34,6 +34,12 @@ include"query.php";
     <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
     <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+    <style type="text/css">
+       table.dataTable tbody td {
+        word-break: break-word;
+        vertical-align: top;
+    }
+</style>
 </head>
 <body data-sidebar="dark" data-topbar="dark">
 
@@ -56,12 +62,12 @@ include"query.php";
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-flex align-items-center justify-content-between">
-                            <h4 class="mb-0">Work Assigning</h4>
+                            <h4 class="mb-0">Site Work</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Cyrus</a></li>
-                                    <li class="breadcrumb-item active">Work Assigning</li>
+                                    <li class="breadcrumb-item active">Site Work</li>
                                 </ol>
                             </div>
 
@@ -145,11 +151,11 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Quantity</label>
-                            <input type="number" class="form-control rounded-corner" name="Qty" id="QtyW" min=1 onkeydown="limit(this);" onkeyup="limit(this);">
+                            <input type="number" class="form-control rounded-corner" name="Qty" id="QtyW" min=1 onkeydown="limitx(this);" onkeyup="limitx(this);">
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Left Quantity</label>
-                            <input type="text" class="form-control rounded-corner" name="Unit" id="LeftQtyW" disabled>
+                            <input type="text" class="form-control rounded-corner" name="Qty" id="LeftQtyW" disabled>
                         </div>          
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Unit</label>
@@ -158,11 +164,11 @@ include"query.php";
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Start Date</label>
-                            <input type="date" class="form-control rounded-corner" name="Unit" id="SDateW" disabled>
+                            <input type="date" class="form-control rounded-corner" name="Unit" id="SDateW">
                         </div>
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">End Date</label>
-                            <input type="date" class="form-control rounded-corner" name="Unit" id="EDateW" disabled>
+                            <input type="date" class="form-control rounded-corner" name="Unit" id="EDateW">
                         </div>
                         <center>
                             <div class="col-lg-2" style="margin-top: 35px;">
@@ -181,23 +187,25 @@ include"query.php";
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Unassigned Work</h4>
 
-                                <div class="table-responsive">
-                                    <table class="table table-centered table-nowrap mb-0 table-bordered displayUWork">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Work</th>
-                                                <th>Work ID</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Assign To</th>
-                                            </tr>
-                                        </thead>
+                                
+                                <table class="table table-centered table-bordered displayUWork">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="min-width: 150px">Work</th>
+                                            <th style="min-width: 400px; max-width: 500px;">Description</th>
+                                            <th style="min-width: 80px">Work ID</th>
+                                            <th style="min-width: 80px">Quantity</th>
+                                            <th style="min-width: 80px">Start Date</th>
+                                            <th style="min-width: 80px">End Date</th>
+                                            <th style="min-width: 120px">Assign To</th>
+                                        </tr>
+                                    </thead>
 
-                                        <tbody>
+                                    <tbody id="UNWork">
 
-                                        </tbody>
-                                    </table>
-                                </div>                        
+                                    </tbody>
+                                </table>
+
                             </div><!-- end card-body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
@@ -264,7 +272,13 @@ include"query.php";
 <script type="text/javascript">
 //
 $(document).ready(function () {
-    $('table.displayUWork').DataTable();
+    $('table.displayUWork').DataTable({
+
+        scrollY: '200px',
+        scrollCollapse: true,
+        paging: false,
+        scrollX: true,
+    });
 });
 
 
@@ -328,69 +342,215 @@ $(document).on('change', '#DivisionCodeW', function(){
 
 
 
-$(document).on('change', '#OrderIDW', function(){
+$(document).on('change', '#SiteCodeW', function(){
 
-    var OrderIDM=$(this).val();
-    if(OrderIDM){
+    var SiteCodeW=$(this).val();
+    if(SiteCodeW){
         $.ajax({
           type:'POST',
           url:'select.php',
-          data:{'OrderIDW':OrderIDM},
+          data:{'SiteCodeWM':SiteCodeW},
           success:function(result){
             $('#MaterialW').html(result);
 
         }
     });  
 
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'SiteWork':SiteCodeW},
+          success:function(result){
+
+           $('.displayUWork').DataTable().clear();
+           $('.displayUWork').DataTable().destroy();
+           $('#UNWork').html(result);
+           $('table.displayUWork').DataTable({
+
+            scrollY: '200px',
+            scrollCollapse: true,
+            paging: false,
+            scrollX: true,
+        });
+
+       }
+   }); 
+
     }else{
         $('#MaterialW').html('<option value="">Select</option>');
     }
 });
 
+$(document).on('change', '#MaterialW', function(){
 
-$(document).on('change', '#VendorM', function(){
+    var MaterialW=$(this).val();
+    var SiteCode=document.getElementById("SiteCodeW").value;
 
-    var VendorID=$(this).val();
-    if(VendorID){
+    if(MaterialW){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetQtyW':MaterialW, 'SiteCodeW':SiteCode},
+          success:function(result){
+            document.getElementById("LeftQtyW").value=result;
+        }
+    }); 
 
         $.ajax({
           type:'POST',
           url:'select.php',
-          data:{'VendorM':VendorID},
+          data:{'GetUnit':MaterialW},
           success:function(result){
-             $('.displayC').DataTable().clear();
-             $('.displayC').DataTable().destroy();
-             $('#CTable').html(result);
-             $('table.displayC').DataTable();
-
-         }
-     });
-    }else{
-        $('.displayC').DataTable().clear();
-        $('.displayC').DataTable().destroy();
+            document.getElementById("UnitW").value=result;
+        }
+    });
+        document.getElementById("QtyW").disabled=false;
     }
 });
 
 
+function limitx(element)
+{
+
+    var Qty=document.getElementById("QtyW").value;
+    var MaxQty= document.getElementById("LeftQtyW").value;
+    if(MaxQty==0){
+        document.getElementById("QtyW").value=null;
+        document.getElementById("QtyW").disabled=true;
+    }else if (Qty>parseInt(MaxQty)) {
+      document.getElementById("QtyW").value=parseInt(MaxQty);
+  }
+
+}
 
 
-$(document).on('change', '#SiteCodeM', function(){
+$(document).on('click', '.AddWorkSite', function(){
 
-    var SiteCodeM=$(this).val();
+    var OrderID=document.getElementById("OrderIDW").value;
+    var SiteCode=document.getElementById("SiteCodeW").value;
+    var MaterialID=document.getElementById("MaterialW").value;
+    var WorkType=document.getElementById("WorkType").value;
+    var Qty=document.getElementById("QtyW").value;
+    var SDate=document.getElementById("SDateW").value;
+    var EDate=document.getElementById("EDateW").value;
+    if(OrderID && SiteCode && MaterialID && WorkType && Qty && SDate && EDate){
 
-    if(SiteCodeM){
         $.ajax({
           type:'POST',
-          url:'select.php',
-          data:{'SiteCodeM':SiteCodeM},
+          url:'insert.php',
+          data:{'OrderIDAW':OrderID, 'SiteCodeAW':SiteCode, 'MaterialIDAW':MaterialID, 'QtyAW':Qty, 'SDateAW':SDate, 'EDateAW':EDate, 'WorkTypeAW':WorkType},
           success:function(result){
-            document.getElementById("InspectionOther").value=result;
-            document.getElementById("InspectionOther").disabled=true;
+            if (result==1) {
+                $('#MaterialW').prop('selectedIndex',0);
+                $('#WorkType').prop('selectedIndex',0);
+                document.getElementById("SDateW").value=null;
+                document.getElementById("EDateW").value=null;
+
+                document.getElementById("QtyW").value=null;
+                document.getElementById("LeftQtyW").value=null;
+                document.getElementById("UnitW").value=null;
+
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SiteCodeWM':SiteCode},
+                  success:function(result){
+                    $('#MaterialW').html(result);
+
+                }
+            });  
+
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SiteWork':SiteCode},
+                  success:function(result){
+
+                   $('.displayUWork').DataTable().clear();
+                   $('.displayUWork').DataTable().destroy();
+                   $('#UNWork').html(result);
+                   $('table.displayUWork').DataTable({
+
+                    scrollY: '200px',
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: true,
+                });
+
+               }
+           }); 
+
+            }else{
+                err(result);
+            }
         }
-    }); 
+    });
     }else{
-        document.getElementById("InspectionOther").value='';
-        document.getElementById("InspectionOther").disabled=false;
+        err("Please enter all fields");
+        //$('.displayUWork').DataTable().clear();
+        //$('.displayUWork').DataTable().destroy();
     }
+});
+
+
+$(document).on('change', '#AssignTo', function(){
+
+    var EmployeeCode=$(this).val();
+    var WorkID=$(this).attr("id2");
+    var SiteCode=document.getElementById("SiteCodeW").value;
+    if(EmployeeCode && WorkID){
+        Swal.fire({
+          title: 'Do you want to save the changes?',
+          showDenyButton: true,
+          showCancelButton: false,
+          confirmButtonText: 'Save',
+          denyButtonText: `Don't save`,
+      }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+              $.ajax({
+                  type:'POST',
+                  url:'insert.php',
+                  data:{'EmployeeAssign':EmployeeCode, 'WorkIDAssign':WorkID},
+                  success:function(result){
+                    if (result==1) {
+                        Swal.fire('Saved!', '', 'success');
+
+                        $.ajax({
+                          type:'POST',
+                          url:'select.php',
+                          data:{'SiteWork':SiteCode},
+                          success:function(result){
+
+                           $('.displayUWork').DataTable().clear();
+                           $('.displayUWork').DataTable().destroy();
+                           $('#UNWork').html(result);
+                           $('table.displayUWork').DataTable({
+
+                            scrollY: '200px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
+
+                       }
+                   });
+
+                    }else{
+                        err(result);
+                    }
+
+                }
+            }); 
+
+          } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+            $('#AssignTo').prop('selectedIndex',0);
+        }
+    })
+
+  }else{
+    $('#AssignTo').html('<option value="">Select</option>');
+}
 });
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2022 at 01:51 PM
+-- Generation Time: Nov 03, 2022 at 06:52 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,6 +20,59 @@ SET time_zone = "+00:00";
 --
 -- Database: `cyrusproject`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `amcs`
+--
+
+CREATE TABLE `amcs` (
+  `AMCID` int(11) NOT NULL,
+  `SiteCode` int(11) NOT NULL,
+  `Description` varchar(200) NOT NULL,
+  `GenDate` date NOT NULL DEFAULT current_timestamp(),
+  `ExpectedCompletion` date DEFAULT NULL,
+  `AssignDate` date DEFAULT NULL,
+  `EmployeeCode` int(11) NOT NULL,
+  `Attended` tinyint(4) NOT NULL DEFAULT 0,
+  `AttendDate` date DEFAULT NULL,
+  `ExecutiveRemark` varchar(200) DEFAULT NULL,
+  `VerificationRemark` varchar(200) DEFAULT NULL,
+  `EntryDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `amcs_posting`
+--
+
+CREATE TABLE `amcs_posting` (
+  `ID` int(11) NOT NULL,
+  `DivisionCode` int(11) NOT NULL,
+  `GadgetID` int(11) NOT NULL,
+  `StartDate` date DEFAULT NULL,
+  `EndDate` date DEFAULT NULL,
+  `Amount` decimal(9,2) NOT NULL,
+  `PostedDate` date NOT NULL DEFAULT current_timestamp(),
+  `Gen` tinyint(4) NOT NULL DEFAULT 0,
+  `GenDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `assignlogs`
+--
+
+CREATE TABLE `assignlogs` (
+  `logID` int(11) NOT NULL,
+  `WorkType` varchar(50) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `AssignedBy` int(11) NOT NULL,
+  `TimeStamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -95,6 +148,29 @@ CREATE TABLE `challan detail` (
 
 INSERT INTO `challan detail` (`ID`, `MaterialID`, `ChallanNo`, `ReadyQty`, `Rate`) VALUES
 (6, 5, '2223CEUP2', 30, '1200.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `complaints`
+--
+
+CREATE TABLE `complaints` (
+  `ComplaintID` int(11) NOT NULL,
+  `SiteCode` int(11) NOT NULL,
+  `Description` varchar(500) NOT NULL,
+  `DateofInformation` date DEFAULT NULL,
+  `ExpectedCompletion` date DEFAULT NULL,
+  `AssignDate` date DEFAULT NULL,
+  `EmployeeCode` int(11) DEFAULT NULL,
+  `ReceivedBy` varchar(100) DEFAULT NULL,
+  `MadeBy` varchar(100) DEFAULT NULL,
+  `Attended` tinyint(4) NOT NULL DEFAULT 0,
+  `AttendDate` date DEFAULT NULL,
+  `ExecutiveRemark` varchar(200) DEFAULT NULL,
+  `VerificationRemark` varchar(200) DEFAULT NULL,
+  `EntryDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -247,6 +323,7 @@ CREATE TABLE `employees` (
   `DesignationID` int(11) NOT NULL,
   `Contact` varchar(13) DEFAULT NULL,
   `Email` varchar(150) DEFAULT NULL,
+  `Password` varchar(30) NOT NULL DEFAULT 'cyrus@123',
   `Address` varchar(200) DEFAULT NULL,
   `Active` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -255,9 +332,20 @@ CREATE TABLE `employees` (
 -- Dumping data for table `employees`
 --
 
-INSERT INTO `employees` (`EmployeeCode`, `EmployeeName`, `DesignationID`, `Contact`, `Email`, `Address`, `Active`) VALUES
-(3, 'Anant', 2, '+918418826770', 'suryavanshianantsingh@gmail.com', 'ANANT SINGH SURYAVANSHI\nVILLAGE POST DHIRAULI BABU\nCHHAWANI,\nBasti,\nUttar Pradesh,\npincode: 272127', 1),
-(4, 'Anant Singh', 2, '+918418826770', 'suryavanshianantsingh@gmail.com', 'ANANT SINGH SURYAVANSHI\nVILLAGE POST DHIRAULI BABU\nCHHAWANI,\nBasti,\nUttar Pradesh,\npincode: 272127', 1);
+INSERT INTO `employees` (`EmployeeCode`, `EmployeeName`, `DesignationID`, `Contact`, `Email`, `Password`, `Address`, `Active`) VALUES
+(3, 'Anant', 2, '+918418826770', 'suryavanshianantsingh@gmail.com', 'cyrus@123', 'ANANT SINGH SURYAVANSHI\nVILLAGE POST DHIRAULI BABU\nCHHAWANI,\nBasti,\nUttar Pradesh,\npincode: 272127', 1),
+(4, 'Anant Singh', 2, '+918418826770', 'suryavanshianantsingh@gmail.com', 'cyrus@123', 'ANANT SINGH SURYAVANSHI\nVILLAGE POST DHIRAULI BABU\nCHHAWANI,\nBasti,\nUttar Pradesh,\npincode: 272127', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gadget`
+--
+
+CREATE TABLE `gadget` (
+  `GadgetID` int(11) NOT NULL,
+  `Gadget` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -374,6 +462,27 @@ CREATE TABLE `issuechallan detail` (
   `Qty` int(11) NOT NULL,
   `Unit` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loginlogs`
+--
+
+CREATE TABLE `loginlogs` (
+  `ID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `TimeStamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `loginlogs`
+--
+
+INSERT INTO `loginlogs` (`ID`, `UserID`, `TimeStamp`) VALUES
+(1, 3, '2022-11-03 11:14:37'),
+(2, 3, '2022-11-03 11:15:41'),
+(3, 3, '2022-11-03 11:16:50');
 
 -- --------------------------------------------------------
 
@@ -658,12 +767,22 @@ CREATE TABLE `sitework` (
   `MaterialID` int(11) NOT NULL,
   `WorkTypeID` int(11) NOT NULL,
   `Qty` int(11) NOT NULL,
-  `Unit` varchar(15) NOT NULL,
   `StartDate` date NOT NULL,
   `EndDate` date NOT NULL,
-  `EmployeeCode` int(11) NOT NULL,
-  `AssignDate` date NOT NULL
+  `EmployeeCode` int(11) DEFAULT NULL,
+  `AssignDate` date DEFAULT NULL,
+  `Closed` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sitework`
+--
+
+INSERT INTO `sitework` (`WorkID`, `OrderID`, `SiteCode`, `MaterialID`, `WorkTypeID`, `Qty`, `StartDate`, `EndDate`, `EmployeeCode`, `AssignDate`, `Closed`) VALUES
+(2, 10, 1, 7, 9, 100, '2022-11-01', '2022-11-10', NULL, NULL, 0),
+(3, 10, 1, 6, 3, 5, '2022-11-05', '2022-11-10', 3, '2022-11-03', 0),
+(4, 10, 1, 4, 1, 200, '2022-11-13', '2022-11-17', 3, '2022-11-03', 0),
+(5, 10, 1, 5, 2, 120, '2022-11-05', '2022-11-12', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -831,6 +950,31 @@ INSERT INTO `vendor_details` (`ID`, `MaterialID`, `VendorID`, `Finalized`, `Fina
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `vpendingwork`
+-- (See below for the actual view)
+--
+CREATE TABLE `vpendingwork` (
+`Organization` varchar(200)
+,`DivisionName` varchar(200)
+,`SiteName` varchar(200)
+,`SiteCode` int(11)
+,`OrderID` int(11)
+,`Work` varchar(100)
+,`Qty` int(11)
+,`Unit` varchar(20)
+,`WorkID` int(11)
+,`WorkTypeID` int(11)
+,`EmployeeCode` int(11)
+,`EmployeeName` varchar(150)
+,`StartDate` date
+,`EndDate` date
+,`AssignDate` date
+,`LeftDays` int(7)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `worktype`
 --
 
@@ -911,9 +1055,36 @@ DROP TABLE IF EXISTS `pending_po`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `pending_po`  AS SELECT `organization_details`.`Organization` AS `Organization`, `organization_details`.`DivisionName` AS `DivisionName`, `orders`.`OrderID` AS `OrderID`, `po`.`PODate` AS `PODate`, `po`.`PONo` AS `PONo`, `po`.`POID` AS `POID` FROM (((`po` join `orders` on(`po`.`OrderID` = `orders`.`OrderID`)) join `organization_details` on(`orders`.`DivisionCode` = `organization_details`.`DivisionCode`)) join `po_details` on(`po`.`POID` = `po_details`.`POID`)) WHERE `po_details`.`POQty` - `po_details`.`ReadyQty` > 00  ;
 
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vpendingwork`
+--
+DROP TABLE IF EXISTS `vpendingwork`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vpendingwork`  AS SELECT `organization_details`.`Organization` AS `Organization`, `organization_details`.`DivisionName` AS `DivisionName`, `site`.`SiteName` AS `SiteName`, `sitework`.`SiteCode` AS `SiteCode`, `sitework`.`OrderID` AS `OrderID`, `worktype`.`Work` AS `Work`, `sitework`.`Qty` AS `Qty`, `demand_details`.`Unit` AS `Unit`, `sitework`.`WorkID` AS `WorkID`, `sitework`.`WorkTypeID` AS `WorkTypeID`, `sitework`.`EmployeeCode` AS `EmployeeCode`, `employees`.`EmployeeName` AS `EmployeeName`, `sitework`.`StartDate` AS `StartDate`, `sitework`.`EndDate` AS `EndDate`, `sitework`.`AssignDate` AS `AssignDate`, to_days(`sitework`.`EndDate`) - to_days(curdate()) AS `LeftDays` FROM (((((`sitework` join `worktype` on(`sitework`.`WorkTypeID` = `worktype`.`WorkTypeID`)) join `site` on(`sitework`.`SiteCode` = `site`.`SiteCode`)) join `organization_details` on(`site`.`DivisionCode` = `organization_details`.`DivisionCode`)) join `employees` on(`sitework`.`EmployeeCode` = `employees`.`EmployeeCode`)) join `demand_details` on(`sitework`.`MaterialID` = `demand_details`.`MaterialID`)) WHERE `sitework`.`EmployeeCode` is not null AND `sitework`.`AssignDate` is not null AND `sitework`.`Closed` = 00  ;
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `amcs`
+--
+ALTER TABLE `amcs`
+  ADD PRIMARY KEY (`AMCID`);
+
+--
+-- Indexes for table `amcs_posting`
+--
+ALTER TABLE `amcs_posting`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `assignlogs`
+--
+ALTER TABLE `assignlogs`
+  ADD PRIMARY KEY (`logID`);
 
 --
 -- Indexes for table `billbook`
@@ -932,6 +1103,12 @@ ALTER TABLE `billdetail`
 --
 ALTER TABLE `challan detail`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `complaints`
+--
+ALTER TABLE `complaints`
+  ADD PRIMARY KEY (`ComplaintID`);
 
 --
 -- Indexes for table `deliverychallan`
@@ -976,6 +1153,12 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`EmployeeCode`);
 
 --
+-- Indexes for table `gadget`
+--
+ALTER TABLE `gadget`
+  ADD PRIMARY KEY (`GadgetID`);
+
+--
 -- Indexes for table `gst rates`
 --
 ALTER TABLE `gst rates`
@@ -993,6 +1176,12 @@ ALTER TABLE `issuechallan`
 -- Indexes for table `issuechallan detail`
 --
 ALTER TABLE `issuechallan detail`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `loginlogs`
+--
+ALTER TABLE `loginlogs`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -1116,6 +1305,24 @@ ALTER TABLE `work verification`
 --
 
 --
+-- AUTO_INCREMENT for table `amcs`
+--
+ALTER TABLE `amcs`
+  MODIFY `AMCID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `amcs_posting`
+--
+ALTER TABLE `amcs_posting`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `assignlogs`
+--
+ALTER TABLE `assignlogs`
+  MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `billbook`
 --
 ALTER TABLE `billbook`
@@ -1132,6 +1339,12 @@ ALTER TABLE `billdetail`
 --
 ALTER TABLE `challan detail`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `complaints`
+--
+ALTER TABLE `complaints`
+  MODIFY `ComplaintID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `deliverychallan`
@@ -1176,6 +1389,12 @@ ALTER TABLE `employees`
   MODIFY `EmployeeCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `gadget`
+--
+ALTER TABLE `gadget`
+  MODIFY `GadgetID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `gst rates`
 --
 ALTER TABLE `gst rates`
@@ -1192,6 +1411,12 @@ ALTER TABLE `issuechallan`
 --
 ALTER TABLE `issuechallan detail`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `loginlogs`
+--
+ALTER TABLE `loginlogs`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `material consumed`
@@ -1257,7 +1482,7 @@ ALTER TABLE `sitesurvey`
 -- AUTO_INCREMENT for table `sitework`
 --
 ALTER TABLE `sitework`
-  MODIFY `WorkID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `WorkID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tempoffer`
