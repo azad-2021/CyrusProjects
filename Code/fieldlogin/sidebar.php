@@ -23,51 +23,35 @@
 
     </div>
 
-    <!--
-            <div class="navbar-brand-box" style="margin-top: 10px; margin-bottom: 30px;">
-        <a href="index.php" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="assets/images/STAR.gif" alt="" height="70" width="150" style=" border-radius: 10px;">
-            </span>
-            <span class="logo-lg">
-                <img src="assets/images/STAR.gif" alt="" height="70" width="150" style="border-radius: 10px;">
-            </span>
-        </a>
 
-        <a href="index.php" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="assets/images/STAR.gif" alt=""  height="70" width="150" style="border-radius: 10px;">
-            </span>
-            <span class="logo-lg" style="font-size:25px;">
-                <img src="assets/images/STAR.gif" alt=""  height="70" width="150" style="border-radius: 10px;">
-            </span>
-        </a>
+    <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
+        <i class="ri-menu-line"></i>
+    </button>
 
+    <div data-simplebar class="sidebar-menu-scroll">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+
+                <li>
+                    <a href="index.php" class="waves-effect">
+                        <i class="ri-home-gear-line"></i><span class="badge rounded-pill bg-success float-end"></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pverification.php" class=" waves-effect">
+                        <i class="ri-file-list-fill"></i>
+                        <span>Pending Verification</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Sidebar -->
     </div>
--->
-
-<button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
-    <i class="ri-menu-line"></i>
-</button>
-
-<div data-simplebar class="sidebar-menu-scroll">
-
-    <!--- Sidemenu -->
-    <div id="sidebar-menu">
-        <!-- Left Menu Start -->
-
-        <ul class="metismenu list-unstyled" id="side-menu">
-            <li class="menu-title">Menu</li>
-
-            <li>
-                <a href="index.php" class="waves-effect">
-                    <i class="ri-home-gear-line"></i><span class="badge rounded-pill bg-success float-end"></span>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- Sidebar -->
-</div>
 </div>
 <!-- Left Sidebar End -->

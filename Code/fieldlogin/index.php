@@ -211,7 +211,7 @@ if (mysqli_num_rows($result)>0)
                                                         print '<td><span class="d-none">'.$row["EndDate"].'</span>'.date('d-M-Y',strtotime($row["EndDate"]))."</td>";
                                                         print '<td><span class="d-none">'.$row["StartDate"].'</span>'.date('d-M-Y',strtotime($row["AssignDate"]))."</td>";
                                                         print '<td>'.$row["LeftDays"]."</td>";
-                                                        print '<td><a href="reporting.php?'.$WorkID.'">Enter Details</a></td>';
+                                                        print '<td><a href="reporting.php?WorkID='.$WorkID.'">Enter Details</a></td>';
                                                         print '</tr>';
                                                     }
 

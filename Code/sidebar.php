@@ -23,29 +23,6 @@
 
     </div>
 
-    <!--
-            <div class="navbar-brand-box" style="margin-top: 10px; margin-bottom: 30px;">
-        <a href="index.php" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="assets/images/STAR.gif" alt="" height="70" width="150" style=" border-radius: 10px;">
-            </span>
-            <span class="logo-lg">
-                <img src="assets/images/STAR.gif" alt="" height="70" width="150" style="border-radius: 10px;">
-            </span>
-        </a>
-
-        <a href="index.php" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="assets/images/STAR.gif" alt=""  height="70" width="150" style="border-radius: 10px;">
-            </span>
-            <span class="logo-lg" style="font-size:25px;">
-                <img src="assets/images/STAR.gif" alt=""  height="70" width="150" style="border-radius: 10px;">
-            </span>
-        </a>
-
-    </div>
--->
-
 <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
     <i class="ri-menu-line"></i>
 </button>
@@ -164,30 +141,28 @@
             </li>
 
             <li>
-                <a href="apps-chat.html" class=" waves-effect">
-                    <i class="ri-file-list-fill"></i>
-                    <span>Work Reporting</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="apps-chat.html" class=" waves-effect">
+                <a href="pverification.php" class=" waves-effect">
                     <i class="ri-file-list-fill"></i>
                     <span>Work Verification</span>
                 </a>
             </li>
+
+            <li class="menu-title">Billing & Payment</li>
+
             <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                    <i class="ri-account-circle-line"></i>
-                    <span>Authentication</span>
+                <a href="billing.php" class=" waves-effect">
+                    <i class="ri-file-list-fill"></i>
+                    <span>Billing</span>
                 </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="auth-login.html">Login</a></li>
-                    <li><a href="auth-register.html">Register</a></li>
-                    <li><a href="auth-recoverpw.html">Recover Password</a></li>
-                    <li><a href="auth-lock-screen.html">Lock Screen</a></li>
-                </ul>
             </li>
+
+            <li>
+                <a href="pverification.php" class=" waves-effect">
+                    <i class="ri-file-list-fill"></i>
+                    <span>Payment Entry</span>
+                </a>
+            </li>
+
 
         </ul>
     </div>

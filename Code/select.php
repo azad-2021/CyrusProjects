@@ -37,6 +37,20 @@ if (!empty($DivisionCode))
 
 }
 
+$GetGST=!empty($_POST['GetGST'])?$_POST['GetGST']:'';
+if (!empty($GetGST))
+{
+	$Query="SELECT GSTIN FROM division WHERE DivisionCode=$GetGST";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		$arr=mysqli_fetch_assoc($result);
+		echo $arr['GSTIN'];
+
+	}
+
+}
+
 
 $DivisionCodeOrder=!empty($_POST['DivisionCodeOrder'])?$_POST['DivisionCodeOrder']:'';
 if (!empty($DivisionCodeOrder))
@@ -841,5 +855,89 @@ if (!empty($VendorNameAVE))
 
 		}
 	}
+
+
+//Verfication
+
+	
+	$VIDConsumed=!empty($_POST['VIDConsumed'])?$_POST['VIDConsumed']:'';
+
+	if (!empty($VIDConsumed))
+	{   
+
+		$query="SELECT MaterialName, `material consumed`.Qty, Unit FROM cyrusproject.`material consumed`
+		inner join demand_details on `material consumed`.MaterialID=demand_details.MaterialID WHERE VerificationID=$VIDConsumed";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+				
+				print "<tr>";
+				print '<td>'.$row["MaterialName"]."</td>";
+				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
+				print '</tr>';
+			}
+
+		}
+	}
+
+
+	$VIDExpense=!empty($_POST['VIDExpense'])?$_POST['VIDExpense']:'';
+
+	if (!empty($VIDExpense))
+	{   
+
+		$query="SELECT * FROM `employee expense` WHERE VerificationID=$VIDExpense";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+				$query2="SELECT WorkDate FROM work_verification WHERE VerificationID=$VIDExpense";
+				$result2=mysqli_query($con,$query2);
+				if (mysqli_num_rows($result)>0)
+				{
+					$row2=mysqli_fetch_assoc($result2);
+					$Expense=$VIDExpense.'_'.date('d-m-Y',strtotime($row2["WorkDate"]));
+
+				}
+				
+				print "<tr>";
+				print '<td>'.$row["MaterialName"]."</td>";
+				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
+				print '<td>'.$row["Rate"]."</td>";
+				print '<td>'.$row["Qty"]*$row["Rate"]."</td>";
+				print '<td><a href="fieldlogin/expense/'.$Expense.'.pdf" target="_blank">Receipt</a></td>';
+				print '</tr>';
+			}
+
+		}
+	}
+
+
+//Billing
+
+	$DivCodeOrderB=!empty($_POST['DivCodeOrderB'])?$_POST['DivCodeOrderB']:'';
+	if (!empty($DivCodeOrderB))
+	{
+		$Query="SELECT Orders.OrderID FROM cyrusproject.orders Where DivisionCode=$DivCodeOrderB";
+		$result=mysqli_query($con,$Query);
+		echo "<option value=''>Order ID</option>";
+		if (mysqli_num_rows($result)>0)
+		{
+			
+			while ($arr=mysqli_fetch_assoc($result))
+			{
+				echo '<option value="'.$arr['OrderID'].'">'.$arr['OrderID']."</option>";
+
+			}
+		}
+
+	}
+
+
 	?>
 

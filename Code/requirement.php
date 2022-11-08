@@ -284,10 +284,15 @@ if (isset($_POST['submit'])) {
                         </div>
 
                         <center>
-                            <input class="form-check-input" type="checkbox" id="Labour" style="margin-top: 25px;">
+                            <input class="form-check-input form-check-inline" type="checkbox" id="Labour" style="margin-top: 25px;">
                             <label class="form-check-label" for="formCheck1" style="margin-top: 20px;">
                                 Labour Work
                             </label>
+                            <input class="form-check-input" type="checkbox" id="Supply" style="margin-top: 25px; margin-left:5px">
+                            <label class="form-check-label form-check-inline" for="formCheck1" style="margin-top: 20px;">
+                                Supply Only
+                            </label>
+
                         </center>
 
                         <center>

@@ -8,6 +8,7 @@ $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
 $m=date('m',strtotime($timestamp));
 $y=date('y',strtotime($timestamp));
+$EmployeeCode=$_SESSION['userid'];
 
 if ($m<=3) {
 	$FY=($y-1).$y;
@@ -765,6 +766,31 @@ if (!empty($OrderIDAW))
 }
 
 
+$Vremark=!empty($_POST['Vremark'])?$_POST['Vremark']:'';
+if (!empty($Vremark))
+{
+	$VRID=!empty($_POST['VRID'])?$_POST['VRID']:'';
+	$Verification=!empty($_POST['Verification'])?$_POST['Verification']:'';
+
+	if ($Verification=='Rejected') {
+		$Vremark=$Verification.' '.$Vremark;
+		$Accepted=0;
+	}else{
+		$Accepted=1;
+	}
+
+	$sql = "UPDATE work_verification SET VerificationRemark='$Vremark', VerificationByID=$EmployeeCode, VerificationDate='$Date', Accepted=$Accepted, Closed=$Accepted WHERE VerificationID =$VRID";
+
+	if ($con->query($sql) === TRUE) {
+
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
+}
+
 $EmployeeAssign=!empty($_POST['EmployeeAssign'])?$_POST['EmployeeAssign']:'';
 if (!empty($EmployeeAssign))
 {
@@ -780,4 +806,5 @@ if (!empty($EmployeeAssign))
 	
 
 }
+
 ?>
