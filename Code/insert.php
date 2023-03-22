@@ -112,14 +112,13 @@ if (!empty($DivisionCodeO) and !empty($LOADate))
 	VALUES ($DivisionCodeO, '$Description', '$LOANumber', '$LOADate', '$Completion', $BGAmount, '$BGDate', $Warranty, '$OderingAuth', '$BillingAuth')";
 
 	if ($con->query($sql) === TRUE) {
-		$_SESSION["NewOrderID"]=$con->insert_id;
 
-		$OrderID=$_SESSION["NewOrderID"];
+		$OrderID=$con->insert_id;
 		$sql2 = "INSERT INTO $demands (OrderID, OrderDate, StatusID)
 		VALUES ($OrderID, '$Date', 1)";
 
 		if ($con->query($sql2) === TRUE) {
-			echo 1;
+			echo $OrderID;
 		} else {
 			echo "Error: " . $sql2 . "<br>" . $con->error;
 		}
@@ -140,8 +139,11 @@ if (!empty($OrderIDRequirement) and !empty($Schedule))
 	$UnitRequirement=!empty($_POST['UnitRequirement'])?$_POST['UnitRequirement']:'';
 	$IAuth=!empty($_POST['IAuth'])?$_POST['IAuth']:'';
 	$RequirementRate=!empty($_POST['RequirementRate'])?$_POST['RequirementRate']:'';
-	$Labour=!empty($_POST['Labour'])?$_POST['Labour']:0;
+	$BillingType=!empty($_POST['BillingType'])?$_POST['BillingType']:0;
 	
+	$MaterialName=str_replace("/"," or",$MaterialName);
+	$Schedule=str_replace("/","or",$Schedule);
+
 	$Query="SELECT MaterialName FROM $temprequirement WHERE MaterialName='$MaterialName' and OrderID=$OrderIDRequirement";
 	$result=mysqli_query($con,$Query);
 
@@ -159,9 +161,11 @@ if (!empty($OrderIDRequirement) and !empty($Schedule))
 
 	}else{
 
+		$MaterialName=str_replace("'", "", $MaterialName);
+		$Schedule=str_replace("'", "", $Schedule);
 
-		$sql = "INSERT INTO $temprequirement (OrderID, SrNo, MaterialName, Qty, Unit, Rate, InspectingAuth, LabourWork)
-		VALUES ($OrderIDRequirement, '$Schedule', '$MaterialName', $RequirementQty, '$UnitRequirement', $RequirementRate, '$IAuth', $Labour)";
+		$sql = "INSERT INTO $temprequirement (OrderID, SrNo, MaterialName, Qty, Unit, Rate, InspectingAuth, BillingType)
+		VALUES ($OrderIDRequirement, '$Schedule', '$MaterialName', $RequirementQty, '$UnitRequirement', $RequirementRate, '$IAuth', $BillingType)";
 
 		if ($con->query($sql) === TRUE) {
 
@@ -209,7 +213,7 @@ $DelRID=!empty($_POST['DelRID'])?$_POST['DelRID']:'';
 if (!empty($DelRID))
 {
 
-	$sql = "DELETE FROM $temprequirement WHERE ID=$DelRID";
+	$sql = "DELETE FROM $temprequirement WHERE TID=$DelRID";
 
 	if ($con->query($sql) === TRUE) {
 
@@ -254,8 +258,8 @@ if (!empty($MaterialIDAV))
 
 	if ($AVType=='New') {
 
-		$sql = "INSERT INTO vendors (OrderID, VendorName, Contact, Email, Address, GSTNo)
-		VALUES ($OrderIDAV, '$VendorNameAV', '$Contact', '$EmailAV', '$AddressAV', '$GSTNoAV')";
+		$sql = "INSERT INTO vendors (VendorName, Contact, Email, Address, GSTNo)
+		VALUES ('$VendorNameAV', '$Contact', '$EmailAV', '$AddressAV', '$GSTNoAV')";
 
 		if ($con->query($sql) === TRUE) {
 
@@ -278,8 +282,8 @@ if (!empty($MaterialIDAV))
 
 
 	}else if ($AVType=='Existing') {
-		$sql = "INSERT INTO vendor_details (VendorID, MaterialID)
-		VALUES ($VendorNameAV, $MaterialIDAV)";
+		$sql = "INSERT INTO vendor_details (OrderID, VendorID, MaterialID)
+		VALUES ($OrderIDAV, $VendorNameAV, $MaterialIDAV)";
 
 		if ($con->query($sql) === TRUE) {
 
@@ -568,12 +572,18 @@ if (!empty($DelSurvey))
 $SaveSurveyData=!empty($_POST['SaveSurveyData'])?$_POST['SaveSurveyData']:'';
 if (!empty($SaveSurveyData))
 {
-
+	$OrderIDSurvey=!empty($_POST['OrderIDSurvey'])?$_POST['OrderIDSurvey']:'';
 	$sql = "UPDATE sitesurvey SET Status=1 WHERE SiteCode=$SaveSurveyData";
 
 	if ($con->query($sql) === TRUE) {
 
-		echo 1;
+		$sql2 = "UPDATE orders SET OrderStatusID=3 WHERE OrderID=$OrderIDSurvey";
+		if ($con->query($sql2) === TRUE) {
+
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
 	} else {
 		echo "Error: " . $sql . "<br>" . $con->error;
 	}
@@ -799,7 +809,13 @@ if (!empty($EmployeeAssign))
 
 	if ($con->query($sql) === TRUE) {
 
-		echo 1;
+		$sql2 = "UPDATE orders inner join sitework on orders.OrderID=sitework.OrderID SET OrderStatusID=4 WHERE WorkID=$WorkIDAssign";
+		if ($con->query($sql2) === TRUE) {
+
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
 	} else {
 		echo "Error: " . $sql . "<br>" . $con->error;
 	}

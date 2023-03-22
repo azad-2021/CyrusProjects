@@ -27,7 +27,7 @@ if (!empty($DivisionCode))
 	$result=mysqli_query($con,$Query);
 	if (mysqli_num_rows($result)>0)
 	{
-		echo "<option value=''>Select Division</option>";
+		echo "<option value=''>Select Site</option>";
 		while ($arr=mysqli_fetch_assoc($result))
 		{
 			echo '<option value="'.$arr['SiteCode'].'">'.$arr['SiteName']."</option>";
@@ -144,10 +144,21 @@ if (!empty($GetQtySurvey))
 
 $DivisionCodeRequirement=!empty($_POST['DivisionCodeRequirement'])?$_POST['DivisionCodeRequirement']:'';
 if (!empty($DivisionCodeRequirement))
-{
-	$Query="SELECT $orders.OrderID FROM $orders
-	inner join $demands on $orders.OrderID=$demands.OrderID
-	WHERE DivisionCode=$DivisionCodeRequirement and ConfirmationDate is null and StatusID <=2 order by $orders.OrderID";
+{	
+
+	$ReqType=!empty($_POST['ReqType'])?$_POST['ReqType']:'';
+	if ($ReqType=='Regular') {
+
+		$Query="SELECT $orders.OrderID FROM $orders
+		inner join $demands on $orders.OrderID=$demands.OrderID
+		WHERE DivisionCode=$DivisionCodeRequirement and ConfirmationDate is null and StatusID <=2 order by $orders.OrderID";
+	}else if($ReqType=='Variation'){
+		$Query="SELECT $orders.OrderID FROM $orders
+		inner join $demands on $orders.OrderID=$demands.OrderID
+		WHERE DivisionCode=$DivisionCodeRequirement and ConfirmationDate is null and StatusID >1 order by $orders.OrderID";
+
+	}
+
 	$result=mysqli_query($con,$Query);
 	echo "<option value=''>Order ID</option>";
 	if (mysqli_num_rows($result)>0)
@@ -184,17 +195,14 @@ $OrderIDTemp=!empty($_POST['OrderIDTemp'])?$_POST['OrderIDTemp']:'';
 if (!empty($OrderIDTemp))
 {   
 
-	$query="SELECT * FROM $temprequirement WHERE OrderID=$OrderIDTemp";
+	$query="SELECT * FROM $temprequirement join billingtype on $temprequirement.BillingType=billingtype.ID WHERE OrderID=$OrderIDTemp";
 	$result=mysqli_query($con,$query);
 	if (mysqli_num_rows($result)>0)
 	{
 
 		while ($row=mysqli_fetch_assoc($result))
 		{
-			$Labour='No';
-			if ($row["LabourWork"]==1) {
-				$Labour='Yes';
-			}
+			
 			print "<tr>";
 			print '<td>'.$row["SrNo"]."</td>";
 			print '<td style="word-wrap: break-word;">'.$row["MaterialName"]."</td>";
@@ -202,8 +210,8 @@ if (!empty($OrderIDTemp))
 			print '<td>'.$row["Rate"]."</td>";
 			print '<td>'.$row["Rate"]*$row["Qty"]."</td>";
 			print '<td>'.$row["InspectingAuth"]."</td>";
-			print '<td>'.$Labour."</td>";
-			print '<td><button type="button" class="btn btn-danger Delete" id="'.$row["ID"].'">Delete</button></td>';
+			print '<td>'.$row["Type"]."</td>";
+			print '<td><button type="button" class="btn btn-danger Delete" id="'.$row["TID"].'">Delete</button></td>';
 			print '</tr>';
 		}
 
@@ -261,7 +269,7 @@ $OrderIDAV=!empty($_POST['OrderIDAV'])?$_POST['OrderIDAV']:'';
 if (!empty($OrderIDAV))
 {
 	$Query="SELECT MaterialName, MaterialID FROM cyrusproject.demand_details
-	Where Status<=2 and OrderID=$OrderIDAV and LabourWork=0 order by MaterialName";
+	Where Status<=2 and OrderID=$OrderIDAV and BillingType!=4 order by MaterialName";
 	$result=mysqli_query($con,$Query);
 	echo "<option value=''>Select</option>";
 	if (mysqli_num_rows($result)>0)
@@ -361,7 +369,7 @@ if (!empty($VendorNameAVE))
 	$OrderIDOF=!empty($_POST['OrderIDOF'])?$_POST['OrderIDOF']:'';
 	if (!empty($OrderIDOF))
 	{
-		$Query="SELECT VendorName, VendorID FROM cyrusproject.vendors WHERE OrderID=$OrderIDOF Order by VendorName";
+		$Query="SELECT VendorName, VendorID FROM vendors WHERE OrderID=$OrderIDOF Order by VendorName";
 		$result=mysqli_query($con,$Query);
 		echo "<option value=''>Select</option>";
 		if (mysqli_num_rows($result)>0)
@@ -379,7 +387,7 @@ if (!empty($VendorNameAVE))
 	$VendorOF=!empty($_POST['VendorOF'])?$_POST['VendorOF']:'';
 	if (!empty($VendorOF))
 	{
-		$Query="SELECT MaterialName, demand_details.MaterialID FROM cyrusproject.demand_details
+		$Query="SELECT MaterialName, demand_details.MaterialID FROM demand_details
 		join vendor_details on demand_details.MaterialID=vendor_details.MaterialID
 		Where Status<=2 and vendor_details.VendorID=$VendorOF order by MaterialName";
 		$result=mysqli_query($con,$Query);
@@ -574,7 +582,7 @@ if (!empty($VendorNameAVE))
 	if (!empty($VendorIDPO))
 	{   
 
-		$query="SELECT OfferID, vendors.VendorID, VendorName, ModalNo, GST, demand_details.MaterialID, MaterialName, demand_details.OrderID, ItemName, OfferRate, OfferDate, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
+		$query="SELECT DISTINCT offers.MaterialID, OfferID, vendors.VendorID, VendorName, ModalNo, GST, demand_details.MaterialID, MaterialName, demand_details.OrderID, ItemName, OfferRate, OfferDate, offers.Qty, demand_details.Unit, PaymentTerms, WarrantyTerms, DeliveryTerms  FROM cyrusproject.demand_details
 		inner join vendor_details on demand_details.MaterialID=vendor_details.MaterialID
 		inner join vendors on vendor_details.VendorID=vendors.VendorID
 		inner join offers on demand_details.MaterialID=offers.MaterialID
@@ -590,8 +598,7 @@ if (!empty($VendorNameAVE))
 				
 
 				print "<tr>";
-				print '<td class="d-none"><input  name="Offerrate[]" type="number" value="'.$row["OfferRate"].'"></td>';
-				print '<td>'.$row["ItemName"]."</td>";
+				print '<td><input class="d-none" name="Offerrate[]" type="number" value="'.$row["OfferRate"].'">'.$row["ItemName"]."</td>";
 				print '<td>'.$row["ModalNo"]."</td>";
 				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
 				print '<td>'.$row["OfferRate"]."</td>";

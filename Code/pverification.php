@@ -35,28 +35,7 @@ if (mysqli_num_rows($result)>0)
 
     <meta charset="utf-8" />
     <title>Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="" name="description" />
-    <meta content="Anant Singh" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/cyruslogo.png">
-
-    <!-- jquery.vectormap css -->
-    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-
-    <!-- Bootstrap Css -->
-    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <!-- App Css-->
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
-    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap5.min.js">
+    <?php include"head.php" ?>
 
     <style type="text/css">
         th,td{
@@ -283,175 +262,108 @@ if (mysqli_num_rows($result)>0)
     </div><!-- end row -->
 </div>
 <!-- End Page-content -->
-
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © Cyrus Electronics.
-            </div>
-
-        </div>
-    </div>
-</footer>
-
-</div>
-<!-- end main content-->
-
-</div>
-<!-- END layout-wrapper -->
-</div>
-
-
-
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
-
-<!-- JAVASCRIPT -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
-
-
-<script src="assets/libs/select2/js/select2.min.js"></script>
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
-<script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-<script src="assets/libs/admin-resources/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
-<script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
-
-<script src="assets/js/pages/form-advanced.init.js"></script>
-
-
-<!-- jquery.vectormap map -->
-<script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
-
-<script src="assets/js/pages/dashboard.init.js"></script>
-<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-<!-- App js -->
-<script src="assets/js/app.js"></script>
-
-
-<!-- Required datatable js -->
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap5.min.js"></script>
-
+<?php include "footer.php"; ?>
 
 <script type="text/javascript">
 //
-$(document).ready(function () {
-    $('table.display').DataTable({
-        responsive: true
+    $(document).ready(function () {
+        $('table.display').DataTable({
+            responsive: true
+        });
     });
-});
 
 
-function err(msg){
-    Swal.fire({
-        title: 'error!',
-        text: msg,
-        icon: 'error',
+    $(document).on('click', '.SaveVerification', function(){
 
-    })
-}
+        var Vremark=document.getElementById("VRemark").value;
+        var VID=document.getElementById("VID").value;
+        var Verification=$('input[name="Verification"]:checked').val();
 
+        if(Vremark && VID && Verification){
+            $.ajax({
+              type:'POST',
+              url:'insert.php',
+              data:{'Vremark':Vremark, 'VRID':VID, 'Verification':Verification},
+              success:function(result){
 
-$(document).on('click', '.SaveVerification', function(){
-
-    var Vremark=document.getElementById("VRemark").value;
-    var VID=document.getElementById("VID").value;
-    var Verification=$('input[name="Verification"]:checked').val();
-
-    if(Vremark && VID && Verification){
-        $.ajax({
-          type:'POST',
-          url:'insert.php',
-          data:{'Vremark':Vremark, 'VRID':VID, 'Verification':Verification},
-          success:function(result){
-
-            if (result==1) {
-                location.reload();
-            }else{
-                err(result);
+                if (result==1) {
+                    location.reload();
+                }else{
+                    err(result);
+                }
             }
-        }
-    });
-        
-    }else{
-        $('.CDisplay').DataTable().clear();
-        $('.CDisplay').DataTable().destroy();
-    }
-});
+        });
 
-
-$(document).on('click', '.ShowExpense', function(){
-
-    var VID=$(this).attr("id");
-
-    if(VID){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'VIDExpense':VID},
-          success:function(result){
-
-            $('.ExDisplay').DataTable().clear();
-            $('.ExDisplay').DataTable().destroy();
-            $('#ExpenseData').html(result);
-            $(document).ready(function () {
-                $('table.ExDisplay').DataTable({
-                    responsive: true
-                });
-            });
-        }
-    });
-        
-    }else{
-        $('.ExDisplay').DataTable().clear();
-        $('.ExDisplay').DataTable().destroy();
-    }
-});
-
-
-$(document).on('click', '.ShowConsumed', function(){
-
-    var VID=$(this).attr("id");
-
-    if(VID){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'VIDConsumed':VID},
-          success:function(result){
-
+        }else{
             $('.CDisplay').DataTable().clear();
             $('.CDisplay').DataTable().destroy();
-            $('#ConsumedData').html(result);
-            $(document).ready(function () {
-                $('table.CDisplay').DataTable({
-                    responsive: true
-                });
-            });
         }
     });
-        
-    }else{
-        $('.CDisplay').DataTable().clear();
-        $('.CDisplay').DataTable().destroy();
-    }
-});
-
-$(document).on('click', '.VerifyWork', function(){
-    var VID=$(this).attr("id");
-    var VID=document.getElementById("VID").value=VID;
 
 
-});
+    $(document).on('click', '.ShowExpense', function(){
+
+        var VID=$(this).attr("id");
+
+        if(VID){
+            $.ajax({
+              type:'POST',
+              url:'select.php',
+              data:{'VIDExpense':VID},
+              success:function(result){
+
+                $('.ExDisplay').DataTable().clear();
+                $('.ExDisplay').DataTable().destroy();
+                $('#ExpenseData').html(result);
+                $(document).ready(function () {
+                    $('table.ExDisplay').DataTable({
+                        responsive: true
+                    });
+                });
+            }
+        });
+
+        }else{
+            $('.ExDisplay').DataTable().clear();
+            $('.ExDisplay').DataTable().destroy();
+        }
+    });
+
+
+    $(document).on('click', '.ShowConsumed', function(){
+
+        var VID=$(this).attr("id");
+
+        if(VID){
+            $.ajax({
+              type:'POST',
+              url:'select.php',
+              data:{'VIDConsumed':VID},
+              success:function(result){
+
+                $('.CDisplay').DataTable().clear();
+                $('.CDisplay').DataTable().destroy();
+                $('#ConsumedData').html(result);
+                $(document).ready(function () {
+                    $('table.CDisplay').DataTable({
+                        responsive: true
+                    });
+                });
+            }
+        });
+
+        }else{
+            $('.CDisplay').DataTable().clear();
+            $('.CDisplay').DataTable().destroy();
+        }
+    });
+
+    $(document).on('click', '.VerifyWork', function(){
+        var VID=$(this).attr("id");
+        var VID=document.getElementById("VID").value=VID;
+
+
+    });
 
 </script>
 </body>

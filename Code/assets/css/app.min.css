@@ -207,5 +207,8 @@ body:not(.vertical-collpsed) .app-search{
   border-radius: 25px;
 }
 
+table, thead{
+	text-align: center;
+}
 
 /*# sourceMappingURL=app.min.css.map */

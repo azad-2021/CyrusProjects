@@ -11,29 +11,7 @@ include"query.php";
 
     <meta charset="utf-8" />
     <title>Work Assigning</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="" name="description" />
-    <meta content="Anant Singh" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/cyrus logo.png">
-
-    <!-- jquery.vectormap css -->
-    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-
-    <!-- Bootstrap Css -->
-    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <!-- App Css-->
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
-    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
-    <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-    <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
-    <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+    <?php include"head.php" ?>
     <style type="text/css">
        table.dataTable tbody td {
         word-break: break-word;
@@ -214,307 +192,188 @@ include"query.php";
             </div><!-- end row -->
         </div>
         <!-- End Page-content -->
+        <?php include "footer.php"; ?>
+        <script type="text/javascript">
 
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Cyrus Electronics.
-                    </div>
-
-                </div>
-            </div>
-        </footer>
-
-    </div>
-    <!-- end main content-->
-
-</div>
-<!-- END layout-wrapper -->
-</div>
-
-
-
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
-
-<!-- JAVASCRIPT -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
-
-
-<script src="assets/libs/select2/js/select2.min.js"></script>
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
-<script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-<script src="assets/libs/admin-resources/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
-<script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
-
-<script src="assets/js/pages/form-advanced.init.js"></script>
-
-
-<!-- jquery.vectormap map -->
-<script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
-
-<script src="assets/js/pages/dashboard.init.js"></script>
-<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-<!-- App js -->
-<script src="assets/js/app.js"></script>
-
-
-<!-- Required datatable js -->
-<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript">
-//
-$(document).ready(function () {
-    $('table.displayUWork').DataTable({
-
-        scrollY: '200px',
-        scrollCollapse: true,
-        paging: false,
-        scrollX: true,
-    });
-});
-
-
-
-function err(msg){
-    Swal.fire({
-        title: 'error!',
-        text: msg,
-        icon: 'error',
-
-    })
-}
-
-
-$(document).on('change', '#OrgCodeW', function(){
-
-    var OrgCode=$(this).val();
-    if(OrgCode){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'OrgCode':OrgCode},
-          success:function(result){
-            $('#DivisionCodeW').html(result);
-
-        }
-    }); 
-    }else{
-        $('#DivisionCodeW').html('<option value="">Division</option>');
-    }
-});
-
-$(document).on('change', '#DivisionCodeW', function(){
-
-    var DivisionCode=$(this).val();
-    if(DivisionCode){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'DivisionCodeOrder':DivisionCode},
-          success:function(result){
-            $('#OrderIDW').html(result);
-
-        }
-    });
-
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'DivisionCode':DivisionCode},
-          success:function(result){
-            $('#SiteCodeW').html(result);
-
-        }
-    }); 
-    }else{
-        $('#OrderIDW').html('<option value="">Select</option>');
-        $('#SiteCodeW').html('<option value="">Select</option>');
-    }
-});
-
-
-
-$(document).on('change', '#SiteCodeW', function(){
-
-    var SiteCodeW=$(this).val();
-    if(SiteCodeW){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'SiteCodeWM':SiteCodeW},
-          success:function(result){
-            $('#MaterialW').html(result);
-
-        }
-    });  
-
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'SiteWork':SiteCodeW},
-          success:function(result){
-
-           $('.displayUWork').DataTable().clear();
-           $('.displayUWork').DataTable().destroy();
-           $('#UNWork').html(result);
-           $('table.displayUWork').DataTable({
-
-            scrollY: '200px',
-            scrollCollapse: true,
-            paging: false,
-            scrollX: true,
-        });
-
-       }
-   }); 
-
-    }else{
-        $('#MaterialW').html('<option value="">Select</option>');
-    }
-});
-
-$(document).on('change', '#MaterialW', function(){
-
-    var MaterialW=$(this).val();
-    var SiteCode=document.getElementById("SiteCodeW").value;
-
-    if(MaterialW){
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'GetQtyW':MaterialW, 'SiteCodeW':SiteCode},
-          success:function(result){
-            document.getElementById("LeftQtyW").value=result;
-        }
-    }); 
-
-        $.ajax({
-          type:'POST',
-          url:'select.php',
-          data:{'GetUnit':MaterialW},
-          success:function(result){
-            document.getElementById("UnitW").value=result;
-        }
-    });
-        document.getElementById("QtyW").disabled=false;
-    }
-});
-
-
-function limitx(element)
-{
-
-    var Qty=document.getElementById("QtyW").value;
-    var MaxQty= document.getElementById("LeftQtyW").value;
-    if(MaxQty==0){
-        document.getElementById("QtyW").value=null;
-        document.getElementById("QtyW").disabled=true;
-    }else if (Qty>parseInt(MaxQty)) {
-      document.getElementById("QtyW").value=parseInt(MaxQty);
-  }
-
-}
-
-
-$(document).on('click', '.AddWorkSite', function(){
-
-    var OrderID=document.getElementById("OrderIDW").value;
-    var SiteCode=document.getElementById("SiteCodeW").value;
-    var MaterialID=document.getElementById("MaterialW").value;
-    var WorkType=document.getElementById("WorkType").value;
-    var Qty=document.getElementById("QtyW").value;
-    var SDate=document.getElementById("SDateW").value;
-    var EDate=document.getElementById("EDateW").value;
-    if(OrderID && SiteCode && MaterialID && WorkType && Qty && SDate && EDate){
-
-        $.ajax({
-          type:'POST',
-          url:'insert.php',
-          data:{'OrderIDAW':OrderID, 'SiteCodeAW':SiteCode, 'MaterialIDAW':MaterialID, 'QtyAW':Qty, 'SDateAW':SDate, 'EDateAW':EDate, 'WorkTypeAW':WorkType},
-          success:function(result){
-            if (result==1) {
-                $('#MaterialW').prop('selectedIndex',0);
-                $('#WorkType').prop('selectedIndex',0);
-                document.getElementById("SDateW").value=null;
-                document.getElementById("EDateW").value=null;
-
-                document.getElementById("QtyW").value=null;
-                document.getElementById("LeftQtyW").value=null;
-                document.getElementById("UnitW").value=null;
-
-                $.ajax({
-                  type:'POST',
-                  url:'select.php',
-                  data:{'SiteCodeWM':SiteCode},
-                  success:function(result){
-                    $('#MaterialW').html(result);
-
-                }
-            });  
-
-                $.ajax({
-                  type:'POST',
-                  url:'select.php',
-                  data:{'SiteWork':SiteCode},
-                  success:function(result){
-
-                   $('.displayUWork').DataTable().clear();
-                   $('.displayUWork').DataTable().destroy();
-                   $('#UNWork').html(result);
-                   $('table.displayUWork').DataTable({
+            $(document).ready(function () {
+                $('table.displayUWork').DataTable({
 
                     scrollY: '200px',
                     scrollCollapse: true,
                     paging: false,
                     scrollX: true,
                 });
-
-               }
-           }); 
-
-            }else{
-                err(result);
-            }
-        }
-    });
-    }else{
-        err("Please enter all fields");
-        //$('.displayUWork').DataTable().clear();
-        //$('.displayUWork').DataTable().destroy();
-    }
-});
+            });
 
 
-$(document).on('change', '#AssignTo', function(){
 
-    var EmployeeCode=$(this).val();
-    var WorkID=$(this).attr("id2");
-    var SiteCode=document.getElementById("SiteCodeW").value;
-    if(EmployeeCode && WorkID){
-        Swal.fire({
-          title: 'Do you want to save the changes?',
-          showDenyButton: true,
-          showCancelButton: false,
-          confirmButtonText: 'Save',
-          denyButtonText: `Don't save`,
-      }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-              $.ajax({
+
+            $(document).on('change', '#OrgCodeW', function(){
+
+                var OrgCode=$(this).val();
+                if(OrgCode){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'OrgCode':OrgCode},
+                      success:function(result){
+                        $('#DivisionCodeW').html(result);
+
+                    }
+                }); 
+                }else{
+                    $('#DivisionCodeW').html('<option value="">Division</option>');
+                }
+            });
+
+            $(document).on('change', '#DivisionCodeW', function(){
+
+                var DivisionCode=$(this).val();
+                if(DivisionCode){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'DivisionCodeOrder':DivisionCode},
+                      success:function(result){
+                        $('#OrderIDW').html(result);
+
+                    }
+                });
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'DivisionCode':DivisionCode},
+                      success:function(result){
+                        $('#SiteCodeW').html(result);
+
+                    }
+                }); 
+                }else{
+                    $('#OrderIDW').html('<option value="">Select</option>');
+                    $('#SiteCodeW').html('<option value="">Select</option>');
+                }
+            });
+
+
+
+            $(document).on('change', '#SiteCodeW', function(){
+
+                var SiteCodeW=$(this).val();
+                if(SiteCodeW){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'SiteCodeWM':SiteCodeW},
+                      success:function(result){
+                        $('#MaterialW').html(result);
+
+                    }
+                });  
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'SiteWork':SiteCodeW},
+                      success:function(result){
+
+                       $('.displayUWork').DataTable().clear();
+                       $('.displayUWork').DataTable().destroy();
+                       $('#UNWork').html(result);
+                       $('table.displayUWork').DataTable({
+
+                        scrollY: '200px',
+                        scrollCollapse: true,
+                        paging: false,
+                        scrollX: true,
+                    });
+
+                   }
+               }); 
+
+                }else{
+                    $('#MaterialW').html('<option value="">Select</option>');
+                }
+            });
+
+            $(document).on('change', '#MaterialW', function(){
+
+                var MaterialW=$(this).val();
+                var SiteCode=document.getElementById("SiteCodeW").value;
+
+                if(MaterialW){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'GetQtyW':MaterialW, 'SiteCodeW':SiteCode},
+                      success:function(result){
+                        document.getElementById("LeftQtyW").value=result;
+                    }
+                }); 
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'GetUnit':MaterialW},
+                      success:function(result){
+                        document.getElementById("UnitW").value=result;
+                    }
+                });
+                    document.getElementById("QtyW").disabled=false;
+                }
+            });
+
+
+            function limitx(element)
+            {
+
+                var Qty=document.getElementById("QtyW").value;
+                var MaxQty= document.getElementById("LeftQtyW").value;
+                if(MaxQty==0){
+                    document.getElementById("QtyW").value=null;
+                    document.getElementById("QtyW").disabled=true;
+                }else if (Qty>parseInt(MaxQty)) {
+                  document.getElementById("QtyW").value=parseInt(MaxQty);
+              }
+
+          }
+
+
+          $(document).on('click', '.AddWorkSite', function(){
+
+            var OrderID=document.getElementById("OrderIDW").value;
+            var SiteCode=document.getElementById("SiteCodeW").value;
+            var MaterialID=document.getElementById("MaterialW").value;
+            var WorkType=document.getElementById("WorkType").value;
+            var Qty=document.getElementById("QtyW").value;
+            var SDate=document.getElementById("SDateW").value;
+            var EDate=document.getElementById("EDateW").value;
+            if(OrderID && SiteCode && MaterialID && WorkType && Qty && SDate && EDate){
+
+                $.ajax({
                   type:'POST',
                   url:'insert.php',
-                  data:{'EmployeeAssign':EmployeeCode, 'WorkIDAssign':WorkID},
+                  data:{'OrderIDAW':OrderID, 'SiteCodeAW':SiteCode, 'MaterialIDAW':MaterialID, 'QtyAW':Qty, 'SDateAW':SDate, 'EDateAW':EDate, 'WorkTypeAW':WorkType},
                   success:function(result){
                     if (result==1) {
-                        Swal.fire('Saved!', '', 'success');
+                        $('#MaterialW').prop('selectedIndex',0);
+                        $('#WorkType').prop('selectedIndex',0);
+                        document.getElementById("SDateW").value=null;
+                        document.getElementById("EDateW").value=null;
+
+                        document.getElementById("QtyW").value=null;
+                        document.getElementById("LeftQtyW").value=null;
+                        document.getElementById("UnitW").value=null;
+
+                        $.ajax({
+                          type:'POST',
+                          url:'select.php',
+                          data:{'SiteCodeWM':SiteCode},
+                          success:function(result){
+                            $('#MaterialW').html(result);
+
+                        }
+                    });  
 
                         $.ajax({
                           type:'POST',
@@ -534,23 +393,79 @@ $(document).on('change', '#AssignTo', function(){
                         });
 
                        }
-                   });
+                   }); 
 
                     }else{
                         err(result);
                     }
-
                 }
-            }); 
+            });
+            }else{
+                err("Please enter all fields");
+        //$('.displayUWork').DataTable().clear();
+        //$('.displayUWork').DataTable().destroy();
+            }
+        });
 
-          } else if (result.isDenied) {
-            Swal.fire('Changes are not saved', '', 'info')
-            $('#AssignTo').prop('selectedIndex',0);
+
+          $(document).on('change', '#AssignTo', function(){
+
+            var EmployeeCode=$(this).val();
+            var WorkID=$(this).attr("id2");
+            var SiteCode=document.getElementById("SiteCodeW").value;
+            if(EmployeeCode && WorkID){
+                Swal.fire({
+                  title: 'Do you want to save the changes?',
+                  showDenyButton: true,
+                  showCancelButton: false,
+                  confirmButtonText: 'Save',
+                  denyButtonText: `Don't save`,
+              }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+                  if (result.isConfirmed) {
+                      $.ajax({
+                          type:'POST',
+                          url:'insert.php',
+                          data:{'EmployeeAssign':EmployeeCode, 'WorkIDAssign':WorkID},
+                          success:function(result){
+                            if (result==1) {
+                                Swal.fire('Saved!', '', 'success');
+
+                                $.ajax({
+                                  type:'POST',
+                                  url:'select.php',
+                                  data:{'SiteWork':SiteCode},
+                                  success:function(result){
+
+                                   $('.displayUWork').DataTable().clear();
+                                   $('.displayUWork').DataTable().destroy();
+                                   $('#UNWork').html(result);
+                                   $('table.displayUWork').DataTable({
+
+                                    scrollY: '200px',
+                                    scrollCollapse: true,
+                                    paging: false,
+                                    scrollX: true,
+                                });
+
+                               }
+                           });
+
+                            }else{
+                                err(result);
+                            }
+
+                        }
+                    }); 
+
+                  } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                    $('#AssignTo').prop('selectedIndex',0);
+                }
+            })
+
+          }else{
+            $('#AssignTo').html('<option value="">Select</option>');
         }
-    })
-
-  }else{
-    $('#AssignTo').html('<option value="">Select</option>');
-}
-});
+    });
 </script>

@@ -1,6 +1,6 @@
 <?php 
 include"connection.php";
-include"session.php";
+//include"session.php";
 
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
@@ -17,6 +17,7 @@ if (!empty($UserName) and !empty($Password))
 	if (mysqli_num_rows($result)>0)
 	{	
 		$arr=mysqli_fetch_assoc($result);
+		session_start();
 		$_SESSION['username']=$arr['EmployeeName'];
 		$_SESSION['Designation']=$arr['Designation'];
 		$_SESSION['userid']=$arr['EmployeeCode'];

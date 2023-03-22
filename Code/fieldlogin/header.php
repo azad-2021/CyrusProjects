@@ -78,7 +78,7 @@
                     <!-- item-->
                     <div class="pt-2 border-top">
                         <div class="d-grid">
-                            <a class="btn btn-sm btn-link font-size-14 text-center" href="logout.php">
+                            <a class="btn btn-sm btn-link font-size-14 text-center" href="../logout.php">
                                 <i class="ri-shut-down-line align-middle me-1"></i> Logout
                             </a>
                         </div>

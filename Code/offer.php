@@ -131,45 +131,23 @@ if (isset($_POST['submit'])) {
 ?>
 
 <!doctype html>
-    <html lang="en">
+<html lang="en">
 
-    <head>
+<head>
 
-        <meta charset="utf-8" />
-        <title>New Offer</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="" name="description" />
-        <meta content="Anant Singh" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/cyrus logo.png">
-
-        <!-- jquery.vectormap css -->
-        <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-
-        <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-        <!-- App Css-->
-        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
-        <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
-        <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-        <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
-        <style type="text/css">
+    <meta charset="utf-8" />
+    <title>New Offer</title>
+    <?php include"head.php" ?>
+    <style type="text/css">
 
 
-         table.dataTable tbody td {
-            word-break: break-word;
-            vertical-align: top;
-        }
-        .errorClass { border:  1px solid red; }
+       table.dataTable tbody td {
+        word-break: break-word;
+        vertical-align: top;
+    }
+    .errorClass { border:  1px solid red; }
 
-    </style>
+</style>
 
 </head>
 
@@ -198,13 +176,6 @@ if (isset($_POST['submit'])) {
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0">New Offers</h4>
-
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Cyrus</a></li>
-                                        <li class="breadcrumb-item active">New Offers</li>
-                                    </ol>
-                                </div>
 
                             </div>
                         </div>
@@ -291,7 +262,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="col-lg-2">
                                 <label for="recipient-name" class="col-form-label">Offer Quantity</label>
-                                <input type="number" class="form-control rounded-corner" name="QtyOF" id="QtyOF">
+                                <input type="number" class="form-control rounded-corner" name="QtyOF" id="QtyOF" onkeydown="limitOF(this);" onkeyup="limitOF(this);">
                             </div>
 
                             <div class="col-lg-2">
@@ -382,58 +353,7 @@ if (isset($_POST['submit'])) {
 
 </div>
 <!-- End Page-content -->
-
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © Cyrus Electronics.
-            </div>
-
-        </div>
-    </div>
-</footer>
-
-</div>
-<!-- end main content-->
-
-</div>
-<!-- END layout-wrapper -->
-
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
-
-<!-- JAVASCRIPT -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
-
-
-<script src="assets/libs/select2/js/select2.min.js"></script>
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
-<script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-<script src="assets/libs/admin-resources/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
-<script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
-
-<script src="assets/js/pages/form-advanced.init.js"></script>
-
-
-<!-- jquery.vectormap map -->
-<script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
-
-<script src="assets/js/pages/dashboard.init.js"></script>
-<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-<!-- App js -->
-<script src="assets/js/app.js"></script>
-
-
-<!-- Required datatable js -->
-<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<?php include "footer.php"; ?>
 <script type="text/javascript">
 
 
@@ -460,258 +380,268 @@ if (isset($_POST['submit'])) {
     }
 
 
-
-
-
-    $(document).on('change', '#OrgCodeOF', function(){
-
-        var OrgCode=$(this).val();
-        if(OrgCode){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'OrgCode':OrgCode},
-              success:function(result){
-                $('#DivisionCodeOF').html(result);
-
-            }
-        }); 
-        }else{
-            $('#DivisionCodeOF').html('<option value="">Division</option>');
-        }
-    });
-
-    $(document).on('change', '#DivisionCodeOF', function(){
-
-        var DivisionCode=$(this).val();
-        if(DivisionCode){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'DivCodeOrderOF':DivisionCode},
-              success:function(result){
-                $('#OrderIDOF').html(result);
-
-            }
-        });  
-
-        }else{
-            $('#OrderIDOF').html('<option value="">Select</option>');
-            $('#VendorOF').html('<option value="">Select</option>');
-        }
-    });
-
-
-
-    $(document).on('change', '#DivisionCodeOF', function(){
-
-        var DivisionCode=$(this).val();
-        if(DivisionCode){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'DivCodeOrderOF':DivisionCode},
-              success:function(result){
-                $('#OrderIDOF').html(result);
-
-            }
-        });  
-
-        }else{
-            $('#OrderIDOF').html('<option value="">Select</option>');
-            $('#VendorOF').html('<option value="">Select</option>');
-        }
-    });
-
-
-    $(document).on('change', '#OrderIDOF', function(){
-
-        var OrderID=$(this).val();
-        if(OrderID){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'OrderIDOF':OrderID},
-              success:function(result){
-                $('#VendorOF').html(result);
-
-            }
-        }); 
-
-        }else{
-            $('#VendorOF').html('<option value="">Select</option>');
-            $('#MaterialOF').html('<option value="">Select</option>');
-        }
-    });
-
-
-
-    $(document).on('change', '#VendorOF', function(){
-
-        var VendorID=$(this).val();
-        if(VendorID){
-            document.getElementById("VendorOFH").value=VendorID;
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'VendorOF':VendorID},
-              success:function(result){
-                $('#MaterialOF').html(result);
-
-            }
-        }); 
-
-
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'MaterialdataOF':VendorID},
-              success:function(result){
-                 $('.displayOF').DataTable().clear();
-                 $('.displayOF').DataTable().destroy();
-                 $('#MaterialdataOF').html(result);
-
-                 $('table.displayOF').DataTable( {
-
-                     scrollY: '200px',
-                     scrollCollapse: true,
-                     paging: false,
-                     scrollX: true,
-
-                 } );
-
-
-             }
-         });
-
-
-        }else{
-            $('#MaterialOF').html('<option value="">Select</option>');
-        }
-    });
-
-    $(document).on('change', '#MaterialOF', function(){
-
-        var MaterialID=$(this).val();
-        if(MaterialID){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'GetQtyOF':MaterialID},
-              success:function(result){
-                 document.getElementById("TotalQtyOF").value=result;
-             }
-         }); 
-
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'GetUnitOF':MaterialID},
-              success:function(result){
-                 document.getElementById("UnitOF").value=result;
-             }
-         }); 
-
-        }else{
-            document.getElementById("TotalQtyOF").value=0;
-        }
-    });
-
-
-
-    $(document).on('click', '.AddMaterial', function(){
-
-
-        var MaterialID=document.getElementById("MaterialOF").value;
-        var Modal=document.getElementById("ModalNameOF").value;
-        Modal = Modal.replace(/\\/g, "/");
-
-        var ModalNo=document.getElementById("ModalNoOF").value;
-        ModalNo = ModalNo.replace(/\\/g, "/");
+    function limitOF(element)
+    {
 
         var Qty=document.getElementById("QtyOF").value;
-        var Rate=document.getElementById("RateOF").value;
-        var GST=document.getElementById("GSTOF").value;
-        var VendorID =document.getElementById("VendorOF").value;
-        var inspection=$('input[name="inspection"]:checked').val();
+        var MaxQty= document.getElementById("TotalQtyOF").value;
 
-        if (!MaterialID) {
-            $("#MaterialOF").addClass('errorClass');
-        }else if (!Modal) {
-            $("#ModalNameOF").addClass('errorClass');
-        }else if (!ModalNo) {
-            $("#ModalNoOF").addClass('errorClass');
-        }else if (!Rate) {
-            $("#RateOF").addClass('errorClass');
-        }else if (!GST) {
-            $("#GSTOF").addClass('errorClass');
-        }else if (!Qty) {
-            $("#QtyOF").addClass('errorClass');
+        if (Qty>parseInt(MaxQty)) {
+          document.getElementById("QtyOF").value=parseFloat(MaxQty);
+      }
+
+  }
+
+
+  $(document).on('change', '#OrgCodeOF', function(){
+
+    var OrgCode=$(this).val();
+    if(OrgCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrgCode':OrgCode},
+          success:function(result){
+            $('#DivisionCodeOF').html(result);
+
         }
+    }); 
+    }else{
+        $('#DivisionCodeOF').html('<option value="">Division</option>');
+    }
+});
 
+  $(document).on('change', '#DivisionCodeOF', function(){
 
-        if (MaterialID) {
-            $("#MaterialOF").removeClass('errorClass');
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivCodeOrderOF':DivisionCode},
+          success:function(result){
+            $('#OrderIDOF').html(result);
+
         }
-        if (Modal) {
-            $("#ModalNameOF").removeClass('errorClass');
+    });  
+
+    }else{
+        $('#OrderIDOF').html('<option value="">Select</option>');
+        $('#VendorOF').html('<option value="">Select</option>');
+    }
+});
+
+
+
+  $(document).on('change', '#DivisionCodeOF', function(){
+
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivCodeOrderOF':DivisionCode},
+          success:function(result){
+            $('#OrderIDOF').html(result);
+
         }
-        if (Qty) {
-            $("#QtyOF").removeClass('errorClass');
+    });  
+
+    }else{
+        $('#OrderIDOF').html('<option value="">Select</option>');
+        $('#VendorOF').html('<option value="">Select</option>');
+    }
+});
+
+
+  $(document).on('change', '#OrderIDOF', function(){
+
+    var OrderID=$(this).val();
+    if(OrderID){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'OrderIDOF':OrderID},
+          success:function(result){
+            $('#VendorOF').html(result);
+
         }
-        if (Rate) {
-            $("#RateOF").removeClass('errorClass');
-        }if (ModalNo) {
-            $("#ModalNoOF").removeClass('errorClass');
-        }if (GST) {
-            $("#GSTOF").removeClass('errorClass');
+    }); 
+
+    }else{
+        $('#VendorOF').html('<option value="">Select</option>');
+        $('#MaterialOF').html('<option value="">Select</option>');
+    }
+});
+
+
+
+  $(document).on('change', '#VendorOF', function(){
+
+    var VendorID=$(this).val();
+    if(VendorID){
+        document.getElementById("VendorOFH").value=VendorID;
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'VendorOF':VendorID},
+          success:function(result){
+            $('#MaterialOF').html(result);
+
         }
+    }); 
+
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'MaterialdataOF':VendorID},
+          success:function(result){
+           $('.displayOF').DataTable().clear();
+           $('.displayOF').DataTable().destroy();
+           $('#MaterialdataOF').html(result);
+
+           $('table.displayOF').DataTable( {
+
+               scrollY: '200px',
+               scrollCollapse: true,
+               paging: false,
+               scrollX: true,
+
+           } );
+
+
+       }
+   });
+
+
+    }else{
+        $('#MaterialOF').html('<option value="">Select</option>');
+    }
+});
+
+  $(document).on('change', '#MaterialOF', function(){
+
+    var MaterialID=$(this).val();
+    if(MaterialID){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetQtyOF':MaterialID},
+          success:function(result){
+           document.getElementById("TotalQtyOF").value=result;
+       }
+   }); 
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetUnitOF':MaterialID},
+          success:function(result){
+           document.getElementById("UnitOF").value=result;
+       }
+   }); 
+
+    }else{
+        document.getElementById("TotalQtyOF").value=0;
+    }
+});
 
 
 
-        if(MaterialID && Modal && Qty && Rate){
-
-            if((Modal.indexOf("/") > -1)){
-                err("Do not use forwardslash or backslash in Item name");
-            }else if((ModalNo.indexOf("/") > -1)){
-                err("Do not use forwardslash or backslash in ModalNo name");
-            }else if(!inspection){
-                err("Please select inspection option");
-            } else{
-
-              $.ajax({
-                  type:'POST',
-                  url:'insert.php',
-                  data:{'MaterialIDOF':MaterialID, 'Modal':Modal, 'QtyOF':Qty, 'RateOF':Rate, 'inspection':inspection, 'VendorOF':VendorID, 'GSTOF':GST, 'ModalNoOF':ModalNo},
-                  success:function(result){
+  $(document).on('click', '.AddMaterial', function(){
 
 
-                    if (result==1) {
-                        $('#FM').trigger("reset");
+    var MaterialID=document.getElementById("MaterialOF").value;
+    var Modal=document.getElementById("ModalNameOF").value;
+    Modal = Modal.replace(/\\/g, "/");
+
+    var ModalNo=document.getElementById("ModalNoOF").value;
+    ModalNo = ModalNo.replace(/\\/g, "/");
+
+    var Qty=document.getElementById("QtyOF").value;
+    var Rate=document.getElementById("RateOF").value;
+    var GST=document.getElementById("GSTOF").value;
+    var VendorID =document.getElementById("VendorOF").value;
+    var inspection=$('input[name="inspection"]:checked').val();
+
+    if (!MaterialID) {
+        $("#MaterialOF").addClass('errorClass');
+    }else if (!Modal) {
+        $("#ModalNameOF").addClass('errorClass');
+    }else if (!ModalNo) {
+        $("#ModalNoOF").addClass('errorClass');
+    }else if (!Rate) {
+        $("#RateOF").addClass('errorClass');
+    }else if (!GST) {
+        $("#GSTOF").addClass('errorClass');
+    }else if (!Qty) {
+        $("#QtyOF").addClass('errorClass');
+    }
+
+
+    if (MaterialID) {
+        $("#MaterialOF").removeClass('errorClass');
+    }
+    if (Modal) {
+        $("#ModalNameOF").removeClass('errorClass');
+    }
+    if (Qty) {
+        $("#QtyOF").removeClass('errorClass');
+    }
+    if (Rate) {
+        $("#RateOF").removeClass('errorClass');
+    }if (ModalNo) {
+        $("#ModalNoOF").removeClass('errorClass');
+    }if (GST) {
+        $("#GSTOF").removeClass('errorClass');
+    }
 
 
 
-                        $.ajax({
-                          type:'POST',
-                          url:'select.php',
-                          data:{'MaterialdataOF':VendorID},
-                          success:function(result){
-                             $('.displayOF').DataTable().clear();
-                             $('.displayOF').DataTable().destroy();
-                             $('#MaterialdataOF').html(result);
+    if(MaterialID && Modal && Qty && Rate){
 
-                             $('table.displayOF').DataTable( {
+        if((Modal.indexOf("/") > -1)){
+            err("Do not use forwardslash or backslash in Item name");
+        }else if((ModalNo.indexOf("/") > -1)){
+            err("Do not use forwardslash or backslash in ModalNo name");
+        }else if(!inspection){
+            err("Please select inspection option");
+        } else{
 
-                                 scrollY: '200px',
-                                 scrollCollapse: true,
-                                 paging: false,
-                                 scrollX: true,
-
-                             } );
+          $.ajax({
+              type:'POST',
+              url:'insert.php',
+              data:{'MaterialIDOF':MaterialID, 'Modal':Modal, 'QtyOF':Qty, 'RateOF':Rate, 'inspection':inspection, 'VendorOF':VendorID, 'GSTOF':GST, 'ModalNoOF':ModalNo},
+              success:function(result){
 
 
-                         }
-                     });
+                if (result==1) {
+                    $('#FM').trigger("reset");
+
+
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'MaterialdataOF':VendorID},
+                      success:function(result){
+                       $('.displayOF').DataTable().clear();
+                       $('.displayOF').DataTable().destroy();
+                       $('#MaterialdataOF').html(result);
+
+                       $('table.displayOF').DataTable( {
+
+                           scrollY: '200px',
+                           scrollCollapse: true,
+                           paging: false,
+                           scrollX: true,
+
+                       } );
+
+
+                   }
+               });
                     //    
                     $.ajax({
                         type:'POST',
@@ -729,16 +659,16 @@ if (isset($_POST['submit'])) {
             }
 
         });
-          }
+      }
 
-      }else if (VarErr==0) {
-        err("Please enter all fields");
-    }
+  }else if (VarErr==0) {
+    err("Please enter all fields");
+}
 
 });
 
 //
-$(document).on('click', '.DeleteMaterialOF', function(){
+  $(document).on('click', '.DeleteMaterialOF', function(){
 
     var ID=$(this).attr("id");
 
@@ -757,22 +687,22 @@ $(document).on('click', '.DeleteMaterialOF', function(){
                   url:'select.php',
                   data:{'MaterialdataOF':VendorID},
                   success:function(result){
-                     $('.displayOF').DataTable().clear();
-                     $('.displayOF').DataTable().destroy();
-                     $('#MaterialdataOF').html(result);
+                   $('.displayOF').DataTable().clear();
+                   $('.displayOF').DataTable().destroy();
+                   $('#MaterialdataOF').html(result);
 
-                     $('table.displayOF').DataTable( {
+                   $('table.displayOF').DataTable( {
 
-                         scrollY: '200px',
-                         scrollCollapse: true,
-                         paging: false,
-                         scrollX: true,
+                       scrollY: '200px',
+                       scrollCollapse: true,
+                       paging: false,
+                       scrollX: true,
 
-                     } );
+                   } );
 
 
-                 }
-             });
+               }
+           });
 
             }else{
                 err(result);
@@ -783,6 +713,8 @@ $(document).on('click', '.DeleteMaterialOF', function(){
 
     }
 });
+
+
 
 
 </script>

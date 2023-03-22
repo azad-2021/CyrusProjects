@@ -1,0 +1,8 @@
+//vmaterialstatus
+create view vmaterialstatus as
+SELECT Organization, OrganizationCode, orders
+.DivisionCode, DivisionName, orders.OrderID, MaterialID, MaterialName, SrNo, Rate, Qty, Unit, InspectingAuth, DemandDate, Type, material_status.Status FROM cyrusproject.demand_details
+inner join orders on demand_details.OrderID=orders.OrderID
+inner join organization_details on orders.DivisionCode=organization_details.DivisionCode
+inner join material_status on demand_details.Status=material_status.StatusID
+inner join billingtype on demand_details.BillingType=billingtype.ID;

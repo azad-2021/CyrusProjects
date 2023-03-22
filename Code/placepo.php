@@ -11,45 +11,23 @@ $Date = date('Y-m-d',strtotime($timestamp));
 ?>
 
 <!doctype html>
-    <html lang="en">
+<html lang="en">
 
-    <head>
+<head>
 
-        <meta charset="utf-8" />
-        <title>Place PO</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="" name="description" />
-        <meta content="Anant Singh" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/cyrus logo.png">
-
-        <!-- jquery.vectormap css -->
-        <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-
-        <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-        <!-- App Css-->
-        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
-        <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
-        <link href="assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-        <link href="assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
-        <style type="text/css">
+    <meta charset="utf-8" />
+    <title>Place PO</title>
+    <?php include"head.php" ?>
+    <style type="text/css">
 
 
-         table.dataTable tbody td {
-            word-break: break-word;
-            vertical-align: top;
-        }
-        .errorClass { border:  1px solid red; }
+       table.dataTable tbody td {
+        word-break: break-word;
+        vertical-align: top;
+    }
+    .errorClass { border:  1px solid red; }
 
-    </style>
+</style>
 
 </head>
 
@@ -183,177 +161,126 @@ $Date = date('Y-m-d',strtotime($timestamp));
         </div>
         <!-- End Page-content -->
 
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Cyrus Electronics.
-                    </div>
-
-                </div>
-            </div>
-        </footer>
-
-    </div>
-    <!-- end main content-->
-
-</div>
-<!-- END layout-wrapper -->
-
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
-
-<!-- JAVASCRIPT -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
+        <?php include "footer.php"; ?>
+        <script type="text/javascript">
 
 
-<script src="assets/libs/select2/js/select2.min.js"></script>
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
-<script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-<script src="assets/libs/admin-resources/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
-<script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+            $(document).ready(function () {
+                $('table.displayPO').DataTable({
 
-<script src="assets/js/pages/form-advanced.init.js"></script>
+                    scrollY: '200px',
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: true,
+                });
 
-
-<!-- jquery.vectormap map -->
-<script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
-
-<script src="assets/js/pages/dashboard.init.js"></script>
-<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-<!-- App js -->
-<script src="assets/js/app.js"></script>
+            });
 
 
-<!-- Required datatable js -->
-<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript">
+            $(document).on('change', '#OrgCodePO', function(){
+
+                var OrgCode=$(this).val();
+                if(OrgCode){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'OrgCode':OrgCode},
+                      success:function(result){
+                        $('#DivisionCodePO').html(result);
+
+                    }
+                }); 
+                }else{
+                    $('#DivisionCodePO').html('<option value="">Division</option>');
+                }
+            });
 
 
-    $(document).ready(function () {
-        $('table.displayPO').DataTable({
+            $(document).on('change', '#DivisionCodePO', function(){
 
-            scrollY: '200px',
-            scrollCollapse: true,
-            paging: false,
-            scrollX: true,
-        });
-
-    });
-
-
-
-    function err(msg){
-        Swal.fire({
-            title: 'error!',
-            text: msg,
-            icon: 'error',
-
-        })
-    }
-
-
-    $(document).on('change', '#OrgCodePO', function(){
-
-        var OrgCode=$(this).val();
-        if(OrgCode){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'OrgCode':OrgCode},
-              success:function(result){
-                $('#DivisionCodePO').html(result);
-
-            }
-        }); 
-        }else{
-            $('#DivisionCodePO').html('<option value="">Division</option>');
-        }
-    });
-
-
-    $(document).on('change', '#DivisionCodePO', function(){
-
-        var DivisionCode=$(this).val();
-        if(DivisionCode){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'DivisionCodePO':DivisionCode},
-              success:function(result){
+                var DivisionCode=$(this).val();
+                if(DivisionCode){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'DivisionCodePO':DivisionCode},
+                      success:function(result){
                     //alert(result);
-                    $('#OrderIDPO').html(result);
+                        $('#OrderIDPO').html(result);
+
+                    }
+                }); 
+                }else{
+                    $('#OrderIDPO').html('<option value="">Order ID</option>');
+                }
+            });
+
+
+            $(document).on('change', '#OrderIDPO', function(){
+
+                var OrderID=$(this).val();
+                if(OrderID){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'OrderIDPO':OrderID},
+                      success:function(result){
+
+                        $('#VendorPO').html(result);
+
+                    }
+                });
 
                 }
-            }); 
-        }else{
-            $('#OrderIDPO').html('<option value="">Order ID</option>');
-        }
-    });
+            });
 
 
-    $(document).on('change', '#OrderIDPO', function(){
+            $(document).on('change', '#VendorPO', function(){
 
-        var OrderID=$(this).val();
-        if(OrderID){
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'OrderIDPO':OrderID},
-              success:function(result){
-
-                $('#VendorPO').html(result);
-
-            }
-        });
-
-        }
-    });
+                var VendorID=$(this).val();
+                if(VendorID){
 
 
-    $(document).on('change', '#VendorPO', function(){
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'VendorIDPO':VendorID},
+                      success:function(result){
+                        $('.displayPO').DataTable().clear();
+                        $('.displayPO').DataTable().destroy();
+                        $('#MaterialDataPO').html(result);
 
-        var VendorID=$(this).val();
-        if(VendorID){
+
+                        $('table.displayPO').DataTable({
+
+                            scrollY: '200px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
 
 
-            $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'VendorIDPO':VendorID},
-              success:function(result){
-                $('.displayPO').DataTable().clear();
-                $('.displayPO').DataTable().destroy();
-                $('#MaterialDataPO').html(result);
 
-                $('table.displayPO').DataTable();
+                    }
+                });
 
-            }
-        });
+                }else{
+                    $('.displayPO').DataTable().clear();
+                    $('.displayPO').DataTable().destroy();
+                }
+            });
 
-        }else{
-            $('.displayPO').DataTable().clear();
-        }
-    });
+            $(document).on('change', '#checkb', function(){
 
-    $(document).on('change', '#checkb', function(){
-
-      var OfferID=$(this).val();
-      if ($(this).is(":checked")) {
+              var OfferID=$(this).val();
+              if ($(this).is(":checked")) {
         //alert(OfferID);
-        document.getElementById(OfferID).required=true;
-    }else{
-        document.getElementById(OfferID).required=false;
-    }
-});
-</script>
+                document.getElementById(OfferID).required=true;
+            }else{
+                document.getElementById(OfferID).required=false;
+            }
+        });
+    </script>
 </body>
 
 </html>

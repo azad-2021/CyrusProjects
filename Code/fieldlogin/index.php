@@ -86,14 +86,6 @@ if (mysqli_num_rows($result)>0)
                     <div class="col-12">
                         <div class="page-title-box d-flex align-items-center justify-content-between">
                             <h4 class="mb-0">Dashboard</h4>
-
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Cyrus</a></li>
-                                    <li class="breadcrumb-item active">Dashboard</li>
-                                </ol>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -102,11 +94,11 @@ if (mysqli_num_rows($result)>0)
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="row h-100">
-                            <div class="col-md-6 col-xl-4">
+                            <div class="col-md-6 col-xl-6">
                                 <div class="card overflow-hidden card-h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
-                                            <h5 class="font-size-15 text-uppercase mb-0">Pending Order Work</h5>
+                                            <h5 class="font-size-15 text-uppercase mb-0">Pending Work</h5>
                                             <div class="avatar-xs">
                                                 <span class="avatar-title rounded bg-soft-danger font-size-20 mini-stat-icon">
                                                     <i class="ri-file-list-fill text-danger"></i>
@@ -119,7 +111,7 @@ if (mysqli_num_rows($result)>0)
                                 </div><!-- end card -->
                             </div><!-- end col-->
 
-                            <div class="col-md-6 col-xl-4">
+                            <div class="col-md-6 col-xl-6">
                                 <div class="card overflow-hidden card-h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
@@ -137,6 +129,7 @@ if (mysqli_num_rows($result)>0)
                                 </div><!-- end card -->
                             </div><!-- end col-->
 
+                            <!--
                             <div class="col-xl-4">
                                 <div class="card overflow-hidden card-h-100">
                                     <div class="card-body">
@@ -150,11 +143,10 @@ if (mysqli_num_rows($result)>0)
                                         </div>
                                         <h3 class="font-size-24">2048/100000</h3>
 
-                                    </div><!-- end card-body -->
+                                    </div>
 
-
-                                </div><!-- end card -->
-                            </div><!-- end col -->
+                                </div>
+                            </div> end col -->
                         </div><!-- end row -->
                     </div><!-- end col -->
 

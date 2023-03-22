@@ -135,7 +135,7 @@
                     </div>
                     <div class="col-lg-6">
                         <label for="recipient-name" class="col-form-label">Description</label>
-                        <textarea class="form-control rounded-corner" type="text" maxlength="750" id="Description"></textarea>
+                        <textarea class="form-control rounded-corner" type="text" maxlength="1000" id="Description"></textarea>
                     </div>
                     <center>
                         <div class="col-lg-4">
@@ -298,11 +298,11 @@
                             <input type="email" class="form-control rounded-corner" id="EmployeeEmail">
                         </div>
                         <center>
-                        <div class="col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Address</label>
-                            <textarea type="text" class="form-control rounded-corner" id="EmployeeAddress"></textarea>
-                        </div>
-                    </center>
+                            <div class="col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Address</label>
+                                <textarea type="text" class="form-control rounded-corner" id="EmployeeAddress"></textarea>
+                            </div>
+                        </center>
                     </div>
                 </form>
             </div>
@@ -480,6 +480,17 @@
                         <label for="recipient-name" class="col-form-label">Select Vendor</label>
                         <select class="form-select form-control rounded-corner VendorEAV" id="VendorNameAVE">
                             <option value="">Select</option>
+                            <?php
+                            $Query="SELECT VendorName, VendorID FROM vendors Order By VendorName";
+                            $result=mysqli_query($con,$Query);
+                            if (mysqli_num_rows($result)>0)
+                            {
+                              while ($arr=mysqli_fetch_assoc($result))
+                              {
+                                ?>
+                                <option value="<?php echo $arr['VendorID']; ?>"><?php echo $arr['VendorName']; ?></option>
+                                <?php
+                            }}?>
                         </select>
                     </div>
                     <div class="col-lg-3" id="NVendor">
@@ -563,6 +574,100 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary refresh" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Puechase status -->
+
+<div class="modal fade" id="SiteSurveyStatus" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Survey details</h5>
+                
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover table-bordered border-primary pendingpod" style="margin-top:45px" width="100%">
+                    <thead>
+                        <th>Site Name</th>
+                        <th>Quantity</th>
+                    </thead>
+                    <tbody id="SurveyStatusData">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Site survey status -->
+
+<div class="modal fade" id="SiteSurveyStatus" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Survey details</h5>
+                
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover table-bordered border-primary pendingpod" style="margin-top:45px" width="100%">
+                    <thead>
+                        <th>Site Name</th>
+                        <th>Quantity</th>
+                    </thead>
+                    <tbody id="SurveyStatusData">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Site Work status -->
+
+<div class="modal fade" id="SiteSurveyStatus" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Survey details</h5>
+                
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover table-bordered border-primary pendingpod" style="margin-top:45px" width="100%">
+                    <thead>
+                        <th>Site Name</th>
+                        <th>Quantity</th>
+                    </thead>
+                    <tbody id="SurveyStatusData">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
             </div>
         </div>
