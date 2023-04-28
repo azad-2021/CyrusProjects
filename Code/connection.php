@@ -1,8 +1,8 @@
 <?php 
 
-$host = "localhost";  
-$user = "root";  
-$password = '';  
+$host = "192.168.1.2";  
+$user = "Ashok";  
+$password = 'Cyrus@123';  
 
 $db = "cyrusproject";
 

@@ -12,6 +12,11 @@ include"query.php";
     <meta charset="utf-8" />
     <title>Home</title>
     <?php include"head.php" ?>
+    <style type="text/css">
+      #MaterialAV option {
+          word-wrap: break-word;
+      }
+  </style>
 </head>
 <body data-sidebar="dark" data-topbar="dark">
 
@@ -111,16 +116,16 @@ include"query.php";
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-4">Orders Completition less than 30 days</h4>
+                                    <h4 class="card-title mb-4">Orders having DOC less than 30 days</h4>
 
                                     <div class="table-responsive">
                                         <table id="" class="table table-centered table-nowrap mb-0 table-bordered display">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>Organization</th>
-                                                    <th>Division</th>
+                                                    <th>Zone / Division</th>
                                                     <th>Order ID</th>
-                                                    <th>LOA Date</th>
+                                                    <th>Order Date</th>
                                                     <th>Completion Date</th>
                                                     <th>Left Days</th>
                                                 </tr>
@@ -129,7 +134,7 @@ include"query.php";
                                             <tbody>
 
                                                 <?php 
-                                                $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, datediff(CompletionDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode
+                                                $query="SELECT Organization, DivisionName, OrderID, OrderDate, CompletionDate, datediff(CompletionDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode
                                                 join organization on division.OrganizationCode=organization.OrganizationCode
                                                 WHERE datediff(CompletionDate, current_date())<30;";
                                                 $result=mysqli_query($con,$query);
@@ -150,8 +155,10 @@ include"query.php";
                                                         print '<td>'.$row["Organization"]."</td>";
                                                         print '<td>'.$row["DivisionName"]."</td>";
                                                         print '<td>'.$row["OrderID"]."</td>";
-                                                        print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
-                                                        print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
+                                                        print '<td><span class="d-none">'.$row["OrderDate"].'</span>'.date('d-M-Y',strtotime($row["OrderDate"]))."</td>";
+
+                                                        print '<td style="cursor: pointer; color:blue;"><span class="d-none">'.$row["CompletionDate"].'</span> <span class="ChangeDoc" id2="'.$row["OrderID"].'">'.date('d-M-Y',strtotime($row["CompletionDate"])).'</span> <input type="file" style="margin-bottom:15px;" name="DOCFile" id="D'.$row["OrderID"].'" class="form-control rounded-corner d-none"> <input type="date" class="form-control rounded-corner d-none ChangeDoc1" id2="'.$row["CompletionDate"].'" id="'.$row["OrderID"].'"> </td>';
+
                                                         print '<td>'.$row["LeftDays"]."</td>";
                                                         print '</tr>';
                                                     }
@@ -168,7 +175,7 @@ include"query.php";
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-4">BG Completition less than 30 days</h4>
+                                    <h4 class="card-title mb-4">Performance Guarantee expiry less than 90 days</h4>
 
                                     <div class="table-responsive">
                                         <table class="table table-centered table-nowrap mb-0 table-bordered display">
@@ -177,17 +184,18 @@ include"query.php";
                                                     <th>Organization</th>
                                                     <th>Division</th>
                                                     <th>Order ID</th>
-                                                    <th>LOA Date</th>
+                                                    <th>Order Date</th>
                                                     <th>Completion Date</th>
-                                                    <th>BG Amount</th>
-                                                    <th>BG Date</th>
+                                                    <th>PG Amount</th>
+                                                    <th>PG Date</th>
+                                                    <th>PG Valid Till Date</th>
                                                     <th>Left Days</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 <?php 
-                                                $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, BGAmount, BGDate, datediff(BGDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode join organization on division.OrganizationCode=organization.OrganizationCode WHERE datediff(BGDate, current_date())<30;";
+                                                $query="SELECT Organization, DivisionName, OrderID, OrderDate, CompletionDate, PGAmount, PGDate, PGValidDate, datediff(PGValidDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode join organization on division.OrganizationCode=organization.OrganizationCode WHERE datediff(PGValidDate, current_date())<90;";
                                                 $result=mysqli_query($con,$query);
                                                 if (mysqli_num_rows($result)>0)
                                                 {
@@ -206,10 +214,15 @@ include"query.php";
                                                         print '<td>'.$row["Organization"]."</td>";
                                                         print '<td>'.$row["DivisionName"]."</td>";
                                                         print '<td>'.$row["OrderID"]."</td>";
-                                                        print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
+                                                        print '<td><span class="d-none">'.$row["OrderDate"].'</span>'.date('d-M-Y',strtotime($row["OrderDate"]))."</td>";
                                                         print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
-                                                        print '<td>'.$row["BGAmount"]."</td>";
-                                                        print '<td><span class="d-none">'.$row["BGDate"].'</span>'.date('d-M-Y',strtotime($row["BGDate"]))."</td>";
+                                                        print '<td>'.$row["PGAmount"]."</td>";
+
+                                                        print '<td><span class="d-none">'.$row["PGDate"].'</span>'.date('d-M-Y',strtotime($row["PGDate"]))."</td>";
+                                                        
+                                                        print '<td style="cursor: pointer; color:blue;"><span class="d-none">'.$row["PGValidDate"].'</span> <span class="ChangePG" id2="'.$row["OrderID"].'">'.date('d-M-Y',strtotime($row["PGValidDate"])).'</span> <input type="file" style="margin-bottom:15px;" name="DOCFile" id="G'.$row["OrderID"].'" class="form-control rounded-corner d-none"> <input type="date" class="form-control rounded-corner d-none ChangePG1" id2="'.$row["PGValidDate"].'" id="P'.$row["OrderID"].'" id3="'.$row["OrderID"].'"></td>';
+
+                                                        
                                                         print '<td>'.$row["LeftDays"]."</td>";
                                                         print '</tr>';
                                                     }
@@ -286,8 +299,158 @@ include"query.php";
                         $('table.display').DataTable();
                     });
 
+                    $(document).on('dblclick','.ChangeDoc', function(){
 
-                </script>
-            </body>
+                     $(this).addClass("d-none");
+                     var OrderID=$(this).attr("id2");
+                    // alert(OrderID);
+                     $("#"+OrderID).removeClass("d-none");
+                     $("#D"+OrderID).removeClass("d-none");
+                 });
 
-            </html>
+
+                    $(document).on('change', '.ChangeDoc1', function(){
+
+                        var NewDOC=$(this).val();
+                        var DOC=$(this).attr("id2");
+                        var OrderID=$(this).attr("id");
+                        
+                        var file = $('#D'+OrderID)[0].files[0]; 
+                        if (!file) {
+                          err('Please choose a file.');
+                          $(this).val(null);
+                          return;
+                      }
+
+
+                      var fileSize = file.size; 
+                      var fileType = file.type; 
+
+
+                      if (fileSize > 2 * 1024 * 1024) {
+                          err('File size must be less than 2MB.');
+                          $(this).val(null);
+                          return;
+                      }
+
+
+                      if (fileType != 'application/pdf') {
+                          err('File must be in PDF format.');
+                          $(this).val(null);
+                          return;
+                      }
+
+
+                      if(NewDOC && DOC && file){
+
+                        var formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('NewDOC',NewDOC);
+                        formData.append('DOC',DOC);
+                        formData.append('OrderIDDOC',OrderID);
+
+                        $.ajax({
+                          type:'POST',
+                          url:'insert.php',
+                          data:formData,
+                          async: false,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(result){
+                            if (result==1) {
+
+                                location.reload();
+                            }else{
+
+                                err(result);
+                                location.reload();
+
+                            }
+
+                        }
+                    }); 
+                    }else{
+                        err("Please enter all fields");
+                    }
+                });
+
+
+                    $(document).on('dblclick','.ChangePG', function(){
+
+                     $(this).addClass("d-none");
+                     var OrderID=$(this).attr("id2");
+                     //alert(OrderID);
+                     $("#P"+OrderID).removeClass("d-none");
+                     $("#G"+OrderID).removeClass("d-none");
+                 });
+
+
+                    $(document).on('change', '.ChangePG1', function(){
+
+                        var NewPG=$(this).val();
+                        var PG=$(this).attr("id2");
+                        var OrderID=$(this).attr("id3");
+                        
+                        var file = $('#G'+OrderID)[0].files[0]; 
+                        if (!file) {
+                          err('Please choose a file.');
+                          $(this).val(null);
+                          return;
+                      }
+
+
+                      var fileSize = file.size; 
+                      var fileType = file.type; 
+
+
+                      if (fileSize > 2 * 1024 * 1024) {
+                          err('File size must be less than 2MB.');
+                          $(this).val(null);
+                          return;
+                      }
+
+
+                      if (fileType != 'application/pdf') {
+                          err('File must be in PDF format.');
+                          $(this).val(null);
+                          return;
+                      }
+
+                      if(NewPG && PG && file){
+
+                        var formData = new FormData();
+                        formData.append('file2', file);
+                        formData.append('NewPG',NewPG);
+                        formData.append('PG',PG);
+                        formData.append('OrderIDPG',OrderID);
+
+                        $.ajax({
+                          type:'POST',
+                          url:'insert.php',
+                          data:formData,
+                          async: false,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success:function(result){
+                            if (result==1) {
+
+                                location.reload();
+                            }else{
+
+                                err(result);
+                                //location.reload();
+
+                            }
+
+                        }
+                    }); 
+                    }
+                });
+
+
+            </script>
+        </body>
+
+        </html>

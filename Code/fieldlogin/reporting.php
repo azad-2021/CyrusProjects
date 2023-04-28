@@ -333,7 +333,7 @@ if (isset($_POST['submit'])) {
                                         <div class="col-lg-3">
                                             <label>Quantity</label>
                                             <input type="number" name="WorkQty" id="measurement" class="form-control rounded-corner"
-                                            min=1 onkeydown="limit1(this);" onkeyup="limit1(this);" step=".01" required>
+                                            min=1 onkeydown="limit1(this);" onkeyup="limit1(this);" step=".001" required>
                                         </div>
                                         <div class="col-lg-3">
                                             <label>Unit</label>
@@ -781,8 +781,8 @@ function err(msg){
     if(MaxQty==0){
         document.getElementById("measurement").value=null;
         document.getElementById("measurement").disabled=true;
-    }else if (Qty>parseInt(MaxQty)) {
-      document.getElementById("measurement").value=(parseFloat(MaxQty)).toFixed(2);
+    }else if (Qty>parseFloat(MaxQty)) {
+      document.getElementById("measurement").value=(parseFloat(MaxQty)).toFixed(3);
   }
 
 }

@@ -22,6 +22,28 @@
     </div>
 </div>
 
+<div class="modal fade" data-bs-backdrop="static" id="AddConsignee" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control rounded-corner">
+                    <div class="lg-3">
+                        <label for="recipient-name" class="col-form-label">Enter Consignee Name</label>
+                        <input type="text" class="form-control rounded-corner" id="AddConsigneeName">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary SaveConsignee">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" data-bs-backdrop="static" id="NewDivision" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content rounded-corner">
@@ -50,114 +72,44 @@
                         ?>
                     </select>
                 </div>
+
                 <div class="lg-3">
-                    <label for="recipient-name" class="col-form-label">Enter Division Name</label>
-                    <input type="text" class="form-control rounded-corner" id="newdiv">
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary SaveDiv">Save</button>
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="modal fade" data-easein="slideUpIn" id="NewOrder" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-        <div class="modal-content rounded-corner" data-tor="show(p):{rotateX.from(90) pull.down(half)} bounce perspective-self(4000px)">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New Order</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="form-control rounded-corner" id="FAddOrder">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label for="recipient-name" class="col-form-label">Select Organization</label>
-                            <select class="form-select form-control rounded-corner" id="OrgCode">
-                                <option value="">Select</option>
-                                <?php
-
-                                $result=mysqli_query($con,$QueryOrg);
-                                if (mysqli_num_rows($result)>0)
-                                {
-                                  while ($arr=mysqli_fetch_assoc($result))
-                                  {
-                                    ?>
-                                    <option value="<?php echo $arr['OrganizationCode']; ?>"><?php echo $arr['Organization']; ?></option>
-                                    <?php
-                                }
-                            }
+                    <label for="recipient-name" class="col-form-label">Select State</label>
+                    <select class="form-select form-control rounded-corner" id="StateDiv">
+                        <option value="">Select</option>
+                        <?php
+                        $query="SELECT * FROM states Order By StateName";
+                        $result=mysqli_query($con,$query);
+                        if (mysqli_num_rows($result)>0)
+                        {
+                          while ($arr=mysqli_fetch_assoc($result))
+                          {
                             ?>
-                        </select>
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Select Division</label>
-                        <select class="form-select form-control rounded-corner" id="DivisionCode">
-                            <option value="">Select</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">LOA Date</label>
-                        <input type="date" class="form-control rounded-corner" id="LOADate">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Completion Date</label>
-                        <input type="date" class="form-control rounded-corner" id="Completion">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">BG Amount</label>
-                        <input type="number" min="0" class="form-control rounded-corner" id="BGAmount">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">BG Date</label>
-                        <input type="date" class="form-control rounded-corner" id="BGDate">
-                    </div>
-
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Warranty in months</label>
-                        <input type="number" min="0" class="form-control rounded-corner" id="Warranty">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Odering Authority</label>
-                        <input type="text" maxlength="150" class="form-control rounded-corner" id="OderingAuth">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Billing Authority</label>
-                        <input type="text" maxlength="150" class="form-control rounded-corner" id="BillingAuth">
-                    </div>
-
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">LOA Number</label>
-                        <input type="text" maxlength="200" class="form-control rounded-corner" id="LOANumber">
-                    </div>
-                    <div class="col-lg-6">
-                        <label for="recipient-name" class="col-form-label">Description</label>
-                        <textarea class="form-control rounded-corner" type="text" maxlength="1000" id="Description"></textarea>
-                    </div>
-                    <center>
-                        <div class="col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Upload LOA </label>
-                            <i class="ri-file-upload-fill"></i>
-                            <input type="file" class="form-control rounded-corner" id="LOAFile">
-                        </div>
-                    </center>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary SaveOrder">Save</button>
-        </div>
+                            <option value="<?php echo $arr['StateCode']; ?>"><?php echo $arr['StateName']; ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="lg-3">
+                <label for="recipient-name" class="col-form-label">Enter Zone / Division Name</label>
+                <input type="text" class="form-control rounded-corner" id="newdiv">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary SaveDiv">Save</button>
     </div>
 </div>
 </div>
+</div>
+
 
 
 <div class="modal fade" id="NewSite" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content rounded-corner">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">New Site</h5>
@@ -195,41 +147,72 @@
                             <label for="recipient-name" class="col-form-label">Site Name</label>
                             <input type="text" class="form-control rounded-corner" id="SiteName">
                         </div>
-                        <div class="col-lg-6">
-                            <label for="recipient-name" class="col-form-label">Address</label>
-                            <textarea class="form-control rounded-corner" type="text" maxlength="180" id="SiteAddress"></textarea>
-                        </div>
-                        <div class="col-lg-4" style="margin-top: 10px;">
-                            <label for="recipient-name" class="col-form-label">Consignee</label>
-                            <input type="text" maxlength="130" class="form-control rounded-corner" id="Consignee">
-                        </div>
+                        <div class="col-lg-2">
+                            <label for="recipient-name" class="col-form-label">Select State</label>
+                            <select class="form-select form-control rounded-corner" id="StateSite">
+                                <option value="">Select</option>
+                                <?php
+                                $query="SELECT * FROM states Order By StateName";
+                                $result=mysqli_query($con,$query);
+                                if (mysqli_num_rows($result)>0)
+                                {
+                                  while ($arr=mysqli_fetch_assoc($result))
+                                  {
+                                    ?>
+                                    <option value="<?php echo $arr['StateCode']; ?>"><?php echo $arr['StateName']; ?></option>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="recipient-name" class="col-form-label">Select District</label>
+                        <select class="form-select form-control rounded-corner" id="DistrictSite">
+                            <option value="">Select</option>
 
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label for="recipient-name" class="col-form-label">Consignee</label>
+                        <input type="text" maxlength="130" class="form-control rounded-corner" id="Consignee">
+                    </div>
+
+                    <div class="col-lg-5">
+                        <label for="recipient-name" class="col-form-label">Address</label>
+                        <textarea class="form-control rounded-corner" type="text" maxlength="180" id="SiteAddress"></textarea>
+                    </div>
+
+                    <center>
                         <div class="col-lg-2" style="margin-top: 50px;">
                             <button type="button" class="bt btn-lg btn-primary AddSite">Add</button>
                         </div>
+                    </center>
 
-                    </div>
-                </form>
+                </div>
+            </form>
 
-                <table class="table table-responsive table-centered table-hover table-bordered border-primary sitedisplay" style="margin-top:45px" width="100%">
-                    <thead>
-                        <th width="25%">Site Name</th>
-                        <th width="25%">Address</th>
-                        <th width="25%">Consignee</th>
-                        <th width="25%">Action</th>
-                    </thead>
-                    <tbody id="Sitedata">
+            <table class="table table-responsive table-centered table-hover table-bordered border-primary sitedisplay" style="margin-top:45px" width="100%">
+                <thead>
+                    <th width="20%">Site Name</th>
+                    <th width="20%">District</th>
+                    <th width="20%">Address</th>
+                    <th width="20%">Consignee</th>
+                    <th width="20%">Action</th>
+                </thead>
+                <tbody id="Sitedata">
 
-                    </tbody>
-                </table>
+                </tbody>
+            </table>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
         </div>
     </div>
+</div>
 </div>
 
 
@@ -315,7 +298,7 @@
     </div>
 </div>
 
-
+<!--
 <div class="modal fade" id="SiteSurvey" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content rounded-corner">
@@ -414,7 +397,7 @@
         </div>
     </div>
 </div>
-
+-->
 <div class="modal fade" id="Accessing" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content rounded-corner">
@@ -461,7 +444,7 @@
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Material</label>
-                            <select class="form-select form-control rounded-corner2" id="MaterialAV">
+                            <select class="form-select form-control rounded-corner3" id="MaterialAV">
                                 <option value="">Select</option>
 
                             </select>
@@ -493,56 +476,84 @@
                             }}?>
                         </select>
                     </div>
-                    <div class="col-lg-3" id="NVendor">
+                    <div class="col-lg-4" id="NVendor">
                         <label for="recipient-name" class="col-form-label">Name</label>
                         <input type="text" class="form-control rounded-corner" name="VendorNameAV" id="VendorNameAVN">
-                    </div> 
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Address</label>
-                        <input type="text" class="form-control rounded-corner" name="VendorNameAV" id="AddressAV">
-                    </div>  
-
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Contact Number</label>
-                        <input type="number" class="form-control rounded-corner" name="ContactAV" id="ContactAV">
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="recipient-name" class="col-form-label">Email</label>
-                        <input type="email" class="form-control rounded-corner" name="EmailAV" id="EmailAV">
-                    </div>
-
-                </div>
-                <center>
+                    </div>                         
                     <div class="col-lg-4">
-                        <label for="recipient-name" class="col-form-label">GST No.</label>
-                        <input type="text" class="form-control rounded-corner" name="VendorNameAV" id="GSTNoAV">
-                    </div>  
-                    <div class="col-lg-4" style="margin-top: 35px;">
-                        <button type="button" class="bt btn-lg btn-primary AddVendor">Add</button>
-                    </div>
-                </center>
-            </form>
+                        <label for="recipient-name" class="col-form-label">Select State</label>
 
-            <table class="table table-responsive table-centered table-hover table-bordered border-primary avdisplay" style="margin-top:45px" width="100%">
-                <thead>
-                    <th width="20%">Vendor Name</th>
-                    <th width="20%">Address</th>
-                    <th width="15%">Contact</th>
-                    <th width="15%">Email</th>
-                    <th width="15%">GST No</th>
-                    <th width="15%">Action</th>
-                </thead>
-                <tbody id="VendorDataAV">
+                        <select class="form-control rounded-corner select2" id="State">
+                            <option value="">Select</option>
+                            <?php
 
-                </tbody>
-            </table>
+                            $query="SELECT * FROM states Order By StateName";
+                            $result=mysqli_query($con,$query);
+                            if (mysqli_num_rows($result)>0)
+                            {
+                              while ($arr=mysqli_fetch_assoc($result))
+                              {
+                                ?>
+                                <option value="<?php echo $arr['StateCode']; ?>"><?php echo $arr['StateName']; ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <label for="recipient-name" class="col-form-label">Select District</label>
+                    <select class="form-select form-control rounded-corner" id="DistrictV">
+                        <option value="">Select</option>
 
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <label for="recipient-name" class="col-form-label">Address</label>
+                    <textarea type="text" class="form-control rounded-corner" name="VendorNameAV" id="AddressAV"></textarea>
+                </div>  
 
-        </div>
+                <div class="col-lg-3">
+                    <label for="recipient-name" class="col-form-label">Contact Number</label>
+                    <input type="number" class="form-control rounded-corner" onkeydown="limit(this);" onkeyup="limit(this);" name="ContactAV" id="ContactAV">
+                </div>
+                <div class="col-lg-3">
+                    <label for="recipient-name" class="col-form-label">Email</label>
+                    <input type="email" class="form-control rounded-corner" name="EmailAV" id="EmailAV">
+                </div>
+
+                <div class="col-lg-3">
+                    <label for="recipient-name" class="col-form-label">GST No.</label>
+                    <input type="text" class="form-control rounded-corner" name="VendorNameAV" id="GSTNoAV">
+                </div>  
+            </div>
+            <center>
+                <div class="col-lg-4" style="margin-top: 35px;">
+                    <button type="button" class="bt btn-lg btn-primary AddVendor">Add</button>
+                </div>
+            </center>
+        </form>
+
+        <table class="table table-responsive table-centered table-hover table-bordered border-primary avdisplay" style="margin-top:45px" width="100%">
+            <thead>
+                <th width="20%">Vendor Name</th>
+                <th width="20%">Address</th>
+                <th width="15%">Contact</th>
+                <th width="15%">Email</th>
+                <th width="15%">GST No</th>
+                <th width="15%">Action</th>
+            </thead>
+            <tbody id="VendorDataAV">
+
+            </tbody>
+        </table>
+
     </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+    </div>
+</div>
 </div>
 </div>
 

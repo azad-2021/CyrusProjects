@@ -74,8 +74,8 @@ if (isset($_POST['submit'])) {
 
             if ($con->query($sql) === TRUE) {
 
-               echo "<meta http-equiv='refresh' content='0'>";
-           } else {
+             echo "<meta http-equiv='refresh' content='0'>";
+         } else {
 
             echo "Error: " . $sql . "<br>" . $con->error;
         }
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
     <style type="text/css">
 
 
-       table.dataTable tbody td {
+     table.dataTable tbody td {
         word-break: break-word;
         vertical-align: top;
     }
@@ -233,7 +233,7 @@ if (isset($_POST['submit'])) {
                         <h4 align="center">Enter Material Details</h4>
                         <div class="row">
                             <div class="col-lg-3">
-                                <label for="recipient-name" class="col-form-label">Sr No (Schedule for Railways)</label>
+                                <label for="recipient-name" class="col-form-label">Sr No / Schedule for Railways</label>
                                 <input type="text" class="form-control rounded-corner" name="ScheduleName" id="Schedule">
                             </div>
                             <div class="col-lg-9">
@@ -265,16 +265,31 @@ if (isset($_POST['submit'])) {
                                 <label for="recipient-name" class="col-form-label">Rate</label>
                                 <input type="number" class="form-control rounded-corner" name="Rate" id="Rate">
                             </div>
-                            <div class="col-lg-3">
-                                <label for="recipient-name" class="col-form-label">Inspection Authority</label>
-                                <input type="text" class="form-control rounded-corner" name="IAuth" id="IAuth">
+                            <div class="col-lg-3" style="margin-top: 5px;">
+                                <label>Inspection Authority</label>
+                                <select class="form-control rounded-corner" name="IAuth" id="IAuth" required>
+                                    <option value="">Select</option>
+                                    <?php
+
+                                    $Query="SELECT * FROM inspectingauth order by InspectionAuthority";
+                                    $result=mysqli_query($con,$Query);
+                                    if (mysqli_num_rows($result)>0)
+                                    {
+                                      while ($arr=mysqli_fetch_assoc($result))
+                                      {
+                                        ?>
+                                        <option value="<?php echo $arr['InspectionAuthority']; ?>"><?php echo $arr['InspectionAuthority']; ?></option>
+                                        <?php
+                                    }}?>
+                                </select>
+                                
                             </div>
                         </div>
 
                         <center>
 
                             <div class="col-lg-3" style="margin-top:10px;">
-                                <label>Billing Type</label>
+                                <label>Material Type</label>
                                 <select class="form-control rounded-corner" id="BillingType" required>
                                     <option value="">Select</option>
                                     <?php
@@ -412,12 +427,12 @@ if (isset($_POST['submit'])) {
 
                         $('table.display').DataTable( {
 
-                           scrollY: '200px',
-                           scrollCollapse: true,
-                           paging: false,
-                           scrollX: true,
+                         scrollY: '200px',
+                         scrollCollapse: true,
+                         paging: false,
+                         scrollX: true,
 
-                       } );
+                     } );
 
                     }
                 });
@@ -435,11 +450,11 @@ if (isset($_POST['submit'])) {
 
 
                 if (Type=='Variation') {
-                   var file_data = $('#VrDocument').prop('files')[0];   
-                   var form_data = new FormData();                  
-                   form_data.append('file', file_data);
+                 var file_data = $('#VrDocument').prop('files')[0];   
+                 var form_data = new FormData();                  
+                 form_data.append('file', file_data);
 
-                   if(file_data){
+                 if(file_data){
 
                     var filename = file_data.name;
                     var extension = filename.split('.').pop().toLowerCase();
@@ -543,12 +558,12 @@ if (isset($_POST['submit'])) {
 
                             $('table.display').DataTable( {
 
-                               scrollY: '200px',
-                               scrollCollapse: true,
-                               paging: false,
-                               scrollX: true,
+                             scrollY: '200px',
+                             scrollCollapse: true,
+                             paging: false,
+                             scrollX: true,
 
-                           } );
+                         } );
 
 
                         }
@@ -571,8 +586,8 @@ $(document).on('change', '#Type', function(){
 
     var DcType=$(this).val();
     if(DcType=='Variation'){
-     $("#TypeDiv").removeClass("d-none");
- }else{
+       $("#TypeDiv").removeClass("d-none");
+   }else{
     $('#TypeDiv').addClass("d-none");
 }
 });
@@ -600,12 +615,12 @@ $(document).on('click', '.Delete', function(){
 
                     $('table.display').DataTable( {
 
-                       scrollY: '200px',
-                       scrollCollapse: true,
-                       paging: false,
-                       scrollX: true,
+                     scrollY: '200px',
+                     scrollCollapse: true,
+                     paging: false,
+                     scrollX: true,
 
-                   } );
+                 } );
 
                 }
             });

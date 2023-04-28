@@ -11,6 +11,8 @@ if ($_SESSION['Designation']=='Admin') {
 	header("Location:index.php");
 }elseif ($_SESSION['Designation']=='Field Employee') {
 	header("Location:fieldlogin/");
+}elseif ($_SESSION['Designation']=='Backend Support') {
+	header("Location:index.php");
 }
 
 ?>

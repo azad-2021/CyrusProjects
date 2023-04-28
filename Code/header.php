@@ -1,3 +1,19 @@
+<?php 
+
+$Hour = date('G');
+//echo $_SESSION['user'];
+
+$user=$_SESSION['username'];
+
+if ( $Hour >= 1 && $Hour <= 11 ) {
+  $wish= "Good Morning ".$_SESSION['username'];
+} else if ( $Hour >= 12 && $Hour <= 15 ) {
+  $wish= "Good Afternoon ".$_SESSION['username'];
+} else if ( $Hour >= 19 || $Hour <= 23 ) {
+  $wish= "Good Evening ".$_SESSION['username'];
+}
+ ?>
+
 <div id="layout-wrapper">
 
 
@@ -34,7 +50,7 @@
         <div class="d-flex">
 
 
-
+            <h5 align="left" style="color:white; margin-top: 25px"><?php echo $wish; ?></h5>
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
                     <i class="ri-fullscreen-line"></i>
@@ -53,7 +69,7 @@
                 <div class="p-3">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="m-0"> Danish Zehen </h6>
+                            <h6 class="m-0"><?php echo$_SESSION['username'] ?></h6>
                         </div>
                         <div class="col-auto">
                             <a href="#!" class="small"> Available</a>

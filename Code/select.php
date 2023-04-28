@@ -37,6 +37,41 @@ if (!empty($DivisionCode))
 
 }
 
+$StateCode=!empty($_POST['StateCode'])?$_POST['StateCode']:'';
+if (!empty($StateCode))
+{
+	$Query="SELECT DistrictCode, DistrictName FROM district WHERE StateCode=$StateCode order by DistrictName";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+		echo "<option value=''>Select District</option>";
+		while ($arr=mysqli_fetch_assoc($result))
+		{
+			echo '<option value="'.$arr['DistrictCode'].'">'.$arr['DistrictName']."</option>";
+
+		}
+	}
+
+}
+
+$GetDistrict=!empty($_POST['GetDistrict'])?$_POST['GetDistrict']:'';
+if (!empty($GetDistrict))
+{
+	$Query="SELECT DistrictCode, DistrictName FROM district WHERE StateCode=$GetDistrict order by DistrictName";
+	$result=mysqli_query($con,$Query);
+	echo "<option value=''>Select Site</option>";
+	if (mysqli_num_rows($result)>0)
+	{
+		
+		while ($arr=mysqli_fetch_assoc($result))
+		{
+			echo '<option value="'.$arr['DistrictCode'].'">'.$arr['DistrictName']."</option>";
+
+		}
+	}
+
+}
+
 $GetGST=!empty($_POST['GetGST'])?$_POST['GetGST']:'';
 if (!empty($GetGST))
 {
@@ -189,6 +224,30 @@ if (!empty($OrderIDRequirement))
 
 }
 
+$DivisionCodeO=!empty($_POST['DivisionCodeO'])?$_POST['DivisionCodeO']:'';
+
+if (!empty($DivisionCodeO))
+{   
+
+	$query="SELECT * FROM site join district on site.DistrictCode=district.DistrictCode WHERE DivisionCode=$DivisionCodeO";
+	$result=mysqli_query($con,$query);
+	if (mysqli_num_rows($result)>0)
+	{
+
+		while ($row=mysqli_fetch_assoc($result))
+		{
+			
+			print "<tr>";
+			print '<td>'.$row["SiteName"]."</td>";
+			print '<td>'.$row["Address"]."</td>";
+			print '<td>'.$row["DistrictName"]."</td>";
+			print '<td><input class="form-check-input" type="checkbox" name="SiteCodeO[]" value="'.$row["SiteCode"].'"></td>';
+			print '</tr>';
+		}
+
+	}
+}
+
 
 $OrderIDTemp=!empty($_POST['OrderIDTemp'])?$_POST['OrderIDTemp']:'';
 
@@ -223,7 +282,7 @@ $Sitedata=!empty($_POST['Sitedata'])?$_POST['Sitedata']:'';
 if (!empty($Sitedata))
 {   
 
-	$query="SELECT * FROM site WHERE DivisionCode=$Sitedata";
+	$query="SELECT * FROM site inner join district on site.DistrictCode=district.DistrictCode WHERE DivisionCode=$Sitedata";
 	$result=mysqli_query($con,$query);
 	if (mysqli_num_rows($result)>0)
 	{
@@ -234,6 +293,7 @@ if (!empty($Sitedata))
 			print "<tr>";
 
 			print '<td>'.$row["SiteName"]."</td>";
+			print '<td>'.$row["DistrictName"]."</td>";
 			print '<td>'.$row["Address"].' '.$row["Unit"]."</td>";
 			print '<td>'.$row["Consignee"]."</td>";
 			print '<td><button type="button" class="btn btn-danger DeleteSite" id="'.$row["SiteCode"].'">Delete</button></td>';
@@ -247,9 +307,9 @@ if (!empty($Sitedata))
 $DivCodeOrderAV=!empty($_POST['DivCodeOrderAV'])?$_POST['DivCodeOrderAV']:'';
 if (!empty($DivCodeOrderAV))
 {
-	$Query="SELECT Orders.OrderID FROM cyrusproject.demand_details
+	$Query="SELECT orders.OrderID FROM cyrusproject.demand_details
 	inner join orders on demand_details.OrderID=orders.OrderID
-	Where Status=1 and DivisionCode=$DivCodeOrderAV Group by demand_details.OrderID order by orders.OrderID";
+	Where demand_details.Status=1 and DivisionCode=$DivCodeOrderAV Group by demand_details.OrderID order by orders.OrderID";
 	$result=mysqli_query($con,$Query);
 	echo "<option value=''>Order ID</option>";
 	if (mysqli_num_rows($result)>0)
@@ -275,7 +335,7 @@ if (!empty($OrderIDAV))
 	if (mysqli_num_rows($result)>0)
 	{
 		while($arr=mysqli_fetch_assoc($result)){
-			echo '<option value="'.$arr['MaterialID'].'">'.$arr['MaterialName']."</option>";
+			echo '<option style="white-space: normal; word-wrap: break-word;" value="'.$arr['MaterialID'].'">'.$arr['MaterialName']."</option>";
 		}
 
 	}
@@ -365,7 +425,7 @@ if (!empty($VendorNameAVE))
 
 	}
 
-
+/*
 	$OrderIDOF=!empty($_POST['OrderIDOF'])?$_POST['OrderIDOF']:'';
 	if (!empty($OrderIDOF))
 	{
@@ -382,14 +442,15 @@ if (!empty($VendorNameAVE))
 		}
 
 	}
-
+*/
 
 	$VendorOF=!empty($_POST['VendorOF'])?$_POST['VendorOF']:'';
 	if (!empty($VendorOF))
 	{
+		$OrderIDOF=!empty($_POST['OrderIDOF'])?$_POST['OrderIDOF']:'';
 		$Query="SELECT MaterialName, demand_details.MaterialID FROM demand_details
 		join vendor_details on demand_details.MaterialID=vendor_details.MaterialID
-		Where Status<=2 and vendor_details.VendorID=$VendorOF order by MaterialName";
+		Where Status<=2 and vendor_details.VendorID=$VendorOF and demand_details.OrderID=$OrderIDOF order by MaterialName";
 		$result=mysqli_query($con,$Query);
 		echo '<option value="" style="text-align: center;">Select</option>';
 		if (mysqli_num_rows($result)>0)
@@ -561,7 +622,7 @@ if (!empty($VendorNameAVE))
 	{
 		$Query="SELECT vendors.VendorID, VendorName FROM cyrusproject.vendors
 		inner join offers on vendors.VendorID=offers.VendorID
-		WHERE Finalized=1 and vendors.OrderID=$OrderIDPO group by offers.VendorID order by VendorName;";
+		WHERE Finalized=1 and offers.OrderID=$OrderIDPO group by offers.VendorID order by VendorName;";
 		$result=mysqli_query($con,$Query);
 		echo "<option value=''>Vendor</option>";
 		if (mysqli_num_rows($result)>0)
@@ -623,8 +684,10 @@ if (!empty($VendorNameAVE))
 	if (!empty($SurveydataE))
 	{   
 
+		$View=!empty($_POST['View'])?$_POST['View']:'';
+
 		$query="SELECT MaterialName, SurveyID, sitesurvey.Qty, Unit FROM cyrusproject.sitesurvey
-		join demand_details on sitesurvey.MaterialID=demand_details.MaterialID WHERE SiteCode=$SurveydataE and sitesurvey.Status=0";
+		join demand_details on sitesurvey.MaterialID=demand_details.MaterialID WHERE SiteCode=$SurveydataE and sitesurvey.Status=1";
 		$result=mysqli_query($con,$query);
 		if (mysqli_num_rows($result)>0)
 		{
@@ -635,7 +698,11 @@ if (!empty($VendorNameAVE))
 				print "<tr>";
 				print '<td style="word-wrap: break-word;">'.$row["MaterialName"]."</td>";
 				print '<td>'.$row["Qty"].' '.$row["Unit"]."</td>";
-				print '<td><button type="button" class="btn btn-danger DeleteSurvey" id="'.$row["SurveyID"].'">Delete</button></td>';
+				if (!empty($View)) {
+					print '<td><button type="button" class="btn btn-danger disabled DeleteSurvey" id="'.$row["SurveyID"].'">Delete</button></td>';
+				}else{
+					print '<td><button type="button" class="btn btn-danger DeleteSurvey" id="'.$row["SurveyID"].'">Delete</button></td>';
+				}
 				print '</tr>';
 			}
 
@@ -812,7 +879,8 @@ if (!empty($VendorNameAVE))
 			echo $arr2['Qty'];
 
 		}else{
-			echo $arr['leftQty'];
+			//echo $arr['leftQty'];
+			echo $arr2['Qty'];
 		}
 
 

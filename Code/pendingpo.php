@@ -61,6 +61,7 @@ include"query.php";
                                                 <th>Organization</th>
                                                 <th>Division</th>
                                                 <th>Order ID</th>
+                                                <th>Vendor</th>
                                                 <th>PO Date</th>
                                                 <th>PO No</th>
                                                 <th>Action</th>
@@ -79,6 +80,7 @@ include"query.php";
                                                 print '<td>'.$row["Organization"]."</td>";
                                                 print '<td>'.$row["DivisionName"]."</td>";
                                                 print '<td>'.$row["OrderID"]."</td>";
+                                                print '<td>'.$row["VendorName"]."</td>";
                                                 print '<td><span class="d-none">'.$row["PODate"].'</span>'.date('d-M-Y',strtotime($row["PODate"]))."</td>";
                                                 print '<td><a href="printpo.php?PONo='.$EnPONo.'" target="_blank">'.$row["PONo"].'</a></td>';
                                                 print '<td><button type="button" class="btn btn-primary podata" data-bs-toggle="modal" data-bs-target="#pendingpo" id="'.$row["POID"].'">PO Detail</button></td>';

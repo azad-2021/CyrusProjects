@@ -18,6 +18,20 @@ if ($m<=3) {
 }
 
 
+$ConsigneeName=!empty($_POST['ConsigneeName'])?$_POST['ConsigneeName']:'';
+if (!empty($ConsigneeName))
+{
+
+	$sql = "INSERT INTO consignee (ConsigneeName)
+	VALUES ('$ConsigneeName')";
+
+	if ($con->query($sql) === TRUE) {
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+}
+
 $NewOrg=!empty($_POST['NewOrg'])?$_POST['NewOrg']:'';
 if (!empty($NewOrg))
 {
@@ -33,13 +47,15 @@ if (!empty($NewOrg))
 }
 
 
+
 $NewDiv=!empty($_POST['NewDiv'])?$_POST['NewDiv']:'';
 $OrgCode=!empty($_POST['OrgCodeNDiv'])?$_POST['OrgCodeNDiv']:'';
 if (!empty($NewDiv))
 {
+	$StateCodeDiv=!empty($_POST['StateCodeDiv'])?$_POST['StateCodeDiv']:'';
 
-	$sql = "INSERT INTO $div (OrganizationCode, DivisionName)
-	VALUES ($OrgCode, '$NewDiv')";
+	$sql = "INSERT INTO $div (OrganizationCode, DivisionName, StateCode)
+	VALUES ($OrgCode, '$NewDiv', $StateCodeDiv)";
 
 	if ($con->query($sql) === TRUE) {
 		echo 1;
@@ -106,14 +122,22 @@ if (!empty($DivisionCodeO) and !empty($LOADate))
 	$BillingAuth=!empty($_POST['BillingAuth'])?$_POST['BillingAuth']:'';
 	$LOANumber=!empty($_POST['LOANumber'])?$_POST['LOANumber']:'';
 	$Description=!empty($_POST['Description'])?$_POST['Description']:'';
+	$PGType=!empty($_POST['PGType'])?$_POST['PGType']:'';
+	$AMCIncludedMonth=!empty($_POST['AMCIncludedMonth'])?$_POST['AMCIncludedMonth']:'';
+	$ValidTillDate=!empty($_POST['ValidTillDate'])?$_POST['ValidTillDate']:'';
 
+	if (!empty($AMCIncludedMonth)) {
+		$sql = "INSERT INTO $orders (DivisionCode, Description, OrderNo, OrderDate, CompletionDate, PGAmount, PGDate, Warranty, OrderingAuth, BillingAuth, PGTypeID, AMCIncluded, AMCPeriod, PGValidDate)
+		VALUES ($DivisionCodeO, '$Description', '$LOANumber', '$LOADate', '$Completion', $BGAmount, '$BGDate', $Warranty, '$OderingAuth', '$BillingAuth', $PGType, 1, $AMCIncludedMonth, '$ValidTillDate')";
+	}else{
 
-	$sql = "INSERT INTO $orders (DivisionCode, Description, LOANo, LOADate, CompletionDate, BGAmount, BGDate, Warranty, OrderingAuth, BillingAuth)
-	VALUES ($DivisionCodeO, '$Description', '$LOANumber', '$LOADate', '$Completion', $BGAmount, '$BGDate', $Warranty, '$OderingAuth', '$BillingAuth')";
-
+		$sql = "INSERT INTO $orders (DivisionCode, Description, OrderNo, OrderDate, CompletionDate, PGAmount, PGDate, Warranty, OrderingAuth, BillingAuth, PGTypeID, PGValidDate)
+		VALUES ($DivisionCodeO, '$Description', '$LOANumber', '$LOADate', '$Completion', $BGAmount, '$BGDate', $Warranty, '$OderingAuth', '$BillingAuth', $PGType, '$ValidTillDate')";
+	}
 	if ($con->query($sql) === TRUE) {
 
 		$OrderID=$con->insert_id;
+		$_SESSION["NewOrderID"]=$OrderID;
 		$sql2 = "INSERT INTO $demands (OrderID, OrderDate, StatusID)
 		VALUES ($OrderID, '$Date', 1)";
 
@@ -186,6 +210,7 @@ if (!empty($DivisionCodeS))
 	$SiteName=!empty($_POST['SiteName'])?$_POST['SiteName']:'';
 	$SiteAddress=!empty($_POST['SiteAddress'])?$_POST['SiteAddress']:'';
 	$Consignee=!empty($_POST['Consignee'])?$_POST['Consignee']:'';
+	$DistrictCodeSite=!empty($_POST['DistrictCodeSite'])?$_POST['DistrictCodeSite']:'';
 
 	$Query="SELECT SiteName FROM site WHERE SiteName='$SiteName' and DivisionCode=$DivisionCodeS";
 	$result=mysqli_query($con,$Query);
@@ -196,8 +221,8 @@ if (!empty($DivisionCodeS))
 		echo 'Site already exist';
 
 	}else{
-		$sql = "INSERT INTO site (DivisionCode, SiteName, Address, Consignee)
-		VALUES ($DivisionCodeS, '$SiteName', '$SiteAddress', '$Consignee')";
+		$sql = "INSERT INTO site (DivisionCode, SiteName, Address, Consignee, DistrictCode)
+		VALUES ($DivisionCodeS, '$SiteName', '$SiteAddress', '$Consignee', $DistrictCodeSite)";
 
 		if ($con->query($sql) === TRUE) {
 
@@ -255,11 +280,12 @@ if (!empty($MaterialIDAV))
 	$Contact=!empty($_POST['Contact'])?$_POST['Contact']:'';
 	$Contact='+91'.$Contact;
 	$EmailAV=!empty($_POST['EmailAV'])?$_POST['EmailAV']:'';
+	$DistrictCodeV=!empty($_POST['DistrictCodeV'])?$_POST['DistrictCodeV']:'';
 
 	if ($AVType=='New') {
 
-		$sql = "INSERT INTO vendors (VendorName, Contact, Email, Address, GSTNo)
-		VALUES ('$VendorNameAV', '$Contact', '$EmailAV', '$AddressAV', '$GSTNoAV')";
+		$sql = "INSERT INTO vendors (VendorName, Contact, Email, Address, GSTNo, DistrictCode)
+		VALUES ('$VendorNameAV', '$Contact', '$EmailAV', '$AddressAV', '$GSTNoAV', $DistrictCodeV)";
 
 		if ($con->query($sql) === TRUE) {
 
@@ -454,7 +480,7 @@ if (!empty($OfferIDGenPO))
 
 		} else {
 
-			$err=1;
+			//$err=1;
 
 			echo "Error: " . $sql . "<br>" . $con->error;
 		}
@@ -462,8 +488,8 @@ if (!empty($OfferIDGenPO))
 	}
 
 
-	$sql = "INSERT INTO po (OrderID, ShippingAddress, PONo)
-	VALUES ($OrderIDGenPO, '$Shipping', '$NewPONo')";
+	$sql = "INSERT INTO po (OrderID, ShippingAddress, PONo, UserID)
+	VALUES ($OrderIDGenPO, '$Shipping', '$NewPONo', $EmployeeCode)";
 
 	if ($con->query($sql) === TRUE) {
 
@@ -485,7 +511,7 @@ if (!empty($OfferIDGenPO))
 
 				if ($con->query($sqlm) === TRUE) {
 
-					echo 1;
+					//echo 1;
 				} else {
 					echo "Error: " . $sqlm . "<br>" . $con->error;
 				}
@@ -498,7 +524,7 @@ if (!empty($OfferIDGenPO))
 			if ($con->query($sql2) === TRUE) {
 				
 			} else {
-				$err=1;
+				//$err=1;
 				echo "Error: " . $sql2 . "<br>" . $con->error;
 				break;
 			}
@@ -737,7 +763,39 @@ if (!empty($POIDCH))
 
 }
 
+$OrderIDAW=!empty($_POST['OrderIDAW'])?$_POST['OrderIDAW']:'';
+if (!empty($OrderIDAW))
+{
+	$SiteCodeAW=!empty($_POST['SiteCodeAW'])?$_POST['SiteCodeAW']:'';
+	$MaterialIDAW=!empty($_POST['MaterialIDAW'])?$_POST['MaterialIDAW']:'';
+	$QtyAW=!empty($_POST['QtyAW'])?$_POST['QtyAW']:'';
+	$WorkTypeAW=!empty($_POST['WorkTypeAW'])?$_POST['WorkTypeAW']:'';
+	$SDateAW=!empty($_POST['SDateAW'])?$_POST['SDateAW']:'';
+	$EDateAW=!empty($_POST['EDateAW'])?$_POST['EDateAW']:'';
 
+	if ($QtyAW<=0)
+	{
+
+		echo "Quantity must be greator than 0";
+
+	}else{
+
+		$sql = "INSERT INTO sitework (OrderID, SiteCode, MaterialID, WorkTypeID, Qty, StartDate, EndDate)
+		VALUES ($OrderIDAW, $SiteCodeAW, $MaterialIDAW, $WorkTypeAW, $QtyAW, '$SDateAW', '$EDateAW')";
+
+		if ($con->query($sql) === TRUE) {
+
+			echo 1;
+
+
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+
+	}
+}
+
+/*
 $OrderIDAW=!empty($_POST['OrderIDAW'])?$_POST['OrderIDAW']:'';
 if (!empty($OrderIDAW))
 {
@@ -774,7 +832,7 @@ if (!empty($OrderIDAW))
 
 	}
 }
-
+*/
 
 $Vremark=!empty($_POST['Vremark'])?$_POST['Vremark']:'';
 if (!empty($Vremark))
@@ -820,6 +878,98 @@ if (!empty($EmployeeAssign))
 		echo "Error: " . $sql . "<br>" . $con->error;
 	}
 	
+
+}
+
+//Update DOC
+
+$NewDOC=!empty($_POST['NewDOC'])?$_POST['NewDOC']:'';
+if (!empty($NewDOC))
+{	
+	$DOC=!empty($_POST['DOC'])?$_POST['DOC']:'';
+	$OrderIDDOC=!empty($_POST['OrderIDDOC'])?$_POST['OrderIDDOC']:'';
+	$file = $_FILES['file'];
+
+  // validate file size
+	if ($file['size'] > 2 * 1024 * 1024) {
+		echo 'File size must be less than 2MB.';
+		exit;
+	}
+
+  // validate file type
+	if ($file['type'] != 'application/pdf') {
+		echo 'File must be in PDF format.';
+		exit;
+	}
+
+	$uploadDir = 'NewDOCDocument/';
+	
+
+	
+	$sql = "UPDATE orders SET CompletionDate='$NewDOC' WHERE OrderID=$OrderIDDOC";
+	if ($con->query($sql) === TRUE) {
+
+		$sql = "INSERT INTO dochistory (OrderID, CompletionDate, Updatedby, UpdatedOn)
+		VALUES ($OrderIDDOC, '$DOC', $EmployeeCode, '$Date')";
+
+		if ($con->query($sql) === TRUE) {
+			$last_id = $con->insert_id;
+			$uploadFile = $uploadDir . basename($last_id.'.pdf');
+			if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+				echo 1;
+			}
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+
+}
+
+
+//Update PG
+
+$NewPG=!empty($_POST['NewPG'])?$_POST['NewPG']:'';
+if (!empty($NewPG))
+{	
+	$PG=!empty($_POST['PG'])?$_POST['PG']:'';
+	$OrderIDPG=!empty($_POST['OrderIDPG'])?$_POST['OrderIDPG']:'';
+
+	$file = $_FILES['file2'];
+
+  // validate file size
+	if ($file['size'] > 2 * 1024 * 1024) {
+		echo 'File size must be less than 2MB.';
+		exit;
+	}
+
+  // validate file type
+	if ($file['type'] != 'application/pdf') {
+		echo 'File must be in PDF format.';
+		exit;
+	}
+
+	$uploadDir = 'NewPGDocument/';
+
+	$sql = "UPDATE orders SET PGValidDate='$NewPG' WHERE OrderID=$OrderIDPG";
+	if ($con->query($sql) === TRUE) {
+
+		$sql = "INSERT INTO pghistory (OrderID, PGDate, Updatedby, UpdatedOn)
+		VALUES ($OrderIDPG, '$PG', $EmployeeCode, '$Date')";
+
+		if ($con->query($sql) === TRUE) {
+			$last_id = $con->insert_id;
+			$uploadFile = $uploadDir . basename($last_id.'.pdf');
+			if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+				echo 1;
+			}
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
 
 }
 

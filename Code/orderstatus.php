@@ -2,7 +2,6 @@
 include"connection.php";
 include"session.php";
 include"query.php";
-$_SESSION["NewOrderID"]=0;
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +52,7 @@ $_SESSION["NewOrderID"]=0;
                                                 <th style="min-width:70px;">Organization</th>
                                                 <th style="min-width:100px;">Division</th>
                                                 <th style="min-width:50px;">Order ID</th>
-                                                <th style="min-width:200px;">LOA Date</th>
+                                                <th style="min-width:200px;">Order Date</th>
                                                 <th style="min-width:40px;">Completion Date</th>
                                                 <th style="min-width:60px;">Status</th>
                                             </tr>
@@ -62,7 +61,7 @@ $_SESSION["NewOrderID"]=0;
                                         <tbody>
 
                                             <?php 
-                                            $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, Status FROM cyrusproject.orders
+                                            $query="SELECT Organization, DivisionName, OrderID, OrderDate, CompletionDate, Status FROM cyrusproject.orders
                                             inner join division on orders.DivisionCode=division.DivisionCode
                                             inner join organization on division.OrganizationCode=organization.OrganizationCode
                                             inner join orderstatus on orders.OrderStatusID=orderstatus.StatusID;";
@@ -77,7 +76,7 @@ $_SESSION["NewOrderID"]=0;
                                                  print '<td>'.$row["Organization"]."</td>";
                                                  print '<td>'.$row["DivisionName"]."</td>";
                                                  print '<td>'.$row["OrderID"]."</td>";
-                                                 print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
+                                                 print '<td><span class="d-none">'.$row["OrderDate"].'</span>'.date('d-M-Y',strtotime($row["OrderDate"]))."</td>";
                                                  print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
 
                                                  print '<td>'.$row["Status"]."</td>";

@@ -3,7 +3,7 @@ include"connection.php";
 include"session.php";
 include"query.php";
 
-$UserID=1;
+$UserID=$_SESSION['userid'];
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
 
                         <div class="row" style="margin-bottom: 30px;">
                             <div class="col-lg-6">
-                                <textarea type="text" class="form-control rounded-corner2" name="BilledTo" placeholder="Billed To" disabled><?php echo $VDetails; ?></textarea>
+                                <textarea type="text" class="form-control rounded-corner" name="BilledTo" placeholder="Billed To" disabled><?php echo $VDetails; ?></textarea>
                             </div>
                             <div class="col-lg-6">
                                 <textarea type="text" class="form-control rounded-corner" name="Shipping" id="Shipping" placeholder="Shipping Address" required><?php echo $ShippedTo; ?></textarea>

@@ -50,17 +50,18 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewOrg">New Organization</a></li>
-                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDivision">New Division</a></li>
+                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDivision">New Zone / Division</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewSite">New Site</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDesignation">New Designation</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewEmployee">New Employee</a></li>
-                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewOrder">New Order</a></li>
+                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#AddConsignee">Add Consignee</a></li>
+                        <li><a href="neworders.php">New Order</a></li>
                         <li><a href="layouts-compact-sidebar.html">New Complaints</a></li>
 
                     </ul>
 
                 </li>
-
+                <!--
                 <li>
                     <a href="javascript: void(0);" class=" waves-effect">
                         <i class="ri-arrow-down-s-line"></i>
@@ -77,113 +78,129 @@
                     </ul>
 
                 </li>
-                <li>
-                    <a href="requirement.php" class=" waves-effect">
-                        <i class="ri-shopping-cart-2-line"></i>
-                        <span>Material Requirement</span>
-                    </a>
-                </li>
 
-                <li>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#SiteSurvey" class="waves-effect">
-                        <i class="ri-map-fill"></i>
-                        <span>Site Survey</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="orderstatus.php" class="waves-effect">
-                        <i class="ri-luggage-cart-fill"></i>
-                        <span>Order Status</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="materialstatus.php" class="waves-effect">
-                        <i class="ri-luggage-cart-fill"></i>
-                        <span>Material Status</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="workstatus.php" class="waves-effect">
-                        <i class="ri-luggage-cart-fill"></i>
-                        <span>Work Status</span>
-                    </a>
-                </li>
-                <li class="menu-title">Purchase & Movement Control</li>
+                            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#SiteSurvey" class="waves-effect">
+                    <i class="ri-map-fill"></i>
+                    <span>Site Survey</span>
+                </a>
+            </li>
+        -->
+        <li>
+            <a href="requirement.php" class=" waves-effect">
+                <i class="ri-shopping-cart-2-line"></i>
+                <span>Material Requirement</span>
+            </a>
+        </li>
 
-                <li>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#Accessing">
-                        <i class="ri-user-2-fill"></i>
-                        <span>Accessing Vendor</span>
-                    </a>
-                </li>
+        <li>
+            <a href="PendingSiteSurvey.php" class=" waves-effect">
+                <i class="ri-shopping-cart-2-line"></i>
+                <span>Site Survey</span>
+            </a>
+        </li>
 
-                <li>
-                    <a href="Offer.php" class="waves-effect">
-                        <i class="ri-mail-add-line"></i>
-                        <span>New Offer</span>
-                    </a>
-                </li>
+        <li>
+            <a href="ViewSiteSurvey.php" class=" waves-effect">
+                <i class="ri-shopping-cart-2-line"></i>
+                <span>Site Survey Detail</span>
+            </a>
+        </li>
 
-                <li>
-                    <a href="fvendor.php" class="waves-effect">
-                        <i class="ri-user-follow-fill"></i>
-                        <span>Finalizing Vendors</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="placepo.php" class="waves-effect">
-                        <i class="ri-bill-fill"></i>
-                        <span>Place PO</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="pendingpo.php" class="waves-effect">
-                        <i class="ri-bill-fill"></i>
-                        <span>Pending PO</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="movement.php" class="waves-effect">
-                        <i class="ri-luggage-cart-fill"></i>
-                        <span>Movement Control</span>
-                    </a>
-                </li>
-                <li class="menu-title">Work Reporting & Verification</li>
+        <li>
+            <a href="orderstatus.php" class="waves-effect">
+                <i class="ri-luggage-cart-fill"></i>
+                <span>Order Status</span>
+            </a>
+        </li>
+        <li>
+            <a href="materialstatus.php" class="waves-effect">
+                <i class="ri-luggage-cart-fill"></i>
+                <span>Material Status</span>
+            </a>
+        </li>
+        <li>
+            <a href="workstatus.php" class="waves-effect">
+                <i class="ri-luggage-cart-fill"></i>
+                <span>Work Status</span>
+            </a>
+        </li>
+        <li class="menu-title">Purchase & Movement Control</li>
 
-                <li>
-                    <a href="workassign.php" class=" waves-effect">
-                        <i class="ri-file-list-fill"></i>
-                        <span>Work Assigning</span>
-                    </a>
-                </li>
+        <li>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#Accessing">
+                <i class="ri-user-2-fill"></i>
+                <span>Accessing Vendor</span>
+            </a>
+        </li>
 
-                <li>
-                    <a href="pverification.php" class=" waves-effect">
-                        <i class="ri-file-list-fill"></i>
-                        <span>Work Verification</span>
-                    </a>
-                </li>
+        <li>
+            <a href="Offer.php" class="waves-effect">
+                <i class="ri-mail-add-line"></i>
+                <span>New Offer</span>
+            </a>
+        </li>
 
-                <li class="menu-title">Billing & Payment</li>
+        <li>
+            <a href="fvendor.php" class="waves-effect">
+                <i class="ri-user-follow-fill"></i>
+                <span>Finalizing Vendors</span>
+            </a>
+        </li>
+        <li>
+            <a href="placepo.php" class="waves-effect">
+                <i class="ri-bill-fill"></i>
+                <span>Place PO</span>
+            </a>
+        </li>
+        <li>
+            <a href="pendingpo.php" class="waves-effect">
+                <i class="ri-bill-fill"></i>
+                <span>Pending PO</span>
+            </a>
+        </li>
+        <li>
+            <a href="movement.php" class="waves-effect">
+                <i class="ri-luggage-cart-fill"></i>
+                <span>Movement Control</span>
+            </a>
+        </li>
+        <li class="menu-title">Work Reporting & Verification</li>
 
-                <li>
-                    <a href="billing.php" class=" waves-effect">
-                        <i class="ri-file-list-fill"></i>
-                        <span>Billing</span>
-                    </a>
-                </li>
+        <li>
+            <a href="workassign.php" class=" waves-effect">
+                <i class="ri-file-list-fill"></i>
+                <span>Work Assigning</span>
+            </a>
+        </li>
 
-                <li>
-                    <a href="pverification.php" class=" waves-effect">
-                        <i class="ri-file-list-fill"></i>
-                        <span>Payment Entry</span>
-                    </a>
-                </li>
+        <li>
+            <a href="pverification.php" class=" waves-effect">
+                <i class="ri-file-list-fill"></i>
+                <span>Work Verification</span>
+            </a>
+        </li>
+
+        <li class="menu-title">Billing & Payment</li>
+
+        <li>
+            <a href="billing.php" class=" waves-effect">
+                <i class="ri-file-list-fill"></i>
+                <span>Billing</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="pverification.php" class=" waves-effect">
+                <i class="ri-file-list-fill"></i>
+                <span>Payment Entry</span>
+            </a>
+        </li>
 
 
-            </ul>
-        </div>
-        <!-- Sidebar -->
-    </div>
+    </ul>
+</div>
+<!-- Sidebar -->
+</div>
 </div>
 <!-- Left Sidebar End -->

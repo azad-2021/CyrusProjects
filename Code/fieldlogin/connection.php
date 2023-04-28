@@ -2,7 +2,7 @@
 
 $host = "localhost";  
 $user = "root";  
-$password = '';  
+$password = 'cyrus@123';  
 
 $db = "cyrusproject";
 

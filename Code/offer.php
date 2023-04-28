@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 
     if (empty($errors)==true) {
 
-        $query="SELECT OrderID FROM vendors WHERE VendorID=$VendorID";
+        $query="SELECT OrderID FROM vendor_details WHERE VendorID=$VendorID";
         $result=mysqli_query($con,$query);
         if (mysqli_num_rows($result)>0)
         {
@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
     <style type="text/css">
 
 
-       table.dataTable tbody td {
+     table.dataTable tbody td {
         word-break: break-word;
         vertical-align: top;
     }
@@ -221,6 +221,17 @@ if (isset($_POST['submit'])) {
                                 <label for="recipient-name" class="col-form-label">Select Vendor</label>
                                 <select class="form-select form-control rounded-corner" name="VendorOF" id="VendorOF" required>
                                     <option value="">Select</option>
+                                    <?php
+                                    $query="SELECT VendorID, VendorName FROM vendors Order By VendorName";
+                                    $result=mysqli_query($con,$query);
+                                    if (mysqli_num_rows($result)>0)
+                                    {
+                                      while ($arr=mysqli_fetch_assoc($result))
+                                      {
+                                        ?>
+                                        <option value="<?php echo $arr['VendorID']; ?>"><?php echo $arr['VendorName']; ?></option>
+                                        <?php
+                                    }}?>
                                 </select>
                             </div>
 
@@ -452,7 +463,7 @@ if (isset($_POST['submit'])) {
         $('#VendorOF').html('<option value="">Select</option>');
     }
 });
-
+/*
 
   $(document).on('change', '#OrderIDOF', function(){
 
@@ -473,18 +484,19 @@ if (isset($_POST['submit'])) {
         $('#MaterialOF').html('<option value="">Select</option>');
     }
 });
-
+*/
 
 
   $(document).on('change', '#VendorOF', function(){
 
     var VendorID=$(this).val();
-    if(VendorID){
+    var  OrderID=$('#OrderIDOF').val()
+    if(VendorID && OrderID){
         document.getElementById("VendorOFH").value=VendorID;
         $.ajax({
           type:'POST',
           url:'select.php',
-          data:{'VendorOF':VendorID},
+          data:{'VendorOF':VendorID, 'OrderIDOF':OrderID},
           success:function(result){
             $('#MaterialOF').html(result);
 
@@ -497,22 +509,22 @@ if (isset($_POST['submit'])) {
           url:'select.php',
           data:{'MaterialdataOF':VendorID},
           success:function(result){
-           $('.displayOF').DataTable().clear();
-           $('.displayOF').DataTable().destroy();
-           $('#MaterialdataOF').html(result);
+             $('.displayOF').DataTable().clear();
+             $('.displayOF').DataTable().destroy();
+             $('#MaterialdataOF').html(result);
 
-           $('table.displayOF').DataTable( {
+             $('table.displayOF').DataTable( {
 
-               scrollY: '200px',
-               scrollCollapse: true,
-               paging: false,
-               scrollX: true,
+                 scrollY: '200px',
+                 scrollCollapse: true,
+                 paging: false,
+                 scrollX: true,
 
-           } );
+             } );
 
 
-       }
-   });
+         }
+     });
 
 
     }else{
@@ -529,18 +541,18 @@ if (isset($_POST['submit'])) {
           url:'select.php',
           data:{'GetQtyOF':MaterialID},
           success:function(result){
-           document.getElementById("TotalQtyOF").value=result;
-       }
-   }); 
+             document.getElementById("TotalQtyOF").value=result;
+         }
+     }); 
 
         $.ajax({
           type:'POST',
           url:'select.php',
           data:{'GetUnitOF':MaterialID},
           success:function(result){
-           document.getElementById("UnitOF").value=result;
-       }
-   }); 
+             document.getElementById("UnitOF").value=result;
+         }
+     }); 
 
     }else{
         document.getElementById("TotalQtyOF").value=0;
@@ -626,22 +638,22 @@ if (isset($_POST['submit'])) {
                       url:'select.php',
                       data:{'MaterialdataOF':VendorID},
                       success:function(result){
-                       $('.displayOF').DataTable().clear();
-                       $('.displayOF').DataTable().destroy();
-                       $('#MaterialdataOF').html(result);
+                         $('.displayOF').DataTable().clear();
+                         $('.displayOF').DataTable().destroy();
+                         $('#MaterialdataOF').html(result);
 
-                       $('table.displayOF').DataTable( {
+                         $('table.displayOF').DataTable( {
 
-                           scrollY: '200px',
-                           scrollCollapse: true,
-                           paging: false,
-                           scrollX: true,
+                             scrollY: '200px',
+                             scrollCollapse: true,
+                             paging: false,
+                             scrollX: true,
 
-                       } );
+                         } );
 
 
-                   }
-               });
+                     }
+                 });
                     //    
                     $.ajax({
                         type:'POST',
@@ -687,22 +699,22 @@ if (isset($_POST['submit'])) {
                   url:'select.php',
                   data:{'MaterialdataOF':VendorID},
                   success:function(result){
-                   $('.displayOF').DataTable().clear();
-                   $('.displayOF').DataTable().destroy();
-                   $('#MaterialdataOF').html(result);
+                     $('.displayOF').DataTable().clear();
+                     $('.displayOF').DataTable().destroy();
+                     $('#MaterialdataOF').html(result);
 
-                   $('table.displayOF').DataTable( {
+                     $('table.displayOF').DataTable( {
 
-                       scrollY: '200px',
-                       scrollCollapse: true,
-                       paging: false,
-                       scrollX: true,
+                         scrollY: '200px',
+                         scrollCollapse: true,
+                         paging: false,
+                         scrollX: true,
 
-                   } );
+                     } );
 
 
-               }
-           });
+                 }
+             });
 
             }else{
                 err(result);

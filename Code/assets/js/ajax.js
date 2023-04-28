@@ -24,15 +24,42 @@ $(document).on('click', '.SaveOrg', function(){
 });
 
 
+$(document).on('click', '.SaveConsignee', function(){
+
+  var ConsigneeName=$("#AddConsigneeName").val();
+  if (ConsigneeName) {
+      $.ajax({
+        url:"insert.php",
+        method:"POST",
+        data:{'ConsigneeName':ConsigneeName},
+        success:function(result){
+            if(result==1){
+                Swal.fire({
+                    title: 'success',
+                    text: 'Consignee Added',
+                    icon: 'success',
+                });
+                $('#AddConsignee').modal("hide");
+                $("#AddConsigneeName").val(null);
+            }else{
+                err(result);
+            }
+        }
+    });
+  }
+});
+
+
 $(document).on('click', '.SaveDiv', function(){
 
   var OrgCode=document.getElementById("OrgCodeNDiv").value;
   var Division=document.getElementById("newdiv").value;
-  if (OrgCode && Division) {
+  var StateCode=$("#StateDiv").val();
+  if (OrgCode && Division && StateCode) {
       $.ajax({
         url:"insert.php",
         method:"POST",
-        data:{'NewDiv':Division, 'OrgCodeNDiv':OrgCode},
+        data:{'NewDiv':Division, 'OrgCodeNDiv':OrgCode, 'StateCodeDiv':StateCode},
         success:function(result){
             if(result==1){
                 Swal.fire({
@@ -96,10 +123,21 @@ $(document).on('change', '#LOADate', function(){
   $('#BGDate').attr('min' , MinDate);
 });
 
+$(document).on('change', '#AMCIncluded', function(){
+
+    if ($('#AMCIncluded').is(":checked")) {
+        $("#amcd").removeClass("d-none");
+    }else{
+        $("#amcd").addClass("d-none");
+    }
+
+});
+
 
 
 $(document).on('click', '.SaveOrder', function(){
 
+    var AMCIncludedMonth=$("#AMCIncludedMonth").val();
     var file_data = $('#LOAFile').prop('files')[0];   
     var form_data = new FormData();                  
     form_data.append('file', file_data);
@@ -109,54 +147,60 @@ $(document).on('click', '.SaveOrder', function(){
 
     if(jQuery.inArray(extension,['pdf','']) == -1){
       err("Invalid file format");
+  }else if($('#AMCIncluded').is(":checked") && !AMCIncludedMonth){
+    err("Please enter all fields");
+}else if(file_data){
+
+    var PGType=$("#PGType").val();
+    var ValidTillDate=$("#ValidTillDate").val();
+    var DivisionCode=document.getElementById("DivisionCode").value;
+    var LOADate=document.getElementById("LOADate").value;
+    var Completion=document.getElementById("Completion").value;
+    var BGAmount=document.getElementById("BGAmount").value;
+    var BGDate=document.getElementById("BGDate").value;
+    var Warranty=document.getElementById("Warranty").value;
+    var OderingAuth=document.getElementById("OderingAuth").value;
+    var BillingAuth=document.getElementById("BillingAuth").value;
+    var LOANumber=document.getElementById("LOANumber").value;
+    var Description=document.getElementById("Description").value;
+    //alert(AMCIncludedMonth);
+    if (DivisionCode && LOADate && Completion && BGAmount && BGDate && Warranty && OderingAuth && BillingAuth && Description && file_data && PGType && ValidTillDate) {
+      $.ajax({
+        url:"insert.php",
+        method:"POST",
+        data:{'DivisionCodeO':DivisionCode, 'LOADate':LOADate, 'Completion':Completion, 'BGAmount':BGAmount, 'BGDate':BGDate, 'Warranty':Warranty, 'OderingAuth':OderingAuth, 'BillingAuth':BillingAuth, 'LOANumber':LOANumber, 'Description':Description, 'AMCIncludedMonth':AMCIncludedMonth, PGType, 'ValidTillDate':ValidTillDate},
+        success:function(result){
+            //alert(result);
+
+            $.ajax({
+                url: 'upload.php',
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,                         
+                type: 'post',
+                success: function(result){
+
+                }
+            });
+
+
+            Swal.fire({
+                title: 'success',
+                text: 'Order ID : '+result,
+                icon: 'success',
+            });
+            $('#FAddOrder').trigger("reset");
+            $('#NewOrder').modal("hide");
+            $("#amcd").addClass("d-none");
+
+        }
+    });
   }else{
-
-
-      var DivisionCode=document.getElementById("DivisionCode").value;
-      var LOADate=document.getElementById("LOADate").value;
-      var Completion=document.getElementById("Completion").value;
-      var BGAmount=document.getElementById("BGAmount").value;
-      var BGDate=document.getElementById("BGDate").value;
-      var Warranty=document.getElementById("Warranty").value;
-      var OderingAuth=document.getElementById("OderingAuth").value;
-      var BillingAuth=document.getElementById("BillingAuth").value;
-      var LOANumber=document.getElementById("LOANumber").value;
-      var Description=document.getElementById("Description").value;
-
-      if (DivisionCode && LOADate && Completion && BGAmount && BGDate && Warranty && OderingAuth && BillingAuth && Description && file_data) {
-          $.ajax({
-            url:"insert.php",
-            method:"POST",
-            data:{'DivisionCodeO':DivisionCode, 'LOADate':LOADate, 'Completion':Completion, 'BGAmount':BGAmount, 'BGDate':BGDate, 'Warranty':Warranty, 'OderingAuth':OderingAuth, 'BillingAuth':BillingAuth, 'LOANumber':LOANumber, 'Description':Description},
-            success:function(result){
-
-
-                $.ajax({
-                    url: 'upload.php',
-                    dataType: 'text',
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: form_data,                         
-                    type: 'post',
-                    success: function(result){
-
-                    }
-                });
-
-
-                Swal.fire({
-                    title: 'success',
-                    text: 'Order ID : '+result,
-                    icon: 'success',
-                });
-                $('#FAddOrder').trigger("reset");
-                $('#NewOrder').modal("hide");
-
-            }
-        });
-      }
-  }
+    err("Please enter all fields");
+}
+}
 });
 
 
@@ -169,12 +213,12 @@ $(document).on('click', '.AddSite', function(){
     var SiteName=document.getElementById("SiteName").value;
     var SiteAddress=document.getElementById("SiteAddress").value;
     var Consignee=document.getElementById("Consignee").value;
-
-    if(DivisionCode && SiteName && SiteAddress && Consignee){
+    var DistrictCode=$("#DistrictSite").val();
+    if(DivisionCode && SiteName && SiteAddress && Consignee && DistrictCode){
         $.ajax({
           type:'POST',
           url:'insert.php',
-          data:{'DivisionCodeS':DivisionCode, 'SiteName':SiteName, 'SiteAddress':SiteAddress, 'Consignee':Consignee},
+          data:{'DivisionCodeS':DivisionCode, 'SiteName':SiteName, 'SiteAddress':SiteAddress, 'Consignee':Consignee, 'DistrictCodeSite':DistrictCode},
           success:function(result){
             if (result==1) {
                 document.getElementById("SiteName").value='';
@@ -228,8 +272,37 @@ $(document).on('change', '#DivisionCodeSite', function(){
             }
         }); 
 
+            $.ajax({
+              type:'POST',
+              url:'select.php',
+              data:{'GetDistrict':DivisionCode},
+              success:function(result){
+                $('#DistrictSite').html(result);
+            }
+        });
+
         }
     }); 
+    }else{
+        $('#DivisionCode').html('<option value="">Division</option>');
+    }
+});
+
+
+$(document).on('change', '#StateSite', function(){
+
+    var StateSite=$(this).val();
+    if(StateSite){
+
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'GetDistrict':StateSite},
+          success:function(result){
+            $('#DistrictSite').html(result);
+        }
+    });
+
     }else{
         $('#DivisionCode').html('<option value="">Division</option>');
     }
@@ -378,6 +451,23 @@ $(document).on('change', '#MaterialAV', function(){
     }
 });
 
+$(document).on('change', '#State', function(){
+
+    var StateCode=$(this).val();
+    if(StateCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'StateCode':StateCode},
+          success:function(result){
+            $('#DistrictV').html(result);
+        }
+    }); 
+
+    }else{
+       $('#DistrictV').html('<option value="">District</option>');
+   }
+});
 
 
 $( ".VendorType" ).change(function() {
@@ -414,15 +504,15 @@ $(document).on('change', '#VendorNameAVE', function(){
           data:{'VendorNameAVE':VendorID},
           success:function(result){
 
-           const obj = JSON.parse(result);
-           document.getElementById("AddressAV").value=obj.Address;
-           document.getElementById("ContactAV").value=obj.Contact;
-           document.getElementById("EmailAV").value=obj.Email;
-           document.getElementById("GSTNoAV").value=obj.GST;
+             const obj = JSON.parse(result);
+             document.getElementById("AddressAV").value=obj.Address;
+             document.getElementById("ContactAV").value=obj.Contact;
+             document.getElementById("EmailAV").value=obj.Email;
+             document.getElementById("GSTNoAV").value=obj.GST;
 
 
-       }
-   }); 
+         }
+     }); 
 
     }else{
         document.getElementById("AddressAV").value="";
@@ -449,12 +539,12 @@ $(document).on('click', '.AddVendor', function(){
 
     var Address= document.getElementById("AddressAV").value;
     var GST=document.getElementById("GSTNoAV").value;
-
-    if(MaterialID && OrderID && Vendor && Contact && Email && Type && Address && GST){
+    var DistrictCode=$("#DistrictV").val();
+    if(MaterialID && OrderID && Vendor && Contact && Email && Type && Address && GST && DistrictCode){
         $.ajax({
           type:'POST',
           url:'insert.php',
-          data:{'MaterialIDAV':MaterialID, 'OrderIDAV':OrderID, 'VendorNameAV':Vendor, 'Contact':Contact, 'EmailAV':Email, 'AVType':Type, 'AddressAV':Address, 'GSTNoAV':GST},
+          data:{'MaterialIDAV':MaterialID, 'OrderIDAV':OrderID, 'VendorNameAV':Vendor, 'Contact':Contact, 'EmailAV':Email, 'AVType':Type, 'AddressAV':Address, 'GSTNoAV':GST, 'DistrictCodeV':DistrictCode},
           success:function(result){
             if (result==1) {
                 document.getElementById("VendorNameAVN").value='';
@@ -565,6 +655,7 @@ $(document).on('change', '#DivisionCodeSurvey', function(){
           data:{'DivisionCode':DivisionCode},
           success:function(result){
             $('#SiteCodeSurvey').html(result);
+            $('#SiteCodeSurveyD').html(result);
 
         }
     }); 
@@ -751,32 +842,50 @@ $(document).on('change', '#SiteCodeSurvey', function(){
                 PrevSiteCode=SiteCode;
             }else{
 
-             $("select#SiteCodeSurvey").prop('selectedIndex', 0);
-             $.ajax({
-              type:'POST',
-              url:'select.php',
-              data:{'SurveydataE':0},
-              success:function(result){
+               $("select#SiteCodeSurvey").prop('selectedIndex', 0);
+               $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SurveydataE':0},
+                  success:function(result){
 
-                $('.Surveydisplay').DataTable().clear();
-                $('.Surveydisplay').DataTable().destroy();
-                $('#Surveydata').html(result);
-                $('table.Surveydisplay').DataTable();
+                    $('.Surveydisplay').DataTable().clear();
+                    $('.Surveydisplay').DataTable().destroy();
+                    $('#Surveydata').html(result);
+                    $('table.Surveydisplay').DataTable();
 
-            }
-        });
+                }
+            });
 
 
-         }
-     })
+           }
+       })
 
     }else{
-       $('.Surveydisplay').DataTable().clear();
-       $('.Surveydisplay').DataTable().destroy();
-   }
+     $('.Surveydisplay').DataTable().clear();
+     $('.Surveydisplay').DataTable().destroy();
+ }
+});
+
+$(document).on('change', '#SiteCodeSurveyD', function(){
+
+    var SiteCode=$(this).val();
+    $.ajax({
+      type:'POST',
+      url:'select.php',
+      data:{'SurveydataE':SiteCode, 'View':'View'},
+      success:function(result){
+
+        $('.Surveydisplay').DataTable().clear();
+        $('.Surveydisplay').DataTable().destroy();
+        $('#Surveydata').html(result);
+        $('table.Surveydisplay').DataTable();
+
+    }
 });
 
 
+});
 $(document).on('click', '.DeleteSurvey', function(){
 
     var ID=$(this).attr("id");

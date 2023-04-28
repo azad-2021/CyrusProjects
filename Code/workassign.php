@@ -13,7 +13,7 @@ include"query.php";
     <title>Work Assigning</title>
     <?php include"head.php" ?>
     <style type="text/css">
-       table.dataTable tbody td {
+     table.dataTable tbody td {
         word-break: break-word;
         vertical-align: top;
     }
@@ -271,16 +271,22 @@ include"query.php";
                     }
                 });  
 
-                    $.ajax({
-                      type:'POST',
-                      url:'select.php',
-                      data:{'SiteWork':SiteCodeW},
-                      success:function(result){
+                    
 
-                       $('.displayUWork').DataTable().clear();
-                       $('.displayUWork').DataTable().destroy();
-                       $('#UNWork').html(result);
-                       $('table.displayUWork').DataTable({
+                }else{
+                    $('#MaterialW').html('<option value="">Select</option>');
+                }
+
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SiteWork':SiteCodeW},
+                  success:function(result){
+
+                     $('.displayUWork').DataTable().clear();
+                     $('.displayUWork').DataTable().destroy();
+                     $('#UNWork').html(result);
+                     $('table.displayUWork').DataTable({
 
                         scrollY: '200px',
                         scrollCollapse: true,
@@ -288,12 +294,9 @@ include"query.php";
                         scrollX: true,
                     });
 
-                   }
-               }); 
+                 }
+             });
 
-                }else{
-                    $('#MaterialW').html('<option value="">Select</option>');
-                }
             });
 
             $(document).on('change', '#MaterialW', function(){
@@ -333,7 +336,7 @@ include"query.php";
                     document.getElementById("QtyW").value=null;
                     document.getElementById("QtyW").disabled=true;
                 }else if (Qty>parseInt(MaxQty)) {
-                  document.getElementById("QtyW").value=parseInt(MaxQty);
+                  document.getElementById("QtyW").value=parseFloat(MaxQty);
               }
 
           }
@@ -381,19 +384,19 @@ include"query.php";
                           data:{'SiteWork':SiteCode},
                           success:function(result){
 
-                           $('.displayUWork').DataTable().clear();
-                           $('.displayUWork').DataTable().destroy();
-                           $('#UNWork').html(result);
-                           $('table.displayUWork').DataTable({
+                             $('.displayUWork').DataTable().clear();
+                             $('.displayUWork').DataTable().destroy();
+                             $('#UNWork').html(result);
+                             $('table.displayUWork').DataTable({
 
-                            scrollY: '200px',
-                            scrollCollapse: true,
-                            paging: false,
-                            scrollX: true,
-                        });
+                                scrollY: '200px',
+                                scrollCollapse: true,
+                                paging: false,
+                                scrollX: true,
+                            });
 
-                       }
-                   }); 
+                         }
+                     }); 
 
                     }else{
                         err(result);
@@ -437,19 +440,19 @@ include"query.php";
                                   data:{'SiteWork':SiteCode},
                                   success:function(result){
 
-                                   $('.displayUWork').DataTable().clear();
-                                   $('.displayUWork').DataTable().destroy();
-                                   $('#UNWork').html(result);
-                                   $('table.displayUWork').DataTable({
+                                     $('.displayUWork').DataTable().clear();
+                                     $('.displayUWork').DataTable().destroy();
+                                     $('#UNWork').html(result);
+                                     $('table.displayUWork').DataTable({
 
-                                    scrollY: '200px',
-                                    scrollCollapse: true,
-                                    paging: false,
-                                    scrollX: true,
-                                });
+                                        scrollY: '200px',
+                                        scrollCollapse: true,
+                                        paging: false,
+                                        scrollX: true,
+                                    });
 
-                               }
-                           });
+                                 }
+                             });
 
                             }else{
                                 err(result);
