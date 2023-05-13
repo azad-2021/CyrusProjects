@@ -973,4 +973,35 @@ if (!empty($NewPG))
 
 }
 
+
+//Site Office Work Assigning
+
+$OrderIDOfficeWork=!empty($_POST['OrderIDOfficeWork'])?$_POST['OrderIDOfficeWork']:'';
+if (!empty($OrderIDOfficeWork))
+{
+	$SiteCodeOfficeWork=!empty($_POST['SiteCodeOfficeWork'])?$_POST['SiteCodeOfficeWork']:'';
+	$OfficeWorkDesc=!empty($_POST['OfficeWorkDesc'])?$_POST['OfficeWorkDesc']:'';
+	$AssignEmployeeOffice=!empty($_POST['AssignEmployeeOffice'])?$_POST['AssignEmployeeOffice']:'';
+	$OfficeAssignDate=!empty($_POST['OfficeAssignDate'])?$_POST['OfficeAssignDate']:'';
+
+	$Query="SELECT * FROM cyrusproject.site_ofice_work WHERE Work='$OfficeWorkDesc'";
+	$result=mysqli_query($con,$Query);
+	if (mysqli_num_rows($result)>0)
+	{
+
+		echo "Work already exist";
+
+	}else{
+
+		$sql = "INSERT INTO cyrusproject.site_ofice_work (SiteCode, Work, EmployeeCode, AssignDate, OrderID)
+		VALUES ($SiteCodeOfficeWork, '$OfficeWorkDesc', $AssignEmployeeOffice, '$OfficeAssignDate', $OrderIDOfficeWork)";
+
+		if ($con->query($sql) === TRUE) {
+			echo 1;
+		} else {
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	}
+}
+
 ?>

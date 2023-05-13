@@ -98,6 +98,23 @@ $(document).on('change', '#OrgCode', function(){
     }
 });
 
+$(document).on('change', '#DivisionCode', function(){
+
+    var DivisionCode=$(this).val();
+    if(DivisionCode){
+        $.ajax({
+          type:'POST',
+          url:'select.php',
+          data:{'DivisionCodeO':DivisionCode},
+          success:function(result){
+            $('#SiteO').html(result);
+
+        }
+    }); 
+    }
+});
+
+
 $(document).on('change', '#OrgCodeSite', function(){
 
     var OrgCode=$(this).val();

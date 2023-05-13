@@ -122,7 +122,7 @@ if (mysqli_num_rows($result)>0)
                                                 </span>
                                             </div>
                                         </div>
-                                        <h3 class="font-size-24">46 </h3>
+                                        <h3 class="font-size-24">0 </h3>
 
                                     </div><!-- end card-body -->
 
@@ -187,7 +187,7 @@ if (mysqli_num_rows($result)>0)
 
                                                             $tr='<tr class="badge-soft-warning">';
                                                         }else{
-                                                            $tr='<tr class="badge-soft-success">';
+                                                            $tr='<tr>';
                                                         }
                                                         $WorkID=base64_encode($row["WorkID"]);
                                                         print($tr);
@@ -217,7 +217,7 @@ if (mysqli_num_rows($result)>0)
                         </div><!-- end col -->
                         
 
-                        <div class="col-xl-12">
+                       <!-- <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title mb-4">Complaints</h4>
@@ -272,8 +272,10 @@ if (mysqli_num_rows($result)>0)
                                             </tbody>
                                         </table>
                                     </div>                        
-                                </div><!-- end card-body -->
-                            </div><!-- end card -->
+                                </div>
+                            </div>
+
+                             end card -->
 
                             <!--<div class="col-xl-12">
                                 <div class="card">

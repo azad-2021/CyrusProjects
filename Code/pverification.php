@@ -198,6 +198,8 @@ if (mysqli_num_rows($result)>0)
                                             <th style="min-width:60px;">Material Consumed</th>
                                             <th style="min-width:60px;">Expense</th>
                                             <th style="min-width:100px;">Addtitional Employee</th>
+                                            <th style="min-width:100px;">Labour/Third Party</th>
+                                            <th style="min-width:100px;">No. of Labours</th>
                                             <th style="min-width:100px;">Action</th>
                                         </tr>
                                     </thead>
@@ -246,6 +248,8 @@ if (mysqli_num_rows($result)>0)
                                             print '<td>'.$Material.'</td>';
                                             print '<td>'.$Expense.'</td>';
                                             print '<td>'.$Additional.'</td>';
+                                            print '<td>'.$row["LabourWork"]."</td>";
+                                            print '<td>'.$row["Labours"]."</td>";
                                             print '<td><a href="" data-bs-toggle="modal" data-bs-target="#Verify" id="'.$VID.'" class="VerifyWork">Verify</a></td>';
                                             print '</tr>';
                                         }

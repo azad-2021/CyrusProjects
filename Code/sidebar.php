@@ -1,5 +1,15 @@
-<!-- ========== Left Sidebar Start ========== -->
-<div class="vertical-menu">
+<?php 
+
+if ($_SESSION['Designation']=='Backend Support') {
+    include"sidebars/BackendSupport.php";
+}elseif ($_SESSION['Designation']=='Purchase') {
+    include"sidebars/Purchase.php";
+}else{
+
+   ?>
+
+   <!-- ========== Left Sidebar Start ========== -->
+   <div class="vertical-menu">
 
     <!-- LOGO -->
     <div class="navbar-brand-box">
@@ -204,3 +214,7 @@
 </div>
 </div>
 <!-- Left Sidebar End -->
+
+<?php
+
+}

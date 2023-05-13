@@ -449,6 +449,17 @@
 
                             </select>
                         </div>
+
+                        <div class="col-lg-9">
+                            <label for="recipient-name" class="col-form-label">Complete Material Description</label>
+                            <textarea class="form-control rounded-corner" id="CompleteDescMat"></textarea>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Quantity</label>
+                            <input type="text" name="" id="QtyUnitACV" class="form-control rounded-corner">
+                        </div>
+
                         <center>
                             <div class="form-check form-check-inline" style="margin-top:20px;">
                               <input class="form-check-input VendorType" type="radio" name="VendorType" id="VendorType" value="New">

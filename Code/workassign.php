@@ -13,7 +13,7 @@ include"query.php";
     <title>Work Assigning</title>
     <?php include"head.php" ?>
     <style type="text/css">
-     table.dataTable tbody td {
+       table.dataTable tbody td {
         word-break: break-word;
         vertical-align: top;
     }
@@ -55,7 +55,7 @@ include"query.php";
                 <!-- end page title -->
 
 
-                <form class="form-control rounded-corner" style="margin-bottom: 50px;" id="SurveyF">
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;">
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Organization</label>
@@ -97,7 +97,12 @@ include"query.php";
 
                             </select>
                         </div>
+                    </div>
+                </form>
 
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;">
+                    <center><h3>Site Work as per work order</h3></center>
+                    <div class="row">
                         <div class="col-lg-6">
                             <label for="recipient-name" class="col-form-label">Select Material</label>
                             <select class="form-select form-control rounded-corner2" id="MaterialW">
@@ -157,16 +162,14 @@ include"query.php";
                     </div>
                 </form>
 
-
-                
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Unassigned Work</h4>
 
-                                
-                                <table class="table table-centered table-bordered displayUWork">
+
+                                <table class="table table-centered table-bordered displayUWork" width="100%">
                                     <thead class="thead-light">
                                         <tr>
                                             <th style="min-width: 150px">Work</th>
@@ -189,6 +192,78 @@ include"query.php";
                     </div><!-- end col -->
 
                 </div><!-- end col -->
+
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;" id="OfficeWorkF">
+                    <center><h3>Add Site office work</h3></center>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="recipient-name" class="col-form-label">Enter Work Detail</label>
+                            <textarea class="form-control rounded-corner" type="text" id="OfficeWorkDesc" maxlength="450"></textarea>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Assign To</label>
+
+                            <select class="form-control rounded-corner" id="AssignEmployeeOffice">
+                                <option value="">Select</option>
+                                <?php
+
+                                $query="SELECT * FROM cyrusproject.employees WHERE Active=1 and DesignationID=2";
+
+                                $result=mysqli_query($con,$query);
+                                if (mysqli_num_rows($result)>0)
+                                {
+                                  while ($arr=mysqli_fetch_assoc($result))
+                                  {
+                                    ?>
+                                    <option value="<?php echo $arr['EmployeeCode']; ?>"><?php echo $arr['EmployeeName']; ?></option>
+                                    <?php
+                                }}?>
+                            </select>
+                        </div>
+
+
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Assign Date</label>
+                            <input type="date" class="form-control rounded-corner" id="OfficeAssignDate">
+                        </div>
+                        <center>
+                            <div class="col-lg-2" style="margin-top: 35px;">
+                                <button type="button" class="bt btn-lg btn-primary AddWorkSiteOffice">Save</button>
+                            </div>
+                        </center>
+
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Site Office Work</h4>
+
+
+                                <table class="table table-centered table-bordered displayOWork" width="100%">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="min-width: 300px">Work</th>
+                                            <th style="min-width: 120px">Work ID</th>
+                                            <th style="min-width: 150px">Assign To</th>
+                                            <th style="min-width: 150px">Assign Date</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="OfficeAssignedWork">
+
+                                    </tbody>
+                                </table>
+
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                </div><!-- end col -->
+
             </div><!-- end row -->
         </div>
         <!-- End Page-content -->
@@ -206,6 +281,71 @@ include"query.php";
             });
 
 
+            $(document).on('click', '.AddWorkSiteOffice', function(){
+
+                var OrderID=document.getElementById("OrderIDW").value;
+                var SiteCode=document.getElementById("SiteCodeW").value;
+                var OfficeWorkDesc=document.getElementById("OfficeWorkDesc").value;
+                var AssignEmployeeOffice=document.getElementById("AssignEmployeeOffice").value;
+                var OfficeAssignDate=document.getElementById("OfficeAssignDate").value;
+
+
+                if(!OrderID){
+
+                    err("Please select OrderID");
+
+                }else if(!SiteCode){
+
+                    err("Please select Site");
+
+                }else if(!OfficeWorkDesc){
+
+                    err("Please enter description");
+
+                }else if(!AssignEmployeeOffice){
+
+                    err("Please select employee");
+
+                }else if(!OfficeAssignDate){
+
+                    err("Please select assign date");
+
+                }else{    
+
+                    $.ajax({
+                      type:'POST',
+                      url:'insert.php',
+                      data:{'OrderIDOfficeWork':OrderID, 'SiteCodeOfficeWork':SiteCode, 'OfficeWorkDesc':OfficeWorkDesc, 'AssignEmployeeOffice':AssignEmployeeOffice, 'OfficeAssignDate':OfficeAssignDate},
+                      success:function(result){
+                        if (result==1) {
+                            $('#OfficeWorkF').trigger("reset");
+                            $.ajax({
+                              type:'POST',
+                              url:'select.php',
+                              data:{'SiteWorkO':SiteCode},
+                              success:function(result){
+
+                               $('.displayOWork').DataTable().clear();
+                               $('.displayOWork').DataTable().destroy();
+                               $('#OfficeAssignedWork').html(result);
+                               $('table.displayOWork').DataTable({
+
+                                scrollY: '300px',
+                                scrollCollapse: true,
+                                paging: false,
+                                scrollX: true,
+                            });
+
+                           }
+                       }); 
+
+                        }else{
+                            err(result);
+                        }
+                    }
+                });
+                }
+            });
 
 
             $(document).on('change', '#OrgCodeW', function(){
@@ -271,7 +411,7 @@ include"query.php";
                     }
                 });  
 
-                    
+
 
                 }else{
                     $('#MaterialW').html('<option value="">Select</option>');
@@ -283,19 +423,41 @@ include"query.php";
                   data:{'SiteWork':SiteCodeW},
                   success:function(result){
 
-                     $('.displayUWork').DataTable().clear();
-                     $('.displayUWork').DataTable().destroy();
-                     $('#UNWork').html(result);
-                     $('table.displayUWork').DataTable({
+                   $('.displayUWork').DataTable().clear();
+                   $('.displayUWork').DataTable().destroy();
+                   $('#UNWork').html(result);
+                   $('table.displayUWork').DataTable({
 
-                        scrollY: '200px',
-                        scrollCollapse: true,
-                        paging: false,
-                        scrollX: true,
-                    });
+                    scrollY: '200px',
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: true,
+                });
 
-                 }
-             });
+               }
+           });
+
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'SiteWorkO':SiteCodeW},
+                  success:function(result){
+
+                   $('.displayOWork').DataTable().clear();
+                   $('.displayOWork').DataTable().destroy();
+                   $('#OfficeAssignedWork').html(result);
+                   $('table.displayOWork').DataTable({
+
+                    scrollY: '300px',
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: true,
+                });
+
+               }
+           }); 
+
+
 
             });
 
@@ -384,19 +546,19 @@ include"query.php";
                           data:{'SiteWork':SiteCode},
                           success:function(result){
 
-                             $('.displayUWork').DataTable().clear();
-                             $('.displayUWork').DataTable().destroy();
-                             $('#UNWork').html(result);
-                             $('table.displayUWork').DataTable({
+                           $('.displayUWork').DataTable().clear();
+                           $('.displayUWork').DataTable().destroy();
+                           $('#UNWork').html(result);
+                           $('table.displayUWork').DataTable({
 
-                                scrollY: '200px',
-                                scrollCollapse: true,
-                                paging: false,
-                                scrollX: true,
-                            });
+                            scrollY: '200px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
 
-                         }
-                     }); 
+                       }
+                   }); 
 
                     }else{
                         err(result);
@@ -440,19 +602,19 @@ include"query.php";
                                   data:{'SiteWork':SiteCode},
                                   success:function(result){
 
-                                     $('.displayUWork').DataTable().clear();
-                                     $('.displayUWork').DataTable().destroy();
-                                     $('#UNWork').html(result);
-                                     $('table.displayUWork').DataTable({
+                                   $('.displayUWork').DataTable().clear();
+                                   $('.displayUWork').DataTable().destroy();
+                                   $('#UNWork').html(result);
+                                   $('table.displayUWork').DataTable({
 
-                                        scrollY: '200px',
-                                        scrollCollapse: true,
-                                        paging: false,
-                                        scrollX: true,
-                                    });
+                                    scrollY: '200px',
+                                    scrollCollapse: true,
+                                    paging: false,
+                                    scrollX: true,
+                                });
 
-                                 }
-                             });
+                               }
+                           });
 
                             }else{
                                 err(result);
@@ -471,4 +633,73 @@ include"query.php";
             $('#AssignTo').html('<option value="">Select</option>');
         }
     });
-</script>
+
+          $(document).on('click', '.AddWorkSite', function(){
+
+            var OrderID=document.getElementById("OrderIDW").value;
+            var SiteCode=document.getElementById("SiteCodeW").value;
+            var MaterialID=document.getElementById("MaterialW").value;
+            var WorkType=document.getElementById("WorkType").value;
+            var Qty=document.getElementById("QtyW").value;
+            var SDate=document.getElementById("SDateW").value;
+            var EDate=document.getElementById("EDateW").value;
+            if(OrderID && SiteCode && MaterialID && WorkType && Qty && SDate && EDate){
+
+                $.ajax({
+                  type:'POST',
+                  url:'insert.php',
+                  data:{'OrderIDAW':OrderID, 'SiteCodeAW':SiteCode, 'MaterialIDAW':MaterialID, 'QtyAW':Qty, 'SDateAW':SDate, 'EDateAW':EDate, 'WorkTypeAW':WorkType},
+                  success:function(result){
+                    if (result==1) {
+                        $('#MaterialW').prop('selectedIndex',0);
+                        $('#WorkType').prop('selectedIndex',0);
+                        document.getElementById("SDateW").value=null;
+                        document.getElementById("EDateW").value=null;
+
+                        document.getElementById("QtyW").value=null;
+                        document.getElementById("LeftQtyW").value=null;
+                        document.getElementById("UnitW").value=null;
+
+                        $.ajax({
+                          type:'POST',
+                          url:'select.php',
+                          data:{'SiteCodeWM':SiteCode},
+                          success:function(result){
+                            $('#MaterialW').html(result);
+
+                        }
+                    });  
+
+                        $.ajax({
+                          type:'POST',
+                          url:'select.php',
+                          data:{'SiteWork':SiteCode},
+                          success:function(result){
+
+                           $('.displayUWork').DataTable().clear();
+                           $('.displayUWork').DataTable().destroy();
+                           $('#UNWork').html(result);
+                           $('table.displayUWork').DataTable({
+
+                            scrollY: '200px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
+
+                       }
+                   }); 
+
+                    }else{
+                        err(result);
+                    }
+                }
+            });
+            }else{
+                err("Please enter all fields");
+        //$('.displayUWork').DataTable().clear();
+        //$('.displayUWork').DataTable().destroy();
+            }
+        });
+
+    </script>

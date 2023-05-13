@@ -1013,6 +1013,32 @@ if (!empty($VendorNameAVE))
 
 	}
 
+//Site Office Work
+
+	$SiteWorkO=!empty($_POST['SiteWorkO'])?$_POST['SiteWorkO']:'';
+
+	if (!empty($SiteWorkO))
+	{   
+
+		$query="SELECT * FROM cyrusproject.site_ofice_work
+		inner join employees on site_ofice_work.EmployeeCode=employees.EmployeeCode WHERE SiteCode=$SiteWorkO";
+		$result=mysqli_query($con,$query);
+		if (mysqli_num_rows($result)>0)
+		{
+
+			while ($row=mysqli_fetch_assoc($result))
+			{
+
+				print "<tr>";
+				print '<td>'.$row["Work"]."</td>";
+				print '<td>'.$row["WorkID"]."</td>";
+				print '<td>'.$row["EmployeeName"]."</td>";
+				print '<td><span class="d-none">'.$row["AssignDate"].'</span>'.date('d-M-Y',strtotime($row["AssignDate"]))."</td>";
+				print '</tr>';
+			}
+
+		}
+	}
 
 	?>
 
