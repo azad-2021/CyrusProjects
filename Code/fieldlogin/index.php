@@ -53,7 +53,7 @@ if (mysqli_num_rows($result)>0)
 
     <link href="../assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
-  
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap5.min.js">
@@ -211,116 +211,61 @@ if (mysqli_num_rows($result)>0)
                                                 ?>
                                             </tbody>
                                         </table>
-                                    </div>                        
-                                </div><!-- end card-body -->
-                            </div><!-- end card -->
-                        </div><!-- end col -->
-                        
+                                    </div> 
 
-                       <!-- <div class="col-xl-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Complaints</h4>
+                                    <h4 class="card-title mb-4">Office Work</h4>
 
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-centered table-bordered border-primary display">
-                                            <thead class="thead-light">
+                                        <table id="" class="table table-hover table-centered table-bordered border-primary display" width="100%">
+                                            <thead class="thead-light" style="text-align:center;">
                                                 <tr>
                                                     <th style="min-width:150px;">Organization</th>
                                                     <th style="min-width:150px;">Division</th>
-                                                    <th style="min-width:100px;">Order ID</th>
-                                                    <th>LOA Date</th>
-                                                    <th>Completion Date</th>
-                                                    <th>BG Amount</th>
-                                                    <th>BG Date</th>
-                                                    <th>Left Days</th>
+                                                    <th style="min-width:150px;">Site</th>
+                                                    <th style="min-width:60px;">Work ID</th>
+                                                    <th style="min-width:120px;">Work</th>
+                                                    <th style="min-width:80px;">Assign Date</th>
+                                                    <th style="min-width:100px;">Action</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 <?php 
-                                                $query="SELECT Organization, DivisionName, OrderID, LOADate, CompletionDate, BGAmount, BGDate, datediff(BGDate, current_date()) as LeftDays  FROM cyrusproject.orders join division on orders.DivisionCode=division.DivisionCode join organization on division.OrganizationCode=organization.OrganizationCode WHERE datediff(BGDate, current_date())<30;";
+                                                $query="SELECT Organization, DivisionName, SiteName, WorkID, Work, OrderID, site.SiteCode, AssignDate FROM cyrusproject.site_ofice_work
+                                                inner join site on site_ofice_work.SiteCode=site.SiteCode
+                                                inner join organization_details on site.DivisionCode=organization_details.DivisionCode WHERE Closed=0
+                                                and EmployeeCode=$EmployeeCode";
                                                 $result=mysqli_query($con,$query);
                                                 if (mysqli_num_rows($result)>0)
                                                 {
 
                                                     while ($row=mysqli_fetch_assoc($result))
                                                     {
-                                                        if($row["LeftDays"]<0){
-
-                                                            $tr='<tr class="badge-soft-danger">';
-                                                        }else{
-                                                            $tr='<tr class="badge-soft-warning">';
-                                                        }
+                 
+                                                        $WorkID=base64_encode($row["WorkID"]);
                                                         print($tr);
 
 
                                                         print '<td>'.$row["Organization"]."</td>";
                                                         print '<td>'.$row["DivisionName"]."</td>";
-                                                        print '<td>'.$row["OrderID"]."</td>";
-                                                        print '<td><span class="d-none">'.$row["LOADate"].'</span>'.date('d-M-Y',strtotime($row["LOADate"]))."</td>";
-                                                        print '<td><span class="d-none">'.$row["CompletionDate"].'</span>'.date('d-M-Y',strtotime($row["CompletionDate"]))."</td>";
-                                                        print '<td>'.$row["BGAmount"]."</td>";
-                                                        print '<td><span class="d-none">'.$row["BGDate"].'</span>'.date('d-M-Y',strtotime($row["BGDate"]))."</td>";
-                                                        print '<td>'.$row["LeftDays"]."</td>";
+                                                        print '<td>'.$row["SiteName"]."</td>";
+                                                        print '<td>'.$row["WorkID"]."</td>";
+                                                        print '<td>'.$row["Work"]."</td>";
+                                                        print '<td><span class="d-none">'.$row["AssignDate"].'</span>'.date('d-M-Y',strtotime($row["AssignDate"]))."</td>";
+                                                        print '<td><a href="officereporting.php?WorkID='.$WorkID.'">Enter Details</a></td>';
                                                         print '</tr>';
                                                     }
 
                                                 }
                                                 ?>
-
                                             </tbody>
                                         </table>
-                                    </div>                        
-                                </div>
-                            </div>
-
-                             end card -->
-
-                            <!--<div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title mb-4">Pending Orders for material requirement</h4>
-
-                                        <div class="table-responsive">
-                                            <table class="table table-centered table-nowrap mb-0 table-bordered display">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th>Organization</th>
-                                                        <th>Division</th>
-                                                        <th>Order ID</th>
-                                                        <th>LOA Date</th>
-                                                        <th>Completion Date</th>
-                                                        <th>BG Amount</th>
-                                                        <th>BG Date</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    <tr class="badge-soft-danger">
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-
-                                                                <div class="flex-grow-1 ms-3">
-                                                                    <div>Org 1</div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>Division 1</td>
-                                                        <td>1234</td>
-                                                        <td>17 Sep 2022</td>
-                                                        <td>17 Sep 2023</td>
-                                                        <th>200000</th>
-                                                        <td>17 Mar 2023</td>
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>                        
-                                    </div> 
-                                </div>
-                            </div> end col -->
+                                    </div>                       
+                                </div><!-- end card-body -->
+                            </div><!-- end card -->
                         </div><!-- end col -->
+                        
+                        
                     </div><!-- end row -->
                 </div>
                 <!-- End Page-content -->
@@ -385,26 +330,26 @@ if (mysqli_num_rows($result)>0)
 
     <script type="text/javascript">
 //
-$(document).ready(function () {
-    $('table.display').DataTable({
-    responsive: true
-});
-});
+        $(document).ready(function () {
+            $('table.display').DataTable({
+                responsive: true
+            });
+        });
 
-$(document).ready(function () {
-    $('table.display').DataTable();
-});
+        $(document).ready(function () {
+            $('table.display').DataTable();
+        });
 
-function err(msg){
-    Swal.fire({
-        title: 'error!',
-        text: msg,
-        icon: 'error',
+        function err(msg){
+            Swal.fire({
+                title: 'error!',
+                text: msg,
+                icon: 'error',
 
-    })
-}
+            })
+        }
 
-</script>
+    </script>
 </body>
 
 </html>

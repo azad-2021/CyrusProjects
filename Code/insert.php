@@ -46,7 +46,20 @@ if (!empty($NewOrg))
 	}
 }
 
+$newzone=!empty($_POST['newzone'])?$_POST['newzone']:'';
+$OrgCodeNZone=!empty($_POST['OrgCodeNZone'])?$_POST['OrgCodeNZone']:'';
+if (!empty($newzone))
+{
 
+	$sql = "INSERT INTO zones (OrganizationCode, ZoneName)
+	VALUES ($OrgCodeNZone, '$newzone')";
+
+	if ($con->query($sql) === TRUE) {
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+}
 
 $NewDiv=!empty($_POST['NewDiv'])?$_POST['NewDiv']:'';
 $OrgCode=!empty($_POST['OrgCodeNDiv'])?$_POST['OrgCodeNDiv']:'';
@@ -848,6 +861,32 @@ if (!empty($Vremark))
 	}
 
 	$sql = "UPDATE work_verification SET VerificationRemark='$Vremark', VerificationByID=$EmployeeCode, VerificationDate='$Date', Accepted=$Accepted, Closed=$Accepted WHERE VerificationID =$VRID";
+
+	if ($con->query($sql) === TRUE) {
+
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+	
+
+}
+
+$Vremark2=!empty($_POST['Vremark2'])?$_POST['Vremark2']:'';
+if (!empty($Vremark2))
+{
+	$VRID2=!empty($_POST['VRID2'])?$_POST['VRID2']:'';
+	$Verification2=!empty($_POST['Verification2'])?$_POST['Verification2']:'';
+	$Closed=!empty($_POST['Closed'])?$_POST['Closed']:0;
+
+	if ($Verification2=='Rejected') {
+		$Vremark2=$Verification2.' '.$Vremark2;
+		$Accepted=0;
+	}else{
+		$Accepted=1;
+	}
+
+	$sql = "UPDATE office_work_verification SET VerificationRemark='$Vremark', VerifiedBy=$EmployeeCode, VDate='$Date', Accepted=$Accepted, Closed=$Closed WHERE VerificationID =$VRID2";
 
 	if ($con->query($sql) === TRUE) {
 

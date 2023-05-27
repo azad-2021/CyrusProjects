@@ -1,3 +1,19 @@
+<?php 
+
+$Hour = date('G');
+//echo $_SESSION['user'];
+
+$user=$_SESSION['username'];
+
+if ( $Hour >= 1 && $Hour <= 11 ) {
+  $wish= "Good Morning ".$_SESSION['username'];
+} else if ( $Hour >= 12 && $Hour <= 15 ) {
+  $wish= "Good Afternoon ".$_SESSION['username'];
+} else if ( $Hour >= 19 || $Hour <= 23 ) {
+  $wish= "Good Evening ".$_SESSION['username'];
+}
+ ?>
+
 <div id="layout-wrapper">
 
 
@@ -8,19 +24,19 @@
              <div class="navbar-brand-box">
                 <a href="index.php" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="../assets/images/cyruslogo.png" alt="" height="22">
+                        <img src="assets/images/cyrus logo.png" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="../assets/images/cyrus logo.png" alt="" height="20">
+                        <img src="assets/images/cyrus logo.png" alt="" height="20">
                     </span>
                 </a>
 
                 <a href="index.php" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="../assets/images/cyruslogo.png" alt="" height="22">
+                        <img src="assets/images/cyrus logo.png" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="../assets/images/cyruslogo.png" alt="" height="20">
+                        <img src="assets/images/cyrus logo.png" alt="" height="20">
                     </span>
                 </a>
             </div>
@@ -46,14 +62,14 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="rounded-circle header-profile-user" src="../assets/images/users/profile.png"
+                <img class="rounded-circle header-profile-user" src="assets/images/users/profile.png"
                 alt="Header Avatar">
             </button>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <div class="p-3">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="m-0"> <?php echo $user ?> </h6>
+                            <h6 class="m-0"><?php echo$_SESSION['username'] ?></h6>
                         </div>
                         <div class="col-auto">
                             <a href="#!" class="small"> Available</a>
@@ -62,7 +78,7 @@
                 </div>
                 <div data-simplebar style="max-height: 230px;">
                     <!-- item-->
-                    <a href="#" class="text-reset notification-item">
+                    <a href="profile.php" class="text-reset notification-item">
                         <div class="d-flex align-items-center">
                             <div class="avatar-xs me-3 mt-1">
                                 <span class="avatar-title bg-soft-primary rounded-circle font-size-16">
@@ -78,7 +94,7 @@
                     <!-- item-->
                     <div class="pt-2 border-top">
                         <div class="d-grid">
-                            <a class="btn btn-sm btn-link font-size-14 text-center" href="../logout.php">
+                            <a class="btn btn-sm btn-link font-size-14 text-center" href="logout.php">
                                 <i class="ri-shut-down-line align-middle me-1"></i> Logout
                             </a>
                         </div>

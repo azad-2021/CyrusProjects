@@ -49,6 +49,35 @@ $(document).on('click', '.SaveConsignee', function(){
   }
 });
 
+$(document).on('click', '.SaveZone', function(){
+
+  var OrgCode=document.getElementById("OrgCodeNZone").value;
+  var newzone=document.getElementById("newzone").value;
+  if (OrgCode && newzone) {
+      $.ajax({
+        url:"insert.php",
+        method:"POST",
+        data:{'newzone':newzone, 'OrgCodeNZone':OrgCode},
+        success:function(result){
+            if(result==1){
+                Swal.fire({
+                    title: 'success',
+                    text: 'Zone Created',
+                    icon: 'success',
+                });
+                $('#NewZone').modal("hide");
+                $('#FAddZone').trigger("reset");
+            }else{
+                err(result);
+            }
+        }
+    });
+  }else{
+    err("Please enter all fields");
+}
+});
+
+
 
 $(document).on('click', '.SaveDiv', function(){
 

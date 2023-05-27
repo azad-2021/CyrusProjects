@@ -13,7 +13,7 @@ include"query.php";
     <title>Work Assigning</title>
     <?php include"head.php" ?>
     <style type="text/css">
-       table.dataTable tbody td {
+     table.dataTable tbody td {
         word-break: break-word;
         vertical-align: top;
     }
@@ -82,13 +82,6 @@ include"query.php";
 
                             </select>
                         </div>
-                        <div class="col-lg-3">
-                            <label for="recipient-name" class="col-form-label">Select Site</label>
-                            <select class="form-select form-control rounded-corner" id="SiteCodeW">
-                                <option value="">Select</option>
-
-                            </select>
-                        </div>
 
                         <div class="col-lg-3">
                             <label for="recipient-name" class="col-form-label">Select Order ID</label>
@@ -97,6 +90,16 @@ include"query.php";
 
                             </select>
                         </div>
+
+                        <div class="col-lg-3">
+                            <label for="recipient-name" class="col-form-label">Select Site</label>
+                            <select class="form-select form-control rounded-corner" id="SiteCodeW">
+                                <option value="">Select</option>
+
+                            </select>
+                        </div>
+
+                        
                     </div>
                 </form>
 
@@ -187,6 +190,28 @@ include"query.php";
                                     </tbody>
                                 </table>
 
+
+                                <h4 class="card-title mb-4" style="margin-top: 80px;">Assigned Work</h4>
+
+
+                                <table class="table table-centered table-bordered displayAWork" width="100%">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="min-width: 150px">Work</th>
+                                            <th style="min-width: 80px">Work ID</th>
+                                            <th style="min-width: 80px">Quantity</th>
+                                            <th style="min-width: 80px">Start Date</th>
+                                            <th style="min-width: 80px">End Date</th>
+                                            <th style="min-width: 120px">Assign To</th>
+                                            <th style="min-width: 120px">Reassign To</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="AWork">
+
+                                    </tbody>
+                                </table>
+
                             </div><!-- end card-body -->
                         </div><!-- end card -->
                     </div><!-- end col -->
@@ -273,7 +298,7 @@ include"query.php";
             $(document).ready(function () {
                 $('table.displayUWork').DataTable({
 
-                    scrollY: '200px',
+                    scrollY: '400px',
                     scrollCollapse: true,
                     paging: false,
                     scrollX: true,
@@ -325,19 +350,19 @@ include"query.php";
                               data:{'SiteWorkO':SiteCode},
                               success:function(result){
 
-                               $('.displayOWork').DataTable().clear();
-                               $('.displayOWork').DataTable().destroy();
-                               $('#OfficeAssignedWork').html(result);
-                               $('table.displayOWork').DataTable({
+                                 $('.displayOWork').DataTable().clear();
+                                 $('.displayOWork').DataTable().destroy();
+                                 $('#OfficeAssignedWork').html(result);
+                                 $('table.displayOWork').DataTable({
 
-                                scrollY: '300px',
-                                scrollCollapse: true,
-                                paging: false,
-                                scrollX: true,
-                            });
+                                    scrollY: '400px',
+                                    scrollCollapse: true,
+                                    paging: false,
+                                    scrollX: true,
+                                });
 
-                           }
-                       }); 
+                             }
+                         }); 
 
                         }else{
                             err(result);
@@ -400,11 +425,12 @@ include"query.php";
             $(document).on('change', '#SiteCodeW', function(){
 
                 var SiteCodeW=$(this).val();
-                if(SiteCodeW){
+                var OrderID=document.getElementById("OrderIDW").value;
+                if(SiteCodeW && OrderID){
                     $.ajax({
                       type:'POST',
                       url:'select.php',
-                      data:{'SiteCodeWM':SiteCodeW},
+                      data:{'SiteCodeWM':SiteCodeW, 'SiteCodeWMOrder':OrderID},
                       success:function(result){
                         $('#MaterialW').html(result);
 
@@ -412,30 +438,56 @@ include"query.php";
                 });  
 
 
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'SiteWork':SiteCodeW, 'SiteWorkOrder':OrderID},
+                      success:function(result){
+
+                         $('.displayUWork').DataTable().clear();
+                         $('.displayUWork').DataTable().destroy();
+                         $('#UNWork').html(result);
+                         $('table.displayUWork').DataTable({
+
+                            scrollY: '400px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
+
+                     }
+                 });
+
+
+                    $.ajax({
+                      type:'POST',
+                      url:'select.php',
+                      data:{'SiteWorkA':SiteCodeW, 'SiteWorkOrderA':OrderID},
+                      success:function(result){
+
+                         $('.displayAWork').DataTable().clear();
+                         $('.displayAWork').DataTable().destroy();
+                         $('#AWork').html(result);
+                         $('table.displayAWork').DataTable({
+
+                            scrollY: '400px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
+
+                     }
+                 });
 
                 }else{
+
+                    if (!OrderID && SiteCodeW) {
+                        err("Please select OrderID");
+                    }
+                    $(this).prop('selectedIndex',0);
                     $('#MaterialW').html('<option value="">Select</option>');
                 }
 
-                $.ajax({
-                  type:'POST',
-                  url:'select.php',
-                  data:{'SiteWork':SiteCodeW},
-                  success:function(result){
-
-                   $('.displayUWork').DataTable().clear();
-                   $('.displayUWork').DataTable().destroy();
-                   $('#UNWork').html(result);
-                   $('table.displayUWork').DataTable({
-
-                    scrollY: '200px',
-                    scrollCollapse: true,
-                    paging: false,
-                    scrollX: true,
-                });
-
-               }
-           });
 
                 $.ajax({
                   type:'POST',
@@ -443,19 +495,19 @@ include"query.php";
                   data:{'SiteWorkO':SiteCodeW},
                   success:function(result){
 
-                   $('.displayOWork').DataTable().clear();
-                   $('.displayOWork').DataTable().destroy();
-                   $('#OfficeAssignedWork').html(result);
-                   $('table.displayOWork').DataTable({
+                     $('.displayOWork').DataTable().clear();
+                     $('.displayOWork').DataTable().destroy();
+                     $('#OfficeAssignedWork').html(result);
+                     $('table.displayOWork').DataTable({
 
-                    scrollY: '300px',
-                    scrollCollapse: true,
-                    paging: false,
-                    scrollX: true,
-                });
+                        scrollY: '300px',
+                        scrollCollapse: true,
+                        paging: false,
+                        scrollX: true,
+                    });
 
-               }
-           }); 
+                 }
+             }); 
 
 
 
@@ -504,73 +556,7 @@ include"query.php";
           }
 
 
-          $(document).on('click', '.AddWorkSite', function(){
-
-            var OrderID=document.getElementById("OrderIDW").value;
-            var SiteCode=document.getElementById("SiteCodeW").value;
-            var MaterialID=document.getElementById("MaterialW").value;
-            var WorkType=document.getElementById("WorkType").value;
-            var Qty=document.getElementById("QtyW").value;
-            var SDate=document.getElementById("SDateW").value;
-            var EDate=document.getElementById("EDateW").value;
-            if(OrderID && SiteCode && MaterialID && WorkType && Qty && SDate && EDate){
-
-                $.ajax({
-                  type:'POST',
-                  url:'insert.php',
-                  data:{'OrderIDAW':OrderID, 'SiteCodeAW':SiteCode, 'MaterialIDAW':MaterialID, 'QtyAW':Qty, 'SDateAW':SDate, 'EDateAW':EDate, 'WorkTypeAW':WorkType},
-                  success:function(result){
-                    if (result==1) {
-                        $('#MaterialW').prop('selectedIndex',0);
-                        $('#WorkType').prop('selectedIndex',0);
-                        document.getElementById("SDateW").value=null;
-                        document.getElementById("EDateW").value=null;
-
-                        document.getElementById("QtyW").value=null;
-                        document.getElementById("LeftQtyW").value=null;
-                        document.getElementById("UnitW").value=null;
-
-                        $.ajax({
-                          type:'POST',
-                          url:'select.php',
-                          data:{'SiteCodeWM':SiteCode},
-                          success:function(result){
-                            $('#MaterialW').html(result);
-
-                        }
-                    });  
-
-                        $.ajax({
-                          type:'POST',
-                          url:'select.php',
-                          data:{'SiteWork':SiteCode},
-                          success:function(result){
-
-                           $('.displayUWork').DataTable().clear();
-                           $('.displayUWork').DataTable().destroy();
-                           $('#UNWork').html(result);
-                           $('table.displayUWork').DataTable({
-
-                            scrollY: '200px',
-                            scrollCollapse: true,
-                            paging: false,
-                            scrollX: true,
-                        });
-
-                       }
-                   }); 
-
-                    }else{
-                        err(result);
-                    }
-                }
-            });
-            }else{
-                err("Please enter all fields");
-        //$('.displayUWork').DataTable().clear();
-        //$('.displayUWork').DataTable().destroy();
-            }
-        });
+          
 
 
           $(document).on('change', '#AssignTo', function(){
@@ -602,19 +588,19 @@ include"query.php";
                                   data:{'SiteWork':SiteCode},
                                   success:function(result){
 
-                                   $('.displayUWork').DataTable().clear();
-                                   $('.displayUWork').DataTable().destroy();
-                                   $('#UNWork').html(result);
-                                   $('table.displayUWork').DataTable({
+                                     $('.displayUWork').DataTable().clear();
+                                     $('.displayUWork').DataTable().destroy();
+                                     $('#UNWork').html(result);
+                                     $('table.displayUWork').DataTable({
 
-                                    scrollY: '200px',
-                                    scrollCollapse: true,
-                                    paging: false,
-                                    scrollX: true,
-                                });
+                                        scrollY: '200px',
+                                        scrollCollapse: true,
+                                        paging: false,
+                                        scrollX: true,
+                                    });
 
-                               }
-                           });
+                                 }
+                             });
 
                             }else{
                                 err(result);
@@ -676,19 +662,19 @@ include"query.php";
                           data:{'SiteWork':SiteCode},
                           success:function(result){
 
-                           $('.displayUWork').DataTable().clear();
-                           $('.displayUWork').DataTable().destroy();
-                           $('#UNWork').html(result);
-                           $('table.displayUWork').DataTable({
+                             $('.displayUWork').DataTable().clear();
+                             $('.displayUWork').DataTable().destroy();
+                             $('#UNWork').html(result);
+                             $('table.displayUWork').DataTable({
 
-                            scrollY: '200px',
-                            scrollCollapse: true,
-                            paging: false,
-                            scrollX: true,
-                        });
+                                scrollY: '200px',
+                                scrollCollapse: true,
+                                paging: false,
+                                scrollX: true,
+                            });
 
-                       }
-                   }); 
+                         }
+                     }); 
 
                     }else{
                         err(result);

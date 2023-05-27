@@ -34,7 +34,7 @@ if (mysqli_num_rows($result)>0)
 <head>
 
     <meta charset="utf-8" />
-    <title>Home</title>
+    <title>Verification</title>
     <?php include"head.php" ?>
 
     <style type="text/css">
@@ -153,6 +153,57 @@ if (mysqli_num_rows($result)>0)
     </div>
 </div>
 
+
+<div class="modal fade" id="Verify2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Office Work Verification</h5>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <label>Enter Verification Remark</label>
+                        <textarea class="form-control rounded-corner" id="VRemark2" type="text"></textarea>
+
+                    </div>
+
+                    <div class="col-lg-12" style="margin-top:42px;">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="Verification2" value="Verified" >
+                          <label class="form-check-label" for="flexRadioDefault1">Verified</label>
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="Verification2" value="Rejected">
+                              <label class="form-check-label" for="flexRadioDefault1">
+                                Rejected
+                            </label>
+                        </div>
+                        <input type="text" name="" id="VID2" class="d-none">
+                    </div>
+
+                    <center>
+                        <div class="col-lg-12" style="margin-top:42px;">
+
+                          <input class="form-check-input" type="checkbox" id="CloseID" value="1" >
+                          <label class="form-check-label" for="flexRadioDefault1">Close ID</label>
+
+                      </div>
+                  </center>
+              </div>
+
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary SaveVerification2">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+    </div>
+</div>
+</div>
+</div>
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
@@ -165,15 +216,7 @@ if (mysqli_num_rows($result)>0)
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-0">Pending Verification</h4>
-
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Cyrus</a></li>
-                                <li class="breadcrumb-item active">Pending Verification</li>
-                            </ol>
-                        </div>
-
+                        <h4 class="mb-0">Pending Verifications</h4>
                     </div>
                 </div>
             </div>
@@ -185,6 +228,11 @@ if (mysqli_num_rows($result)>0)
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
+                                <center>
+                                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                                        <h4 class="mb-0">Work Verifications</h4>
+                                    </div>
+                                </center>
                                 <table id="" class="table table-hover table-centered table-bordered border-primary display" width="100%">
                                     <thead class="thead-light" style="text-align:center;">
                                         <tr>
@@ -258,7 +306,66 @@ if (mysqli_num_rows($result)>0)
                                     ?>
                                 </tbody>
                             </table>
-                        </div>                        
+                        </div> 
+
+
+                        <div class="table-responsive" style="margin-top:50px;">
+                            <center>
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Office Work Verifications</h4>
+                                </div>
+                            </center>
+                            <table id="" class="table table-hover table-centered table-bordered border-primary display" width="100%">
+                                <thead class="thead-light" style="text-align:center;">
+                                    <tr>
+                                        <th style="min-width:110px;">Organization</th>
+                                        <th style="min-width:110px;">Division</th>
+                                        <th style="min-width:120px;">Site</th>
+                                        <th style="min-width:110px;">Employee</th>
+                                        <th style="min-width:50px;">Work ID</th>                                            
+                                        <th style="min-width:120px;">Work</th>
+                                        <th style="min-width:80px;">Assign Date</th>
+                                        <th style="min-width:80px;">Work Date</th>
+                                        <th style="min-width:150px;">Employee Remark</th>                                                                                 
+                                        <th style="min-width:100px;">Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php 
+                                    $query="SELECT VerificationID, office_work_verification.EmployeeCode, site_ofice_work.WorkID, Work, AssignDate, WorkDate, EmployeeRemark, Organization, DivisionName, SiteName, EmployeeName  FROM cyrusproject.office_work_verification
+                                    inner join site on office_work_verification.SiteCode=site.SiteCode
+                                    inner join organization_details on site.DivisionCode=organization_details.DivisionCode
+                                    inner join site_ofice_work on office_work_verification.WorkID=site_ofice_work.WorkID
+                                    inner join employees on office_work_verification.EmployeeCode=employees.EmployeeCode WHERE VerifiedBy is null";
+                                    $result=mysqli_query($con,$query);
+                                    if (mysqli_num_rows($result)>0)
+                                    {
+
+                                        while ($row=mysqli_fetch_assoc($result))
+                                        {
+                                            $VID=$row["VerificationID"];
+
+
+                                            print'<tr>';
+                                            print '<td>'.$row["Organization"]."</td>";
+                                            print '<td>'.$row["DivisionName"]."</td>";
+                                            print '<td>'.$row["SiteName"]."</td>";
+                                            print '<td>'.$row["EmployeeName"]."</td>";
+                                            print '<td>'.$row["WorkID"]."</td>";         
+                                            print '<td>'.$row["Work"]."</td>";
+                                            print '<td><span class="d-none">'.$row["AssignDate"].'</span>'.date('d-M-Y',strtotime($row["AssignDate"]))."</td>";
+                                            print '<td><span class="d-none">'.$row["WorkDate"].'</span>'.date('d-M-Y',strtotime($row["WorkDate"]))."</td>";
+                                            print '<td>'.$row["EmployeeRemark"]."</td>";
+                                            print '<td><a href="" data-bs-toggle="modal" data-bs-target="#Verify2" id="'.$VID.'" class="VerifyWork2">Verify</a></td>';
+                                            print '</tr>';
+                                        }
+
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>                                               
                     </div><!-- end card-body -->
                 </div><!-- end card -->
             </div><!-- end col -->
@@ -304,6 +411,34 @@ if (mysqli_num_rows($result)>0)
         }
     });
 
+    $(document).on('click', '.SaveVerification2', function(){
+
+        var Vremark=document.getElementById("VRemark2").value;
+        var VID=document.getElementById("VID2").value;
+        var Verification=$('input[name="Verification2"]:checked').val();
+        if ($($('#CloseID').is(":checked"))) {
+            var CloseID=1;
+        }else{
+            var CloseID=0;
+        }
+
+        if(Vremark && VID && Verification){
+            $.ajax({
+              type:'POST',
+              url:'insert.php',
+              data:{'Vremark2':Vremark, 'VRID2':VID, 'Verification2':Verification, 'CloseID':CloseID},
+              success:function(result){
+
+                if (result==1) {
+                    location.reload();
+                }else{
+                    err(result);
+                }
+            }
+        });
+
+        }
+    });
 
     $(document).on('click', '.ShowExpense', function(){
 
@@ -365,6 +500,13 @@ if (mysqli_num_rows($result)>0)
     $(document).on('click', '.VerifyWork', function(){
         var VID=$(this).attr("id");
         var VID=document.getElementById("VID").value=VID;
+
+
+    });
+
+    $(document).on('click', '.VerifyWork2', function(){
+        var VID=$(this).attr("id");
+        var VID=document.getElementById("VID2").value=VID;
 
 
     });

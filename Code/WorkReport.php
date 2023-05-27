@@ -47,15 +47,16 @@ include"query.php";
                 <!-- end page title -->
 
 
-                <form class="form-control rounded-corner" style="margin-bottom: 50px;" id="SurveyF">
+                <form class="form-control rounded-corner" style="margin-bottom: 50px;">
                     <center>
                         <br>
+
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" id="EmployeeType" value="">
+                          <input class="form-check-input" type="radio" id="ReportType" value="EmployeeType" name="ReportType">
                           <label class="form-check-label" for="inlineCheckbox1">Employee</label>
                       </div>
                       <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="checkbox" id="SiteType" value="">
+                          <input class="form-check-input" type="radio" id="ReportType" value="SiteType" name="ReportType">
                           <label class="form-check-label" for="inlineCheckbox2">Site/Station</label>
                       </div>
                   </center>
@@ -96,7 +97,7 @@ include"query.php";
                     <div class="col-lg-4 Employee d-none">
                         <label for="recipient-name" class="col-form-label">Select Employee</label>
 
-                        <select class="form-control rounded-corner" id="OrgCodeW">
+                        <select class="form-control rounded-corner" id="EmployeeReport">
                             <option value="">Select</option>
                             
                             <?php
@@ -139,25 +140,32 @@ include"query.php";
                         <div class="card-body">
                             <h4 class="card-title mb-4">Work Report</h4>
 
+                            <div class="table-responsive">
+                                <table class="table table-centered table-bordered displayEmployeeWork Employee d-none">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="min-width: 110px">Organization</th>
+                                            <th style="min-width: 110px">Zone/Division</th>
+                                            <th style="min-width: 120px">Site/Station</th>
+                                            <th style="min-width: 120px">Work</th>
+                                            <th style="min-width: 60px">Quantity</th>
+                                            <th style="min-width: 60px">Order ID</th>
+                                            <th style="min-width: 80px">Work Date</th>
+                                            <th style="min-width: 100px" class="d-none">Employee</th>
+                                            <th style="min-width: 80px">Labour</th>
+                                            <th style="min-width: 80px">No. of labours</th>
+                                        </tr>
+                                    </thead>
 
-                            <table class="table table-centered table-bordered displayUWork">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th style="min-width: 150px">Organization</th>
-                                        <th style="min-width: 150px">Zone/Division</th>
-                                        <th style="min-width: 150px">Site/Station</th>
-                                        <th style="min-width: 80px">Work ID</th>
-                                        <th style="min-width: 80px">Quantity</th>
-                                        <th style="min-width: 80px">Start Date</th>
-                                        <th style="min-width: 80px">End Date</th>
-                                        <th style="min-width: 120px">Assign To</th>
-                                    </tr>
-                                </thead>
+                                    <tbody id="EmployeeWorkReport">
 
-                                <tbody id="UNWork">
+                                    </tbody>
+                                </table>
 
-                                </tbody>
-                            </table>
+
+
+
+                            </div>
 
                         </div><!-- end card-body -->
                     </div><!-- end card -->
@@ -181,7 +189,52 @@ include"query.php";
         });
 
 
+        $(document).on('change', '#ReportType', function(){
 
+            var ReportType=$(this).val();
+            if(ReportType=='EmployeeType'){
+                $( ".Employee" ).removeClass( "d-none" );
+                $( ".Site" ).addClass( "d-none" );
+
+            }else if(ReportType=='SiteType'){
+
+                $( ".Site" ).removeClass( "d-none" );
+                $( ".Employee" ).addClass( "d-none" );
+                
+            }
+        });
+
+        $(document).on('click', '.ViewWorkReport', function(){
+
+            var EmployeeCode=$("#EmployeeReport").val();
+            var Edate=$("#Edate").val();
+            var Sdate=$("#Sdate").val();
+            if(EmployeeCode && Sdate && Edate){
+                $.ajax({
+                  type:'POST',
+                  url:'select.php',
+                  data:{'EmployeeReport':EmployeeCode, 'EdateEReport':Edate, 'SdateEReport':Sdate},
+                  success:function(result){
+
+                     $('.displayEmployeeWork').DataTable().clear();
+                     $('.displayEmployeeWork').DataTable().destroy();
+                     $('#EmployeeWorkReport').html(result);
+                     $('table.displayEmployeeWork').DataTable({
+
+                         dom: 'Bfrtip',
+                         buttons: [
+                            'excel'
+                            ]
+
+                     });
+
+
+                 }
+             }); 
+            }else{
+                err("Please enter all fields");
+            }
+        });
 
         $(document).on('change', '#OrgCodeW', function(){
 
@@ -258,19 +311,19 @@ include"query.php";
               data:{'SiteWork':SiteCodeW},
               success:function(result){
 
-               $('.displayUWork').DataTable().clear();
-               $('.displayUWork').DataTable().destroy();
-               $('#UNWork').html(result);
-               $('table.displayUWork').DataTable({
+                 $('.displayUWork').DataTable().clear();
+                 $('.displayUWork').DataTable().destroy();
+                 $('#UNWork').html(result);
+                 $('table.displayUWork').DataTable({
 
-                scrollY: '200px',
-                scrollCollapse: true,
-                paging: false,
-                scrollX: true,
-            });
+                    scrollY: '200px',
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: true,
+                });
 
-           }
-       });
+             }
+         });
 
         });
 
@@ -359,19 +412,19 @@ include"query.php";
                       data:{'SiteWork':SiteCode},
                       success:function(result){
 
-                       $('.displayUWork').DataTable().clear();
-                       $('.displayUWork').DataTable().destroy();
-                       $('#UNWork').html(result);
-                       $('table.displayUWork').DataTable({
+                         $('.displayUWork').DataTable().clear();
+                         $('.displayUWork').DataTable().destroy();
+                         $('#UNWork').html(result);
+                         $('table.displayUWork').DataTable({
 
-                        scrollY: '200px',
-                        scrollCollapse: true,
-                        paging: false,
-                        scrollX: true,
-                    });
+                            scrollY: '200px',
+                            scrollCollapse: true,
+                            paging: false,
+                            scrollX: true,
+                        });
 
-                   }
-               }); 
+                     }
+                 }); 
 
                 }else{
                     err(result);
@@ -415,19 +468,19 @@ include"query.php";
                               data:{'SiteWork':SiteCode},
                               success:function(result){
 
-                               $('.displayUWork').DataTable().clear();
-                               $('.displayUWork').DataTable().destroy();
-                               $('#UNWork').html(result);
-                               $('table.displayUWork').DataTable({
+                                 $('.displayUWork').DataTable().clear();
+                                 $('.displayUWork').DataTable().destroy();
+                                 $('#UNWork').html(result);
+                                 $('table.displayUWork').DataTable({
 
-                                scrollY: '200px',
-                                scrollCollapse: true,
-                                paging: false,
-                                scrollX: true,
-                            });
+                                    scrollY: '200px',
+                                    scrollCollapse: true,
+                                    paging: false,
+                                    scrollX: true,
+                                });
 
-                           }
-                       });
+                             }
+                         });
 
                         }else{
                             err(result);

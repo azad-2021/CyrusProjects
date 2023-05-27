@@ -1,6 +1,6 @@
 <?php 
 include"connection.php";
-include"session.php";
+//include"session.php";
 
 //$UserID=1;
 date_default_timezone_set('Asia/Calcutta');
@@ -76,7 +76,7 @@ $Date = date('Y-m-d',strtotime($timestamp));
                                         </div>
 
                                         <div class="mt-4 text-center" >
-                                            <a href="arecoverpw.php" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                                            <a href="#" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
                                         </div>
                                     </form>
                                 </div>

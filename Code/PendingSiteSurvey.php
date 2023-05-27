@@ -86,7 +86,7 @@ include"query.php";
                                                 print '<td><span class="d-none">'.$row["OrderDate"].'</span>'.date('d-M-Y',strtotime($row["OrderDate"]))."</td>";
                                                 print '<td>'.$row["SiteName"]."</td>";
 
-                                                print '<td><a href="SiteSurvey.php?SiteCode='.base64_encode($row["SiteCode"]).'">Enter Survey Details</a></td>';
+                                                print '<td><a href="SiteSurvey.php?SiteCode='.base64_encode($row["SiteCode"]).'&OrderID='.base64_encode($row["OrderID"]).'">Enter Survey Details</a></td>';
                                                 print '</tr>';
                                             }
 

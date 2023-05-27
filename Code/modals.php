@@ -44,6 +44,50 @@
     </div>
 </div>
 
+
+<div class="modal fade" data-bs-backdrop="static" id="NewZone" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content rounded-corner">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Zone</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control rounded-corner" id="FAddZone">
+                    <div class="lg-3">
+                        <label for="recipient-name" class="col-form-label">Select Organization</label>
+                        <select class="form-select form-control rounded-corner" id="OrgCodeNZone">
+                            <option value="">Select</option>
+                            <?php
+
+                            $result=mysqli_query($con,$QueryOrg);
+                            if (mysqli_num_rows($result)>0)
+                            {
+                              while ($arr=mysqli_fetch_assoc($result))
+                              {
+                                ?>
+                                <option value="<?php echo $arr['OrganizationCode']; ?>"><?php echo $arr['Organization']; ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="lg-3">
+                    <label for="recipient-name" class="col-form-label">Enter Zone Name</label>
+                    <input type="text" class="form-control rounded-corner" id="newzone">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary SaveZone">Save</button>
+        </div>
+    </div>
+</div>
+</div>
+
 <div class="modal fade" data-bs-backdrop="static" id="NewDivision" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content rounded-corner">
@@ -93,7 +137,7 @@
                 </select>
             </div>
             <div class="lg-3">
-                <label for="recipient-name" class="col-form-label">Enter Zone / Division Name</label>
+                <label for="recipient-name" class="col-form-label">Division Name</label>
                 <input type="text" class="form-control rounded-corner" id="newdiv">
             </div>
         </form>

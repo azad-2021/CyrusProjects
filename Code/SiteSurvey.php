@@ -4,12 +4,12 @@ include"session.php";
 include"query.php";
 
 $SiteCode=base64_decode($_GET['SiteCode']);
-
+$OrderID=base64_decode($_GET['OrderID']);
 $query="SELECT * FROM cyrusproject.siteorders
 inner join division on siteorders.DivisionCode=division.DivisionCode
 inner join orders on siteorders.DivisionOrderID=orders.OrderID
 inner join site on siteorders.SiteCode=site.SiteCode
-inner join organization on division.OrganizationCode=organization.OrganizationCode WHERE siteorders.SiteCode=$SiteCode;";
+inner join organization on division.OrganizationCode=organization.OrganizationCode WHERE siteorders.SiteCode=$SiteCode and orders.OrderID=$OrderID";
 $result=mysqli_query($con,$query);
 if (mysqli_num_rows($result)>0)
 {

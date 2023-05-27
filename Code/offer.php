@@ -17,8 +17,8 @@ if (isset($_POST['submit'])) {
     $DeliveryTerm=$_POST['Delivery'];
     $WarrantyTerm=$_POST['Warranty'];
 
-    $OfferDate=date('d.m.Y',strtotime($_POST['OfferDate']));
-    $OFD=$_POST['OfferDate'];
+    $OfferDate=$_POST['OfferDate'];
+    //$OFD=$_POST['OfferDate'];
     $file_name = $_FILES['OfferFile']['name'];
     $file_size =$_FILES['OfferFile']['size'];
     $file_tmp =$_FILES['OfferFile']['tmp_name'];
@@ -26,12 +26,12 @@ if (isset($_POST['submit'])) {
     $tmp = explode('.', $_FILES['OfferFile']['name']);
     $file_ext = strtolower(end($tmp));    
 
-    $extensions= array("pdf");
+    $extensions= array("pdf, jpeg, JPG, JPEG, JPG, PNG, png");
 
     
 
     if(in_array($file_ext,$extensions)=== false){
-        $errors ='<script>alert("File must be in pdf format")</script>';
+        $errors ='<script>alert("File must be in pdf, png or jpg format")</script>';
     }else if (empty($VendorID)==true) {
         $errors ='<script>alert("Please select vendor")</script>';
     }

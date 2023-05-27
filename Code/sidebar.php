@@ -60,11 +60,13 @@ if ($_SESSION['Designation']=='Backend Support') {
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewOrg">New Organization</a></li>
-                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDivision">New Zone / Division</a></li>
+                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewZone">Add Zone</a></li>
+                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDivision">Add Division</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewSite">New Site</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewDesignation">New Designation</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#NewEmployee">New Employee</a></li>
                         <li><a href="#" data-bs-toggle="modal" data-bs-target="#AddConsignee">Add Consignee</a></li>
+
                         <li><a href="neworders.php">New Order</a></li>
                         <li><a href="layouts-compact-sidebar.html">New Complaints</a></li>
 
